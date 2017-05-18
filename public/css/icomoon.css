@@ -1,0 +1,38 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('../vendor/font-icomoon/icomoon.eot?v2r6ud');
+  src:  url('../vendor/font-icomoon/icomoon.eot?v2r6ud#iefix') format('embedded-opentype'),
+    url('../vendor/font-icomoon/icomoon.ttf?v2r6ud') format('truetype'),
+    url('../vendor/font-icomoon/icomoon.woff?v2r6ud') format('woff'),
+    url('../vendor/font-icomoon/icomoon.svg?v2r6ud#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-camera:before {
+  content: "\e900";
+  color: #fff;
+}
+.icon-drone:before {
+  content: "\e901";
+  color: #fff;
+}
+.icon-vr:before {
+  content: "\e902";
+  color: #fff;
+}
