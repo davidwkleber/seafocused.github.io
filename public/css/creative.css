@@ -481,3 +481,21 @@ img::-moz-selection {
 body {
   webkit-tap-highlight-color: #222222;
 }
+.video-container {
+  text-align: center;
+  margin: auto;
+  margin-bottom: 64px;
+  margin-top: 64px;
+  width: 100%;
+}
+#you .you-h {
+  margin-top: 32px;
+}
+#you .you-p {
+  margin: auto;
+  max-width: 800px;
+  width: 80%;
+}
+#you .you-content {
+  margin-bottom: 32px;
+}
