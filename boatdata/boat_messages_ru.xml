@@ -52,6 +52,8 @@
   <data name="ru_logotooltipText"><![CDATA[]]></data>
   <data name="ru_togglebuttonfirsttooltip"><![CDATA[]]></data>
   <data name="ru_togglebuttonsecondtooltip"><![CDATA[]]></data>
+  <data name="ru_controlBar_classicopenFsTip"><![CDATA[]]></data>
+  <data name="ru_controlBar_classiccloseFsTip"><![CDATA[]]></data>
 
 
   <data name="ru_vr_setup_hmd0"><![CDATA[SELECT YOUR HMD]]></data>
