@@ -322,7 +322,7 @@
 		<option name="position" value="topleft" type="string" />
 		<option name="start_position" value="left" type="string" />
 		<option name="margin_x" value="10" type="int" />
-		<option name="margin_y" value="20" type="int" />
+		<option name="margin_y" value="40" type="int" />
 		<option name="display_title" value="true" type="bool" />
 		<option name="title" value="project_floor_title" type="string" />
 		<option name="title_font" value="Calibri Light" type="string" />
@@ -330,7 +330,7 @@
 		<option name="title_weight" value="bold" type="string" />
 		<option name="title_decoration" value="normal" type="string" />
 		<option name="title_color" value="000000" type="string" />
-		<option name="close_displayed" value="false" type="bool" />
+		<option name="close_displayed" value="true" type="bool" />
 		<option name="close_text" value="floorPlandisplay_close_text" type="string" />
 
 		<option name="background_color" value="ffffff" type="string" />
@@ -483,7 +483,9 @@
 	capture="false"
 	url="%FIRSTXML%/graphics/textfield.swf"
 	align="center"
-	background="false"
+	background="true"
+	backgroundcolor="0x7f7f7f"
+	backgroundalpha="0.80000000000000004"
 	border="false"
 	css="color:#ffffff;font-family:Helvetica;font-weight:bold;font-size:14px;text-align:left;"
 	height="20"
@@ -1474,53 +1476,6 @@
 
 
 <!-- ********** -->
-<!-- Toggle Button -->
-<!-- id : togglebutton -->
-<!-- ********** -->
-
-
-
-  <layer name="togglebutton"
-         keep="true"
-         url="%FIRSTXML%/graphics/togglebutton/download.png" 
-         align="topleft"
-         x="10"
-         y="0"
-         zorder="5"
-         state="true"
-         onclick="togglebuttonOnClick"
-         onout=""
-         height="20"
-         width="20"
-         visible="false"
-         />
-
-  <action name="togglebuttonOnClick">
-    if (state,
-      set(state, false);hideFloorplan();
-
-
-
-      set(url,%FIRSTXML%/graphics/togglebutton/upload.png);
-     ,
-      set(state, true);showFloorplan();
-
-
-
-      set(url,%FIRSTXML%/graphics/togglebutton/download.png);
-    );
-  </action>
-
-  <events name="togglebuttonevents" 
-    onTourStart="showtogglebutton();"
-    hidetourcontrols="hidetogglebutton();" 
-    showtourcontrols="showtogglebutton();" 
-    keep="true" />
-  <action name="hidetogglebutton">set(layer[togglebutton].visible, false);</action>
-  <action name="showtogglebutton">if(tour_displaycontrols,set(layer[togglebutton].visible, true);,hidetogglebutton(););</action>
-
-
-<!-- ********** -->
 <!-- Classic Control Bar -->
 <!-- id : controlBar_classic -->
 <!-- ********** -->
@@ -1594,7 +1549,7 @@
          alpha="0.8"
          edge="right" align="right"
          width="36" height="36"
-         zorder="8"
+         zorder="7"
          onover="controlBar_classicctrlbaronoveraction();"
          onout="controlBar_classicctrlbaronoutaction();"
          onhover="showTooltip('plugin', controlBar_classicmenuTooltipStyle, bottom);"
@@ -1612,9 +1567,9 @@
   <layer name="controlBar_classicmenu_controlbar_bg_img"
          keep="true"
          align="bottomright"
-         x="0" y="80"
+         x="0" y="0"
          url="%FIRSTXML%/graphics/classiccontrolbar/footer.png"
-         zorder="6"
+         zorder="5"
          width="40"
          height="40"
          scale9grid="10|10|80|80"
@@ -1623,9 +1578,9 @@
   <layer name="controlBar_classicmenu_controlbar_bg"
          keep="true"
          align="bottomright"
-         x="0" y="80"
+         x="0" y="0"
          type="container"
-         zorder="7"
+         zorder="6"
          width="40"
          height="40"
          visible="false"
@@ -1763,8 +1718,11 @@
 	capture="false"
 	url="%FIRSTXML%/graphics/textfield.swf"
 	align="center"
-	background="false"
+	background="true"
+	backgroundcolor="0x7a7a7a"
+	backgroundalpha="0.80000000000000004"
 	border="false"
+	shadow="1" shadowrange="4.0" shadowangle="45" shadowcolor="0x000000" shadowalpha="1"
 	textshadow="1" textshadowrange="4.0" textshadowangle="45" textshadowcolor="0x000000" textshadowalpha="1"
 	css="color:#e6e6e6;font-family:Helvetica;font-weight:bold;font-size:14px;text-align:left;"
 	height="20"
@@ -1779,6 +1737,528 @@
 	yoffset="0"
 	edge="bottom"
 	/>
+
+
+<!-- ********** -->
+<!-- Classic Control Bar1 -->
+<!-- id : controlBar_classic1 -->
+<!-- ********** -->
+
+  <krpano controlBar_classic1barbuilt="false" controlBar_classic1backgroundwidthwhenclosed="0" controlBar_classic1backgroundwidthwhenopened="0" controlBar_classic1IsOpened="false" />
+  <events name="controlBar_classic1events" 
+    onxmlcomplete="controlBar_classic1buildMenuBar();" 
+
+
+    keep="true" />
+
+
+
+  <action name="controlBar_classic1buildMenuBar">
+    ifnot (controlBar_classic1barbuilt, controlBar_classic1buildMenu(); set(controlBar_classic1barbuilt, true););
+  </action>
+
+  <action name="controlBar_classic1buildMenu">
+    
+    set(controlBar_classic1button_pos, 20);
+
+
+
+
+    set(layer[controlBar_classic1btn_display_floorplan].x, get(controlBar_classic1button_pos));
+    set(layer[controlBar_classic1btn_hide_floorplan   ].x, get(controlBar_classic1button_pos));
+    inc(controlBar_classic1button_pos, 36);
+
+
+
+
+
+
+
+
+
+
+    inc(controlBar_classic1button_pos, 20);
+
+    set(controlBar_classic1backgroundwidthwhenopened, get(controlBar_classic1button_pos));
+
+
+
+    
+    add(controlBar_classic1VerifyVisibility, 20, 20);
+    if(controlBar_classic1backgroundwidthwhenopened == controlBar_classic1VerifyVisibility,
+      set(controlBar_classic1backgroundwidthwhenopened, 0);
+
+
+    );
+
+	
+	
+  </action>
+
+	<events name="controlBar_classic1StartTourEvents" onTourStart="controlBar_classic1CallOnStartTour();" keep="true" />
+
+	<action name="controlBar_classic1CallOnStartTour">
+		
+		set(layer[controlBar_classic1menu_controlbar_bg_img].width, get(controlBar_classic1button_pos));
+		set(layer[controlBar_classic1menu_controlbar_bg].width, get(controlBar_classic1button_pos));
+		controlBar_classic1showMenuControls();
+	</action>
+
+
+
+  <style name="controlBar_classic1_btn_style"
+         keep="true"
+         alpha="0.8"
+         edge="left" align="left"
+         width="36" height="36"
+         zorder="10"
+         onover="controlBar_classic1ctrlbaronoveraction();"
+         onout="controlBar_classic1ctrlbaronoutaction();"
+         onhover="showTooltip('plugin', controlBar_classic1menuTooltipStyle, top);"
+         />
+  <action name="controlBar_classic1ctrlbaronoveraction">
+    tween(alpha,1,0.1,easeoutquad);
+    tween(y,-2,0.1,easeoutquad);
+  </action>  
+  <action name="controlBar_classic1ctrlbaronoutaction">
+    tween(alpha,0.8);
+    tween(y,0,0.1,easeoutquad);
+    hideTooltip();
+  </action>
+
+  <layer name="controlBar_classic1menu_controlbar_bg_img"
+         keep="true"
+         align="topleft"
+         x="0" y="0"
+         url="%FIRSTXML%/graphics/classiccontrolbar1/footer.png"
+         zorder="8"
+         width="40"
+         height="40"
+         scale9grid="10|10|80|80"
+         visible="false"
+         />
+  <layer name="controlBar_classic1menu_controlbar_bg"
+         keep="true"
+         align="topleft"
+         x="0" y="0"
+         type="container"
+         zorder="9"
+         width="40"
+         height="40"
+         visible="false"
+         alpha="1.0"
+         >
+
+
+
+
+
+
+    <layer name="controlBar_classic1btn_display_floorplan"
+           url="%FIRSTXML%/graphics/classiccontrolbar1/btn_floorplan.png"
+           onclick="showFloorplan();
+"
+           style="controlBar_classic1_btn_style"
+           visible="false"
+           tooltip="controlBar_classic1displayFloorplanTip"
+           />
+    <layer name="controlBar_classic1btn_hide_floorplan"
+           url="%FIRSTXML%/graphics/classiccontrolbar1/btn_floorplan.png"
+           onclick="hideFloorplan();
+"
+           style="controlBar_classic1_btn_style"
+           visible="false"
+           tooltip="controlBar_classic1hideFloorplanTip"
+           />
+
+
+
+
+
+
+  </layer>
+
+
+
+
+
+  <action name="controlBar_classic1hideMenuControls">
+    set(controlBar_classic1IsOpened, false);
+
+
+
+
+
+    controlBar_classic1updateFloorplanButtons();
+
+
+
+
+
+    if(controlBar_classic1backgroundwidthwhenclosed == 0,
+      set(layer[controlBar_classic1menu_controlbar_bg_img].visible, false);
+      set(layer[controlBar_classic1menu_controlbar_bg].visible, false);
+    ,
+      set(layer[controlBar_classic1menu_controlbar_bg_img].visible, true);
+      set(layer[controlBar_classic1menu_controlbar_bg].visible, true);
+    );
+    tween(layer[controlBar_classic1menu_controlbar_bg_img].width,get(controlBar_classic1backgroundwidthwhenclosed),0.5,easeOutQuad);
+    tween(layer[controlBar_classic1menu_controlbar_bg].width,get(controlBar_classic1backgroundwidthwhenclosed),0.5,easeOutQuad);
+    tween(layer[controlBar_classic1menu_controlbar_bg_img].alpha,1.0,0.5,easeOutQuad);
+  </action>
+  <action name="controlBar_classic1showMenuControls">
+    set(controlBar_classic1IsOpened, true);
+    if(controlBar_classic1backgroundwidthwhenopened == 0,
+      set(layer[controlBar_classic1menu_controlbar_bg_img].visible, false);
+      set(layer[controlBar_classic1menu_controlbar_bg].visible, false);
+    ,
+      set(layer[controlBar_classic1menu_controlbar_bg_img].visible, true);
+      set(layer[controlBar_classic1menu_controlbar_bg].visible, true);
+    );
+    tween(layer[controlBar_classic1menu_controlbar_bg_img].alpha,1.0,0.5,easeOutQuad);
+    controlBar_classic1showMenuButtons();
+
+
+      tween(layer[controlBar_classic1menu_controlbar_bg_img].width, get(controlBar_classic1backgroundwidthwhenopened),0.5,easeOutQuad);
+      tween(layer[controlBar_classic1menu_controlbar_bg].width, get(controlBar_classic1backgroundwidthwhenopened),0.5,easeOutQuad);
+
+
+  </action>
+  <action name="controlBar_classic1showMenuButtons">
+
+    controlBar_classic1updateFloorplanButtons();
+
+
+
+
+
+
+
+
+
+  </action>
+
+
+	<events name="controlBar_classic1DisplayFloorPlanEvents" 
+		onshowtourfloorplan="controlBar_classic1updateFloorplanButtons();" 
+		onhidetourfloorplan="controlBar_classic1updateFloorplanButtons();" 
+		keep="true" />
+	<action name="controlBar_classic1HideFloorplanButtons">
+		set(layer[controlBar_classic1btn_display_floorplan].visible, false);
+		set(layer[controlBar_classic1btn_hide_floorplan].visible, false);
+	</action>
+	<action name="controlBar_classic1ShowFloorplanButtons">
+		if (tour_displayfloorplan,
+			set(layer[controlBar_classic1btn_hide_floorplan].visible, true);
+			set(layer[controlBar_classic1btn_display_floorplan].visible, false);
+		,
+			set(layer[controlBar_classic1btn_display_floorplan].visible, true);
+			set(layer[controlBar_classic1btn_hide_floorplan].visible, false);
+		);
+	</action>
+	<action name="controlBar_classic1updateFloorplanButtons">
+		if (controlBar_classic1IsOpened,
+			controlBar_classic1ShowFloorplanButtons();
+		,
+			controlBar_classic1HideFloorplanButtons();
+		);
+	</action>
+
+
+
+
+
+<layer name="controlBar_classic1menuTooltipStyle"
+	keep="true"
+	enabled="false"
+	capture="false"
+	url="%FIRSTXML%/graphics/textfield.swf"
+	align="center"
+	background="true"
+	backgroundcolor="0x7a7a7a"
+	backgroundalpha="0.80000000000000004"
+	border="false"
+	shadow="1" shadowrange="4.0" shadowangle="45" shadowcolor="0x000000" shadowalpha="1"
+	textshadow="1" textshadowrange="4.0" textshadowangle="45" textshadowcolor="0x000000" textshadowalpha="1"
+	css="color:#e6e6e6;font-family:Helvetica;font-weight:bold;font-size:14px;text-align:left;"
+	height="20"
+	autoheight="true"
+	autowidth="auto"
+	selectable="false"
+	zorder="0"
+	visible="false"
+	html=""
+	padding="2"
+	xoffset="0"
+	yoffset="0"
+	edge="top"
+	/>
+
+
+<!-- ********** -->
+<!-- Classic Control Bar2 -->
+<!-- id : controlBar_classic2 -->
+<!-- ********** -->
+
+  <krpano controlBar_classic2barbuilt="false" controlBar_classic2backgroundwidthwhenclosed="0" controlBar_classic2backgroundwidthwhenopened="0" controlBar_classic2IsOpened="false" />
+  <events name="controlBar_classic2events" 
+    onxmlcomplete="controlBar_classic2buildMenuBar();" 
+
+
+    keep="true" />
+
+
+
+  <action name="controlBar_classic2buildMenuBar">
+    ifnot (controlBar_classic2barbuilt, controlBar_classic2buildMenu(); set(controlBar_classic2barbuilt, true););
+  </action>
+
+  <action name="controlBar_classic2buildMenu">
+    
+    set(controlBar_classic2button_pos, 20);
+
+
+
+
+
+
+
+    set(layer[controlBar_classic2btn_show_thumbnails].x, get(controlBar_classic2button_pos));
+    set(layer[controlBar_classic2btn_hide_thumbnails].x, get(controlBar_classic2button_pos));
+    inc(controlBar_classic2button_pos, 36);
+
+
+
+
+
+
+
+    inc(controlBar_classic2button_pos, 20);
+
+    set(controlBar_classic2backgroundwidthwhenopened, get(controlBar_classic2button_pos));
+
+
+
+    
+    add(controlBar_classic2VerifyVisibility, 20, 20);
+    if(controlBar_classic2backgroundwidthwhenopened == controlBar_classic2VerifyVisibility,
+      set(controlBar_classic2backgroundwidthwhenopened, 0);
+
+
+    );
+
+	
+	
+  </action>
+
+	<events name="controlBar_classic2StartTourEvents" onTourStart="controlBar_classic2CallOnStartTour();" keep="true" />
+
+	<action name="controlBar_classic2CallOnStartTour">
+		
+		set(layer[controlBar_classic2menu_controlbar_bg_img].width, get(controlBar_classic2button_pos));
+		set(layer[controlBar_classic2menu_controlbar_bg].width, get(controlBar_classic2button_pos));
+		controlBar_classic2showMenuControls();
+	</action>
+
+
+
+  <style name="controlBar_classic2_btn_style"
+         keep="true"
+         alpha="0.8"
+         edge="left" align="left"
+         width="36" height="36"
+         zorder="13"
+         onover="controlBar_classic2ctrlbaronoveraction();"
+         onout="controlBar_classic2ctrlbaronoutaction();"
+         onhover="showTooltip('plugin', controlBar_classic2menuTooltipStyle, bottom);"
+         />
+  <action name="controlBar_classic2ctrlbaronoveraction">
+    tween(alpha,1,0.1,easeoutquad);
+    tween(y,-2,0.1,easeoutquad);
+  </action>  
+  <action name="controlBar_classic2ctrlbaronoutaction">
+    tween(alpha,0.8);
+    tween(y,0,0.1,easeoutquad);
+    hideTooltip();
+  </action>
+
+  <layer name="controlBar_classic2menu_controlbar_bg_img"
+         keep="true"
+         align="bottomleft"
+         x="0" y="0"
+         url="%FIRSTXML%/graphics/classiccontrolbar2/footer.png"
+         zorder="11"
+         width="40"
+         height="40"
+         scale9grid="10|10|80|80"
+         visible="false"
+         />
+  <layer name="controlBar_classic2menu_controlbar_bg"
+         keep="true"
+         align="bottomleft"
+         x="0" y="0"
+         type="container"
+         zorder="12"
+         width="40"
+         height="40"
+         visible="false"
+         alpha="1.0"
+         >
+
+
+
+
+
+  <layer name="controlBar_classic2btn_hide_thumbnails"
+         url="%FIRSTXML%/graphics/classiccontrolbar2/btn_hide_thumbnails.png"
+         style="controlBar_classic2_btn_style"
+         onclick="hideTourThumbnails();
+"
+         tooltip="controlBar_classic2hideThumbnailsTip"
+         visible="false"
+         />
+  <layer name="controlBar_classic2btn_show_thumbnails"
+         url="%FIRSTXML%/graphics/classiccontrolbar2/btn_show_thumbnails.png"
+         style="controlBar_classic2_btn_style"
+         onclick="showTourThumbnails();
+"
+         tooltip="controlBar_classic2showThumbnailsTip"
+         visible="false"
+         />
+
+
+
+
+
+
+
+  </layer>
+
+
+
+
+	<events name="controlBar_classic2hideshowthumbnailsevent" 
+		hidetourthumbnails="controlBar_classic2updateHideShowThumbnailsButtons();" 
+		showtourthumbnails="controlBar_classic2updateHideShowThumbnailsButtons();" 
+		keep="true" />
+	<action name="controlBar_classic2HideHideShowThumbnailsButtons">
+		set(layer[controlBar_classic2btn_show_thumbnails].visible, false);
+		set(layer[controlBar_classic2btn_hide_thumbnails].visible, false);
+	</action>
+	<action name="controlBar_classic2ShowHideShowThumbnailsButtons">
+		if (tour_displaythumbnails,
+			set(layer[controlBar_classic2btn_hide_thumbnails].visible, true);
+			set(layer[controlBar_classic2btn_show_thumbnails].visible, false);
+		,
+			set(layer[controlBar_classic2btn_show_thumbnails].visible, true);
+			set(layer[controlBar_classic2btn_hide_thumbnails].visible, false);
+		);
+	</action>
+	<action name="controlBar_classic2updateHideShowThumbnailsButtons">
+		if (controlBar_classic2IsOpened,
+			controlBar_classic2ShowHideShowThumbnailsButtons();
+		,
+			controlBar_classic2HideHideShowThumbnailsButtons();
+		);
+	</action>
+
+
+  <action name="controlBar_classic2hideMenuControls">
+    set(controlBar_classic2IsOpened, false);
+
+
+
+
+    controlBar_classic2updateHideShowThumbnailsButtons();
+
+
+
+
+
+
+    if(controlBar_classic2backgroundwidthwhenclosed == 0,
+      set(layer[controlBar_classic2menu_controlbar_bg_img].visible, false);
+      set(layer[controlBar_classic2menu_controlbar_bg].visible, false);
+    ,
+      set(layer[controlBar_classic2menu_controlbar_bg_img].visible, true);
+      set(layer[controlBar_classic2menu_controlbar_bg].visible, true);
+    );
+    tween(layer[controlBar_classic2menu_controlbar_bg_img].width,get(controlBar_classic2backgroundwidthwhenclosed),0.5,easeOutQuad);
+    tween(layer[controlBar_classic2menu_controlbar_bg].width,get(controlBar_classic2backgroundwidthwhenclosed),0.5,easeOutQuad);
+    tween(layer[controlBar_classic2menu_controlbar_bg_img].alpha,1.0,0.5,easeOutQuad);
+  </action>
+  <action name="controlBar_classic2showMenuControls">
+    set(controlBar_classic2IsOpened, true);
+    if(controlBar_classic2backgroundwidthwhenopened == 0,
+      set(layer[controlBar_classic2menu_controlbar_bg_img].visible, false);
+      set(layer[controlBar_classic2menu_controlbar_bg].visible, false);
+    ,
+      set(layer[controlBar_classic2menu_controlbar_bg_img].visible, true);
+      set(layer[controlBar_classic2menu_controlbar_bg].visible, true);
+    );
+    tween(layer[controlBar_classic2menu_controlbar_bg_img].alpha,1.0,0.5,easeOutQuad);
+    controlBar_classic2showMenuButtons();
+
+
+      tween(layer[controlBar_classic2menu_controlbar_bg_img].width, get(controlBar_classic2backgroundwidthwhenopened),0.5,easeOutQuad);
+      tween(layer[controlBar_classic2menu_controlbar_bg].width, get(controlBar_classic2backgroundwidthwhenopened),0.5,easeOutQuad);
+
+
+  </action>
+  <action name="controlBar_classic2showMenuButtons">
+
+
+
+
+
+
+
+
+
+
+      controlBar_classic2updateHideShowThumbnailsButtons();
+  </action>
+
+
+
+
+
+
+<layer name="controlBar_classic2menuTooltipStyle"
+	keep="true"
+	enabled="false"
+	capture="false"
+	url="%FIRSTXML%/graphics/textfield.swf"
+	align="center"
+	background="true"
+	backgroundcolor="0x7a7a7a"
+	backgroundalpha="0.80000000000000004"
+	border="false"
+	shadow="1" shadowrange="4.0" shadowangle="45" shadowcolor="0x000000" shadowalpha="1"
+	textshadow="1" textshadowrange="4.0" textshadowangle="45" textshadowcolor="0x000000" textshadowalpha="1"
+	css="color:#e6e6e6;font-family:Helvetica;font-weight:bold;font-size:14px;text-align:left;"
+	height="20"
+	autoheight="true"
+	autowidth="auto"
+	selectable="false"
+	zorder="0"
+	visible="false"
+	html=""
+	padding="2"
+	xoffset="0"
+	yoffset="0"
+	edge="bottom"
+	/>
+
+
+  <!-- FLOORPLAN -->
+  <action name="hideFloorplan">set(tour_displayfloorplan, false);events.dispatch(onhidetourfloorplan);</action>
+  <action name="showFloorplan">set(tour_displayfloorplan, true); events.dispatch(onshowtourfloorplan);</action>
+
+
+  <!-- Hide / Show Thumbnails -->
+  <action name="hideTourThumbnails">set(tour_displaythumbnails, false);events.dispatch(hidetourthumbnails);</action>
+  <action name="showTourThumbnails">set(tour_displaythumbnails, true); events.dispatch(showtourthumbnails);</action>
 
 
   <!-- Fullscreen Management -->
@@ -1801,11 +2281,6 @@
   <!-- Hide / Show Controls -->
   <action name="hideTourControls">set(tour_displaycontrols, false);events.dispatch(hidetourcontrols);</action>
   <action name="showTourControls">set(tour_displaycontrols, true); events.dispatch(showtourcontrols);</action>
-
-
-  <!-- FLOORPLAN -->
-  <action name="hideFloorplan">set(tour_displayfloorplan, false);events.dispatch(onhidetourfloorplan);</action>
-  <action name="showFloorplan">set(tour_displayfloorplan, true); events.dispatch(onshowtourfloorplan);</action>
 
 
 </krpano>

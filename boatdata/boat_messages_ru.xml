@@ -19,13 +19,13 @@
   <data name="ru_pano14_title"><![CDATA[Outdoor Seating]]></data>
 
 
-  <data name="ru_pano10_title"><![CDATA[Owners Cabin]]></data>
+  <data name="ru_pano10_title"><![CDATA[Navigation Station]]></data>
 
 
   <data name="ru_pano12_title"><![CDATA[Main Saloon]]></data>
 
 
-  <data name="ru_pano15_title"><![CDATA[Navigation Station]]></data>
+  <data name="ru_pano15_title"><![CDATA[Owners Cabin]]></data>
 
 
   <data name="ru_pano17_title"><![CDATA[Mast Head]]></data>
@@ -48,12 +48,15 @@
 	<data name="ru_spotmap109_tooltip"><![CDATA[]]></data>
 
 
+  <data name="ru_floorPlandisplay_close_text"><![CDATA[]]></data>
   <data name="ru_logowebsiteurl"><![CDATA[]]></data>
   <data name="ru_logotooltipText"><![CDATA[]]></data>
-  <data name="ru_togglebuttonfirsttooltip"><![CDATA[]]></data>
-  <data name="ru_togglebuttonsecondtooltip"><![CDATA[]]></data>
-  <data name="ru_controlBar_classicopenFsTip"><![CDATA[]]></data>
-  <data name="ru_controlBar_classiccloseFsTip"><![CDATA[]]></data>
+  <data name="ru_controlBar_classicopenFsTip"><![CDATA[Enter fullscreen]]></data>
+  <data name="ru_controlBar_classiccloseFsTip"><![CDATA[Exit fullscreen]]></data>
+  <data name="ru_controlBar_classic1displayFloorplanTip"><![CDATA[Show floorplan]]></data>
+  <data name="ru_controlBar_classic1hideFloorplanTip"><![CDATA[Hide floorplan]]></data>
+  <data name="ru_controlBar_classic2showThumbnailsTip"><![CDATA[Show thumbnails]]></data>
+  <data name="ru_controlBar_classic2hideThumbnailsTip"><![CDATA[Hide thumbnails]]></data>
 
 
   <data name="ru_vr_setup_hmd0"><![CDATA[SELECT YOUR HMD]]></data>
