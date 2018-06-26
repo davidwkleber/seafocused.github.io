@@ -322,7 +322,7 @@
 		<option name="position" value="topleft" type="string" />
 		<option name="start_position" value="left" type="string" />
 		<option name="margin_x" value="10" type="int" />
-		<option name="margin_y" value="20" type="int" />
+		<option name="margin_y" value="40" type="int" />
 		<option name="display_title" value="true" type="bool" />
 		<option name="title" value="project_floor_title" type="string" />
 		<option name="title_font" value="Calibri Light" type="string" />
@@ -330,7 +330,7 @@
 		<option name="title_weight" value="bold" type="string" />
 		<option name="title_decoration" value="normal" type="string" />
 		<option name="title_color" value="000000" type="string" />
-		<option name="close_displayed" value="false" type="bool" />
+		<option name="close_displayed" value="true" type="bool" />
 		<option name="close_text" value="floorPlandisplay_close_text" type="string" />
 
 		<option name="background_color" value="ffffff" type="string" />
@@ -348,7 +348,7 @@
 		<option name="area_border_color" value="373737" type="string" />
 		<option name="area_border_alpha" value="0.80000000000000004" type="float" />
 		<option name="area_width" value="350" type="int" />
-		<option name="area_height" value="258" type="int" />
+		<option name="area_height" value="290" type="int" />
 		<option name="area_width_unit" value="pixel" type="string" />
 		<option name="area_height_unit" value="pixel" type="string" />
 		<option name="animation" value="false" type="bool" />
@@ -452,7 +452,7 @@
 	y="0"
 	
 	bgcolor="0xdedede"
-	bgalpha="0"
+	bgalpha="0.10000762951094835"
 	
 	zorder="2"
 />
@@ -464,7 +464,7 @@
 	visible="false"
 	
 	borderWidth="2"
-	borderColorDefault="0x848484" 
+	borderColorDefault="0xe6e6e6" 
 	borderColorHover="0xffffff"
 	borderColorSelected="0xffffff"
 	borderAlphaDefault="0.50000762951094835" 
@@ -484,8 +484,8 @@
 	url="%FIRSTXML%/graphics/textfield.swf"
 	align="center"
 	background="true"
-	backgroundcolor="0x1f1f1f"
-	backgroundalpha="0.7000076295109483"
+	backgroundcolor="0x7f7f7f"
+	backgroundalpha="0.80000000000000004"
 	border="false"
 	css="color:#ffffff;font-family:Helvetica;font-weight:bold;font-size:14px;text-align:left;"
 	height="20"
@@ -1351,15 +1351,12 @@
 
 
 <plugin name="gyroscope"
-        url="%FIRSTXML%/graphics/gyro2.js"
+        url="%FIRSTXML%/graphics/gyro.js"
         keep="true"
         devices="no-desktop.and.html5"
 
-        onunavailable="checkGyroUnavailable();"
-        sensor_mode="1"
-        friction="auto"
-        autocalibration="true"
-        touch_mode="full"
+
+        friction="0.5"
         onavailable="delayedcall(1, checkGyroAvailability(););"
         enabled="false"
         activated="false"
@@ -1369,6 +1366,14 @@
 
 <action name="planarGyroscopeTest">
   if(plugin[gyroscope],
+    ifnot (plugin[gyroscope].available === undefined,
+      if (plugin[gyroscope].available,
+        if(scene[get(xml.scene)].planar,
+          if(plugin[gyroscope].enabled,
+            switch(plugin[gyroscope].enabled);
+            if (plugin[gyroscope].enabled, events.dispatch(ongyroscopeon);, events.dispatch(ongyroscopeoff););
+          );
+        ,
           if(scene[get(xml.scene)].full360,
             set(sceneisfull360, false);
             sub(viewhfov, panoview.hmax, panoview.hmin);
@@ -1386,12 +1391,23 @@
           ,
             set(plugin[gyroscope].camroll, false);
           );
+          if(plugin[gyroscope].activated,
+            ifnot(plugin[gyroscope].enabled,
+              switch(plugin[gyroscope].enabled);
+              if (plugin[gyroscope].enabled, events.dispatch(ongyroscopeon);, events.dispatch(ongyroscopeoff););
+            );
+          );
+        );
+
+      );
+    );
   );
 </action>
 
 <action name="changeGyroscopeState">
   if(plugin[gyroscope],
-    if (plugin[gyroscope].isavailable,
+    ifnot (plugin[gyroscope].available === undefined,
+      if (plugin[gyroscope].available,
         if(%1,
           set(plugin[gyroscope].activated,true);
         ,
@@ -1405,22 +1421,27 @@
           );
           if (plugin[gyroscope].enabled, events.dispatch(ongyroscopeon);, events.dispatch(ongyroscopeoff););
         );
+      );
     );
   );
 </action>
 
 <action name="checkGyroAvailability">
   if(plugin[gyroscope],
-    if (plugin[gyroscope].isavailable,
+    ifnot (plugin[gyroscope].available === undefined, 
+      if (plugin[gyroscope].available,
       ifnot(tour_firstlittleplanet,
-        
+        ifnot(scene[get(xml.scene)].planar,
         switch(plugin[gyroscope].enabled);
         set(plugin[gyroscope].activated,true);
-        
+        );
         set(tour_gyroscopedevices, true);
         events.dispatch(ongyroscopeavailable);
       ,
         delayedcall(1, checkGyroAvailability(););
+      );
+      ,
+        set(tour_gyroscopedevices, false);
       );
     ,
       set(tour_gyroscopedevices, false);
@@ -1431,12 +1452,6 @@
   );
 </action>
 
-<action name="checkGyroUnavailable">
-  set(plugin[gyroscope].activated, false);
-  set(plugin[gyroscope].enabled, false);
-  set(tour_gyroscopedevices, false);
-  events.dispatch(ongyroscopeunavailable);
-</action>
 
 <!-- ********** -->
 <!-- Logo -->
@@ -1476,83 +1491,33 @@
 
 
 <!-- ********** -->
-<!-- Toggle Button -->
-<!-- id : togglebutton -->
+<!-- Classic Control Bar1 -->
+<!-- id : controlBar_classic1 -->
 <!-- ********** -->
 
-
-
-  <layer name="togglebutton"
-         keep="true"
-         url="%FIRSTXML%/graphics/togglebutton/download.png" 
-         align="topleft"
-         x="10"
-         y="0"
-         zorder="5"
-         state="true"
-         onclick="togglebuttonOnClick"
-         onout=""
-         height="20"
-         width="20"
-         visible="false"
-         />
-
-  <action name="togglebuttonOnClick">
-    if (state,
-      set(state, false);hideFloorplan();
-
-
-
-      set(url,%FIRSTXML%/graphics/togglebutton/upload.png);
-     ,
-      set(state, true);showFloorplan();
-
-
-
-      set(url,%FIRSTXML%/graphics/togglebutton/download.png);
-    );
-  </action>
-
-  <events name="togglebuttonevents" 
-    onTourStart="showtogglebutton();"
-    hidetourcontrols="hidetogglebutton();" 
-    showtourcontrols="showtogglebutton();" 
-    keep="true" />
-  <action name="hidetogglebutton">set(layer[togglebutton].visible, false);</action>
-  <action name="showtogglebutton">if(tour_displaycontrols,set(layer[togglebutton].visible, true);,hidetogglebutton(););</action>
-
-
-<!-- ********** -->
-<!-- Classic Control Bar -->
-<!-- id : controlBar_classic -->
-<!-- ********** -->
-
-  <krpano controlBar_classicbarbuilt="false" controlBar_classicbackgroundwidthwhenclosed="0" controlBar_classicbackgroundwidthwhenopened="0" controlBar_classicIsOpened="false" />
-  <events name="controlBar_classicevents" 
-    onxmlcomplete="controlBar_classicbuildMenuBar();" 
+  <krpano controlBar_classic1barbuilt="false" controlBar_classic1backgroundwidthwhenclosed="0" controlBar_classic1backgroundwidthwhenopened="0" controlBar_classic1IsOpened="false" />
+  <events name="controlBar_classic1events" 
+    onxmlcomplete="controlBar_classic1buildMenuBar();" 
 
 
     keep="true" />
 
 
 
-  <action name="controlBar_classicbuildMenuBar">
-    ifnot (controlBar_classicbarbuilt, controlBar_classicbuildMenu(); set(controlBar_classicbarbuilt, true););
+  <action name="controlBar_classic1buildMenuBar">
+    ifnot (controlBar_classic1barbuilt, controlBar_classic1buildMenu(); set(controlBar_classic1barbuilt, true););
   </action>
 
-  <action name="controlBar_classicbuildMenu">
+  <action name="controlBar_classic1buildMenu">
     
-    set(controlBar_classicbutton_pos, 20);
+    set(controlBar_classic1button_pos, 20);
 
 
 
-    if (device.fullscreensupport,
-      set(layer[controlBar_classicbtn_openfs ].x, get(controlBar_classicbutton_pos));
-      set(layer[controlBar_classicbtn_closefs].x, get(controlBar_classicbutton_pos));
-      inc(controlBar_classicbutton_pos, 36);
-    );
 
-
+    set(layer[controlBar_classic1btn_display_floorplan].x, get(controlBar_classic1button_pos));
+    set(layer[controlBar_classic1btn_hide_floorplan   ].x, get(controlBar_classic1button_pos));
+    inc(controlBar_classic1button_pos, 36);
 
 
 
@@ -1562,16 +1527,17 @@
 
 
 
-    inc(controlBar_classicbutton_pos, 20);
 
-    set(controlBar_classicbackgroundwidthwhenopened, get(controlBar_classicbutton_pos));
+    inc(controlBar_classic1button_pos, 20);
+
+    set(controlBar_classic1backgroundwidthwhenopened, get(controlBar_classic1button_pos));
 
 
 
     
-    add(controlBar_classicVerifyVisibility, 20, 20);
-    if(controlBar_classicbackgroundwidthwhenopened == controlBar_classicVerifyVisibility,
-      set(controlBar_classicbackgroundwidthwhenopened, 0);
+    add(controlBar_classic1VerifyVisibility, 20, 20);
+    if(controlBar_classic1backgroundwidthwhenopened == controlBar_classic1VerifyVisibility,
+      set(controlBar_classic1backgroundwidthwhenopened, 0);
 
 
     );
@@ -1580,54 +1546,54 @@
 	
   </action>
 
-	<events name="controlBar_classicStartTourEvents" onTourStart="controlBar_classicCallOnStartTour();" keep="true" />
+	<events name="controlBar_classic1StartTourEvents" onTourStart="controlBar_classic1CallOnStartTour();" keep="true" />
 
-	<action name="controlBar_classicCallOnStartTour">
+	<action name="controlBar_classic1CallOnStartTour">
 		
-		set(layer[controlBar_classicmenu_controlbar_bg_img].width, get(controlBar_classicbutton_pos));
-		set(layer[controlBar_classicmenu_controlbar_bg].width, get(controlBar_classicbutton_pos));
-		controlBar_classicshowMenuControls();
+		set(layer[controlBar_classic1menu_controlbar_bg_img].width, get(controlBar_classic1button_pos));
+		set(layer[controlBar_classic1menu_controlbar_bg].width, get(controlBar_classic1button_pos));
+		controlBar_classic1showMenuControls();
 	</action>
 
 
 
-  <style name="controlBar_classic_btn_style"
+  <style name="controlBar_classic1_btn_style"
          keep="true"
          alpha="0.8"
-         edge="right" align="right"
+         edge="left" align="left"
          width="36" height="36"
-         zorder="8"
-         onover="controlBar_classicctrlbaronoveraction();"
-         onout="controlBar_classicctrlbaronoutaction();"
-         onhover="showTooltip('plugin', controlBar_classicmenuTooltipStyle, bottom);"
+         zorder="7"
+         onover="controlBar_classic1ctrlbaronoveraction();"
+         onout="controlBar_classic1ctrlbaronoutaction();"
+         onhover="showTooltip('plugin', controlBar_classic1menuTooltipStyle, top);"
          />
-  <action name="controlBar_classicctrlbaronoveraction">
+  <action name="controlBar_classic1ctrlbaronoveraction">
     tween(alpha,1,0.1,easeoutquad);
     tween(y,-2,0.1,easeoutquad);
   </action>  
-  <action name="controlBar_classicctrlbaronoutaction">
+  <action name="controlBar_classic1ctrlbaronoutaction">
     tween(alpha,0.8);
     tween(y,0,0.1,easeoutquad);
     hideTooltip();
   </action>
 
-  <layer name="controlBar_classicmenu_controlbar_bg_img"
+  <layer name="controlBar_classic1menu_controlbar_bg_img"
          keep="true"
-         align="bottomright"
-         x="0" y="80"
-         url="%FIRSTXML%/graphics/classiccontrolbar/footer.png"
-         zorder="6"
+         align="topleft"
+         x="0" y="0"
+         url="%FIRSTXML%/graphics/classiccontrolbar1/footer.png"
+         zorder="5"
          width="40"
          height="40"
          scale9grid="10|10|80|80"
          visible="false"
          />
-  <layer name="controlBar_classicmenu_controlbar_bg"
+  <layer name="controlBar_classic1menu_controlbar_bg"
          keep="true"
-         align="bottomright"
-         x="0" y="80"
+         align="topleft"
+         x="0" y="0"
          type="container"
-         zorder="7"
+         zorder="6"
          width="40"
          height="40"
          visible="false"
@@ -1639,25 +1605,23 @@
 
 
 
+    <layer name="controlBar_classic1btn_display_floorplan"
+           url="%FIRSTXML%/graphics/classiccontrolbar1/btn_floorplan.png"
+           onclick="showFloorplan();
+"
+           style="controlBar_classic1_btn_style"
+           visible="false"
+           tooltip="controlBar_classic1displayFloorplanTip"
+           />
+    <layer name="controlBar_classic1btn_hide_floorplan"
+           url="%FIRSTXML%/graphics/classiccontrolbar1/btn_floorplan.png"
+           onclick="hideFloorplan();
+"
+           style="controlBar_classic1_btn_style"
+           visible="false"
+           tooltip="controlBar_classic1hideFloorplanTip"
+           />
 
-    <layer name="controlBar_classicbtn_openfs"
-            url="%FIRSTXML%/graphics/classiccontrolbar/btn_enter_fs.png"
-            onclick="enterFullscreen();
-"
-            style="controlBar_classic_btn_style"
-            devices="fullscreensupport"
-            visible="false"
-            tooltip="controlBar_classicopenFsTip"
-            />
-    <layer name="controlBar_classicbtn_closefs"
-            url="%FIRSTXML%/graphics/classiccontrolbar/btn_close_fs.png"
-            onclick="exitFullscreen();
-"
-            style="controlBar_classic_btn_style"
-            visible="false"
-            devices="fullscreensupport"
-            tooltip="controlBar_classiccloseFsTip"
-            />
 
 
 
@@ -1669,104 +1633,103 @@
 
 
 
-  <action name="controlBar_classichideMenuControls">
-    set(controlBar_classicIsOpened, false);
-    controlBar_classicupdateFullscreenButtons();
+  <action name="controlBar_classic1hideMenuControls">
+    set(controlBar_classic1IsOpened, false);
 
 
 
 
 
+    controlBar_classic1updateFloorplanButtons();
 
 
 
 
 
-    if(controlBar_classicbackgroundwidthwhenclosed == 0,
-      set(layer[controlBar_classicmenu_controlbar_bg_img].visible, false);
-      set(layer[controlBar_classicmenu_controlbar_bg].visible, false);
+    if(controlBar_classic1backgroundwidthwhenclosed == 0,
+      set(layer[controlBar_classic1menu_controlbar_bg_img].visible, false);
+      set(layer[controlBar_classic1menu_controlbar_bg].visible, false);
     ,
-      set(layer[controlBar_classicmenu_controlbar_bg_img].visible, true);
-      set(layer[controlBar_classicmenu_controlbar_bg].visible, true);
+      set(layer[controlBar_classic1menu_controlbar_bg_img].visible, true);
+      set(layer[controlBar_classic1menu_controlbar_bg].visible, true);
     );
-    tween(layer[controlBar_classicmenu_controlbar_bg_img].width,get(controlBar_classicbackgroundwidthwhenclosed),0.5,easeOutQuad);
-    tween(layer[controlBar_classicmenu_controlbar_bg].width,get(controlBar_classicbackgroundwidthwhenclosed),0.5,easeOutQuad);
-    tween(layer[controlBar_classicmenu_controlbar_bg_img].alpha,1.0,0.5,easeOutQuad);
+    tween(layer[controlBar_classic1menu_controlbar_bg_img].width,get(controlBar_classic1backgroundwidthwhenclosed),0.5,easeOutQuad);
+    tween(layer[controlBar_classic1menu_controlbar_bg].width,get(controlBar_classic1backgroundwidthwhenclosed),0.5,easeOutQuad);
+    tween(layer[controlBar_classic1menu_controlbar_bg_img].alpha,1.0,0.5,easeOutQuad);
   </action>
-  <action name="controlBar_classicshowMenuControls">
-    set(controlBar_classicIsOpened, true);
-    if(controlBar_classicbackgroundwidthwhenopened == 0,
-      set(layer[controlBar_classicmenu_controlbar_bg_img].visible, false);
-      set(layer[controlBar_classicmenu_controlbar_bg].visible, false);
+  <action name="controlBar_classic1showMenuControls">
+    set(controlBar_classic1IsOpened, true);
+    if(controlBar_classic1backgroundwidthwhenopened == 0,
+      set(layer[controlBar_classic1menu_controlbar_bg_img].visible, false);
+      set(layer[controlBar_classic1menu_controlbar_bg].visible, false);
     ,
-      set(layer[controlBar_classicmenu_controlbar_bg_img].visible, true);
-      set(layer[controlBar_classicmenu_controlbar_bg].visible, true);
+      set(layer[controlBar_classic1menu_controlbar_bg_img].visible, true);
+      set(layer[controlBar_classic1menu_controlbar_bg].visible, true);
     );
-    tween(layer[controlBar_classicmenu_controlbar_bg_img].alpha,1.0,0.5,easeOutQuad);
-    controlBar_classicshowMenuButtons();
+    tween(layer[controlBar_classic1menu_controlbar_bg_img].alpha,1.0,0.5,easeOutQuad);
+    controlBar_classic1showMenuButtons();
 
 
-      tween(layer[controlBar_classicmenu_controlbar_bg_img].width, get(controlBar_classicbackgroundwidthwhenopened),0.5,easeOutQuad);
-      tween(layer[controlBar_classicmenu_controlbar_bg].width, get(controlBar_classicbackgroundwidthwhenopened),0.5,easeOutQuad);
-
-
-  </action>
-  <action name="controlBar_classicshowMenuButtons">
-
-
-
-
-
-
-    controlBar_classicupdateFullscreenButtons();
-
-
+      tween(layer[controlBar_classic1menu_controlbar_bg_img].width, get(controlBar_classic1backgroundwidthwhenopened),0.5,easeOutQuad);
+      tween(layer[controlBar_classic1menu_controlbar_bg].width, get(controlBar_classic1backgroundwidthwhenopened),0.5,easeOutQuad);
 
 
   </action>
+  <action name="controlBar_classic1showMenuButtons">
+
+    controlBar_classic1updateFloorplanButtons();
 
 
 
-	<events name="controlBar_classicmenufullscreenchangeevent"
-		onenterfullscreen="controlBar_classicupdateFullscreenButtons();"
-		onexitfullscreen="controlBar_classicupdateFullscreenButtons();"
-		keep="true"/>
-	<action name="controlBar_classicHideFullscreenButtons">
-		set(layer[controlBar_classicbtn_openfs].visible , false);
-		set(layer[controlBar_classicbtn_closefs].visible, false);
+
+
+
+
+
+
+  </action>
+
+
+	<events name="controlBar_classic1DisplayFloorPlanEvents" 
+		onshowtourfloorplan="controlBar_classic1updateFloorplanButtons();" 
+		onhidetourfloorplan="controlBar_classic1updateFloorplanButtons();" 
+		keep="true" />
+	<action name="controlBar_classic1HideFloorplanButtons">
+		set(layer[controlBar_classic1btn_display_floorplan].visible, false);
+		set(layer[controlBar_classic1btn_hide_floorplan].visible, false);
 	</action>
-	<action name="controlBar_classicShowFullscreenButtons">
-		if (device.fullscreensupport,
-			if(tour_fullscreen,
-				set(layer[controlBar_classicbtn_openfs].visible , false);
-				set(layer[controlBar_classicbtn_closefs].visible, true);
-			,
-				set(layer[controlBar_classicbtn_openfs].visible ,true);
-				set(layer[controlBar_classicbtn_closefs].visible,false);
-			);
+	<action name="controlBar_classic1ShowFloorplanButtons">
+		if (tour_displayfloorplan,
+			set(layer[controlBar_classic1btn_hide_floorplan].visible, true);
+			set(layer[controlBar_classic1btn_display_floorplan].visible, false);
 		,
-			controlBar_classicHideFullscreenButtons();
+			set(layer[controlBar_classic1btn_display_floorplan].visible, true);
+			set(layer[controlBar_classic1btn_hide_floorplan].visible, false);
 		);
 	</action>
-	<action name="controlBar_classicupdateFullscreenButtons">
-		if (controlBar_classicIsOpened,
-			controlBar_classicShowFullscreenButtons();
+	<action name="controlBar_classic1updateFloorplanButtons">
+		if (controlBar_classic1IsOpened,
+			controlBar_classic1ShowFloorplanButtons();
 		,
-			controlBar_classicHideFullscreenButtons();
+			controlBar_classic1HideFloorplanButtons();
 		);
 	</action>
 
 
 
 
-<layer name="controlBar_classicmenuTooltipStyle"
+
+<layer name="controlBar_classic1menuTooltipStyle"
 	keep="true"
 	enabled="false"
 	capture="false"
 	url="%FIRSTXML%/graphics/textfield.swf"
 	align="center"
-	background="false"
+	background="true"
+	backgroundcolor="0x7a7a7a"
+	backgroundalpha="0.80000000000000004"
 	border="false"
+	shadow="1" shadowrange="4.0" shadowangle="45" shadowcolor="0x000000" shadowalpha="1"
 	textshadow="1" textshadowrange="4.0" textshadowangle="45" textshadowcolor="0x000000" textshadowalpha="1"
 	css="color:#e6e6e6;font-family:Helvetica;font-weight:bold;font-size:14px;text-align:left;"
 	height="20"
@@ -1779,7 +1742,7 @@
 	padding="2"
 	xoffset="0"
 	yoffset="0"
-	edge="bottom"
+	edge="top"
 	/>
 
 
@@ -1794,9 +1757,9 @@
 		alpha="1"
 		url="%FIRSTXML%/graphics/webvrbutton/btn_webvr.png" 
 		align="top"
-		x="-10"
+		x="0"
 		y="10"
-		zorder="9"
+		zorder="8"
 		visible="false"
 		onclick="js(accessWebVr());
 "
@@ -1816,32 +1779,47 @@
 	<action name="showwebvrbutton">if(tour_displaycontrols,if(layer[webvrbutton].blocked == false,set(layer[webvrbutton].visible, true););,hidewebvrbutton(););</action>
 
 
+<!-- ********** -->
+<!-- Toggle Button -->
+<!-- id : togglebutton -->
+<!-- ********** -->
+
+  <!-- EMPTY TOGGLE BUTTON : no image file -->
+<!-- ********** -->
+<!-- Simple Button -->
+<!-- id : button -->
+<!-- ********** -->
+
+  <layer name="button"
+         keep="true"
+         url="%FIRSTXML%/graphics/button/btn_enter_fs.png" 
+         align="bottomright"
+         x="10"
+         y="80"
+         zorder="10"
+         visible="false"
+         onclick="buttonOnClick"
+         height="30"
+         width="30"
+         />
+  <action name="buttonOnClick">switchFullscreen();
+
+
+  </action>
+
+  <events name="buttonevents" 
+    onTourStart="showbutton();"
+    hidetourcontrols="hidebutton();" 
+    showtourcontrols="showbutton();" 
+    keep="true" />
+  <action name="hidebutton">set(layer[button].visible, false);</action>
+  <action name="showbutton">if(tour_displaycontrols,set(layer[button].visible, true);,hidebutton(););</action>
+
+
   <!-- FLOORPLAN -->
   <action name="hideFloorplan">set(tour_displayfloorplan, false);events.dispatch(onhidetourfloorplan);</action>
   <action name="showFloorplan">set(tour_displayfloorplan, true); events.dispatch(onshowtourfloorplan);</action>
 
-
-  <!-- Hide / Show Controls -->
-  <action name="hideTourControls">set(tour_displaycontrols, false);events.dispatch(hidetourcontrols);</action>
-  <action name="showTourControls">set(tour_displaycontrols, true); events.dispatch(showtourcontrols);</action>
-
-
-  <!-- Fullscreen Management -->
-  <action name="exitFullScreen" devices="fullscreensupport">set(tour_fullscreen,false);js(setFullscreen(false));</action>
-  <action name="enterFullScreen" devices="fullscreensupport">set(tour_fullscreen,true);js(setFullscreen(true));</action>
-  <action name="switchFullScreen">if(tour_fullscreen,exitFullScreen();,enterFullScreen(););</action>
-
-  
-  <events name="krpanoExitFullscreenEvent"
-    onexitfullscreen="if(tour_fullscreen,exitFullScreenChangeEvent(););"
-    keep="true" />
-
-  <action name="exitFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,false);events.dispatch(onexitfullscreen);</action>
-  <action name="enterFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,true);events.dispatch(onenterfullscreen);</action>
-  <action name="exitFullScreenFallback">set(fullscreen,false);</action>
-  <action name="enterFullScreenFallback">set(fullscreen,true);</action>
-  
-  <action name="resizeFullScreenEvent">delayedcall(0,updatescreen(););</action>
 
 	<!-- WebVR plugin for VR availability tests -->
 
@@ -1870,4 +1848,26 @@
 		set(tour_vrdevices, false);
 		events.dispatch(onvrunavailable);
 	</action>
+  <!-- Fullscreen Management -->
+  <action name="exitFullScreen" devices="fullscreensupport">set(tour_fullscreen,false);js(setFullscreen(false));</action>
+  <action name="enterFullScreen" devices="fullscreensupport">set(tour_fullscreen,true);js(setFullscreen(true));</action>
+  <action name="switchFullScreen">if(tour_fullscreen,exitFullScreen();,enterFullScreen(););</action>
+
+  
+  <events name="krpanoExitFullscreenEvent"
+    onexitfullscreen="if(tour_fullscreen,exitFullScreenChangeEvent(););"
+    keep="true" />
+
+  <action name="exitFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,false);events.dispatch(onexitfullscreen);</action>
+  <action name="enterFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,true);events.dispatch(onenterfullscreen);</action>
+  <action name="exitFullScreenFallback">set(fullscreen,false);</action>
+  <action name="enterFullScreenFallback">set(fullscreen,true);</action>
+  
+  <action name="resizeFullScreenEvent">delayedcall(0,updatescreen(););</action>
+
+  <!-- Hide / Show Controls -->
+  <action name="hideTourControls">set(tour_displaycontrols, false);events.dispatch(hidetourcontrols);</action>
+  <action name="showTourControls">set(tour_displaycontrols, true); events.dispatch(showtourcontrols);</action>
+
+
 </krpano>
