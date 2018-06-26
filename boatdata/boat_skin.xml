@@ -46,13 +46,12 @@
 			<option name="background_color" value="ffffff" type="string" />
 			<option name="background_lighter_color" value="ffffff" type="string" />
 			<option name="background_darker_color" value="d5d5d5" type="string" />
-			<option name="background_alpha" value="0.20000000000000001" type="float" />
+			<option name="background_alpha" value="0.29411764705882354" type="float" />
 			<option name="text_color" value="000000" type="string" />
 			<option name="resize" value="true" type="bool" />
 			<option name="fp_selector" value="one" type="string" />
 			<option name="fp_selector_label" value="floorPlanmenu_label" type="string" />
-			<option name="display_title" value="true" type="bool" />
-			<option name="title" value="project_floor_title" type="string" />
+			<option name="display_title" value="false" type="bool" />
 			<option name="title_font" value="Calibri Light" type="string" />
 			<option name="title_size" value="22" type="int" />
 			<option name="title_weight" value="bold" type="string" />
@@ -323,18 +322,17 @@
 		<option name="start_position" value="left" type="string" />
 		<option name="margin_x" value="10" type="int" />
 		<option name="margin_y" value="40" type="int" />
-		<option name="display_title" value="true" type="bool" />
-		<option name="title" value="project_floor_title" type="string" />
+		<option name="display_title" value="false" type="bool" />
 		<option name="title_font" value="Calibri Light" type="string" />
 		<option name="title_size" value="22" type="int" />
 		<option name="title_weight" value="bold" type="string" />
 		<option name="title_decoration" value="normal" type="string" />
 		<option name="title_color" value="000000" type="string" />
-		<option name="close_displayed" value="true" type="bool" />
+		<option name="close_displayed" value="false" type="bool" />
 		<option name="close_text" value="floorPlandisplay_close_text" type="string" />
 
 		<option name="background_color" value="ffffff" type="string" />
-		<option name="background_alpha" value="0.20000000000000001" type="float" />
+		<option name="background_alpha" value="0.29411764705882354" type="float" />
 		<option name="overlay_displayed" value="false" type="bool" />
 		<option name="overlay_color" value="000000" type="string" />
 		<option name="overlay_alpha" value="0.50000762951094835" type="float" />
@@ -346,11 +344,11 @@
 		<option name="bottomright_radius" value="0" type="int" />
 		<option name="area_border_width" value="5" type="int" />
 		<option name="area_border_color" value="373737" type="string" />
-		<option name="area_border_alpha" value="0.80000000000000004" type="float" />
-		<option name="area_width" value="350" type="int" />
-		<option name="area_height" value="290" type="int" />
-		<option name="area_width_unit" value="pixel" type="string" />
-		<option name="area_height_unit" value="pixel" type="string" />
+		<option name="area_border_alpha" value="0.81176470588235294" type="float" />
+		<option name="area_width" value="50" type="int" />
+		<option name="area_height" value="50" type="int" />
+		<option name="area_width_unit" value="percent" type="string" />
+		<option name="area_height_unit" value="percent" type="string" />
 		<option name="animation" value="false" type="bool" />
 		<option name="animation_duration" value="500" type="int" />
 		<option name="close_on_click" value="false" type="bool" />

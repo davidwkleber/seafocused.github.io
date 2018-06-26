@@ -3,7 +3,7 @@
   <!-- Global variables used by actions and plugins -->
   <krpano 
         tour_soundson="true" 
-        tour_soundsvolume="100" 
+        tour_soundsvolume="13" 
         tour_autotourenabled="false"
         tour_autorotateenabled="false"
         tour_controlmodemousetype="drag2d"
@@ -15,7 +15,7 @@
         tour_displayinfo="false"
         tour_displayspots="true"
         tour_displaycontrols="true"
-        tour_language="ru" />
+        tour_language="en" />
   <krpano tour_gyroscopedevices="true" devices="no-desktop.and.html5" />
   <krpano tour_vrdevices="true" devices="html5" />
   <krpano videos_sounds_path="%FIRSTXML%" devices="html5" />
@@ -75,10 +75,183 @@
   </action>
 
 
-
   <action name="startbehavioursxmlcompleteaction">
-    events.dispatch(onPanoStart);
+    if (skipintro !== null,
+      set(tour_firstlittleplanet, false);
+      events.dispatch(onPanoStart);
+      ifnot (tour_firststartactiondone,
+        events.dispatch(onTourStart);
+        set(tour_firststartactiondone, true);
+      );
+    ,
+
+      set(sceneisfull360, false);
+      if (scene[get(xml.scene)].full360,
+        sub(viewhfov, panoview.hmax, panoview.hmin);
+        if (viewhfov == 360,
+          sub(viewvfov, panoview.vmax, panoview.vmin);
+          if (viewvfov == 180,
+            set(sceneisfull360, true);
+          );
+        );
+      );
+      
+      
+      stoptween(view.fov);
+      stoptween(view.fovmax);
+      stoptween(view.hlookat);
+      stoptween(view.vlookat);
+      stoptween(view.fisheye);
+      
+      if (sceneisfull360 AND (device.webgl OR device.flash),
+	    setlittleplanet();
+      );
+
+    if (tour_firststartactiondone,
+
+      if (sceneisfull360 AND (device.webgl OR device.flash),
+        startLittlePlanetIntroEffect();
+      ,
+        
+        set(view.fovmax, get(panoview.fovmax));
+        set(view.hlookat, get(panoview.h));
+        set(view.vlookat, get(panoview.v));
+        set(view.fisheye, 0.0);
+        set(view.architectural, 0.0);
+        set(view.stereographic, false);
+        set(view.pannini, 0.0);
+        set(view.fisheyefovlink, 0.5);
+        set(view.fov, get(panoview.fov));
+        
+        events.dispatch(onPanoStart);
+      );
+
+    );
+
+
+    set(tour_firststartactiondone, true);
+
+    );
   </action>
+
+  <action name="startLittlePlanetIntroEffect">
+      set(sceneisfull360, false);
+      if (scene[get(xml.scene)].full360,
+        sub(viewhfov, panoview.hmax, panoview.hmin);
+        if (viewhfov == 360,
+          sub(viewvfov, panoview.vmax, panoview.vmin);
+          if (viewvfov == 180,
+            set(sceneisfull360, true);
+          );
+        );
+      );
+      if (sceneisfull360,
+        wait(0);
+        fromlittleplanetintrotonormalview();
+      );
+  </action>
+
+  <action name="setlittleplanet">
+    set(view.architectural, 0.0);
+    set(view.hlookat, get(panoview.h));
+    set(view.vlookat, 90);
+    set(view.pannini, 0.0);
+    if(panoview.fovmax LE 150,
+      set(view.fovmax, 150);
+    ,
+      set(view.fovmax, get(panoview.fovmax));
+    );
+    set(view.stereographic, true);
+    set(view.fisheyefovlink, 1.5);
+    set(view.fisheye, 1.0);
+    set(view.fov, 150);
+    
+    events.dispatch(onStartLittlePlanetIntroduction);
+  </action>
+  <action name="fromlittleplanetintrotonormalview">
+	tweennormalview();
+  </action>
+  <action name="tweennormalview">
+    hideTooltip();
+    tween(view.fovmax, get(panoview.fovmax), 3, easeoutquad);
+    tween(view.hlookat,  get(panoview.h), 3, easeoutquad);
+    tween(view.vlookat, get(panoview.v), 3, easeoutquad);
+    if(panoview.fov LE view.fov, tween(view.fov, get(panoview.fov), 3, easeoutquad); );
+    tween(view.pannini, 0.0, 3, easeoutquad);
+    tween(view.fisheye, 0.0, 3, easeoutquad, 
+      set(view.architectural, 0.0);
+      set(view.stereographic, false);
+      set(view.fisheyefovlink, 0.5);
+      
+      
+      events.dispatch(onPanoStart);
+      events.dispatch(onEndLittlePlanetIntroduction);
+      if (tour_firstlittleplanet,
+        events.dispatch(onTourStart);
+        set(tour_firstlittleplanet, false);
+      );
+    );
+  </action>
+
+  <layer name="splashscreenlayerbg"
+         keep="true"
+         align="center"
+         type="container"
+         width="100%" height="100%"
+         bgalpha="0.13333333333333333"
+         bgcolor="0x108eed"
+         preload="true"
+         onclick="hideintroimage();"
+         bgcapture="true"
+         zorder="98"
+         enabled="true"/>
+  <action name="preload_splashscreen" autorun="preinit">
+    addlayer(splashscreenlayer);
+    set(layer[splashscreenlayer].visible, true);
+    set(layer[splashscreenlayer].align, center);
+    set(layer[splashscreenlayer].zorder, 99);
+    set(layer[splashscreenlayer].keep, true);
+    set(layer[splashscreenlayer].onclick, hideintroimage());
+    set(layer[splashscreenlayer].alpha, 1.0);
+    set(layer[splashscreenlayer].onloaded, autohideintroimage(););
+    set(layer[splashscreenlayer].url, '%FIRSTXML%/graphics/untitled-10_wm1.jpg');
+  </action>
+  <action name="hideintroimage">
+    stopdelayedcall(hideintroimagecall);
+    tween(layer[splashscreenlayer].alpha, 0.0, 0.5, default,
+      tween(layer[splashscreenlayerbg].alpha , 0.0, 0.5, default,
+        removelayer(splashscreenlayer);
+        
+        set(sceneisfull360, false);
+        if (scene[get(xml.scene)].full360,
+          sub(viewhfov, panoview.hmax, panoview.hmin);
+          if (viewhfov == 360,
+            sub(viewvfov, panoview.vmax, panoview.vmin);
+            if (viewvfov == 180,
+              set(sceneisfull360, true);
+            );
+          );
+        );
+        if (sceneisfull360,
+          startLittlePlanetIntroEffect();
+        ,
+          events.dispatch(onPanoStart);
+          events.dispatch(onTourStart);
+        );
+        removelayer(splashscreenlayerbg);
+      );
+    );
+  </action>
+  <action name="autohideintroimage">
+    hideTooltip();
+    delayedcall(hideintroimagecall, 3, hideintroimage() ); 
+  </action>
+
+  <action name="skipintroaction">
+    stopdelayedcall(hideintroimagecall);
+    removelayer(splashscreenlayerbg);
+    removelayer(splashscreenlayer);
+   </action>
 
 
 
@@ -105,9 +278,10 @@
         removepanopolygonalspots();wait(0.1);
       );
       interruptAnimation();
+      resetbackgroundsoundifneeded(%1);
 
       for(set(scenei,0), scenei LT scene.count, inc(scenei),if(scene[get(scenei)].name == %1,
-      
+      stopTourSoundsActions(true,true,true,false);
       loadscene(%1, get(projection_current_params), NOPREVIEW|KEEPVIEW|KEEPMOVING, get(ptblendmode));
       ););
 
@@ -184,7 +358,7 @@
       set(autorotate.enabled, false);
       events.dispatch(onpauseautorotation);
 
-      if(tour_autotourenabled AND useautotourdelay == false,
+      if(tour_autotourenabled,
         stopautotourtimer();
       );
     );
@@ -239,12 +413,17 @@
       );
     );
   </action>
-  <events name="autorotation_events" onnewpano="if(tour_autorotation_pauseplugin LE 0,resumeautorotation(forceresume););" ongyroscopeon="pauseautorotation(forceplugin);" ongyroscopeoff="resumeautorotation(forceplugin);" keep="true"/>
+  <events name="autorotation_events" onnewpano="if(tour_autorotation_pauseplugin LE 0,resumeautorotation(forceresume););" keep="true"/>
+  <events name="autorotationstartevents" onTourStart="autorotationatstart();" keep="true"/>
+  <action name="autorotationatstart">
+    if (norotation === null, startautorotation(););
+    set(events[autorotationstartevents].keep, false);
+  </action>
 
 
   <!-- AUTOTOUR -->
 
-  <krpano useautotourdelay="false" autotourdelay="5" autotourHorizontalStartValue="0" />
+  <krpano autotourdelay="5" autotourHorizontalStartValue="0" />
   <action name="startautotour">
     set(tour_autotourenabled, true);
 startautorotation();
@@ -341,10 +520,8 @@ stopautorotation();
   <action name="autotourtimer">
     if(tour_autotourenabled,
       if(tour_autorotateenabled,
-        if(autorotate.enabled,
-          stopautotour();loadNextScene();
+        if(autorotate.enabled,loadNextScene();
 
-          startautotour();
         );
       );
     );
@@ -359,7 +536,7 @@ stopautorotation();
     onkeyup="autotouronuseraction(true);" 
     keep="true" />
   <action name="autotouronnewpanoaction">
-    if(tour_autotourenabled, resetautotourvariables(););
+    if(tour_autotourenabled, delayedcall(0.5,resetautotourvariables();););
   </action>
   <action name="autotouronuseraction">
     if(tour_autotourenabled, if(%1, resetautotourvariables();, stopautotourtimer();););
@@ -818,8 +995,7 @@ stopautorotation();
 
 		<layer name="webvr_button_text" 
 			url="%FIRSTXML%/graphics/textfield.swf"
-			html="Royal Lagoon - Pilot Saloon 65
-"Serena""
+			html=""
 			background="false"
 			align="center"
 			edge="bottom"
