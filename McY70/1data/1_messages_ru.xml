@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano>
+
+<!-- ************************ -->
+<!--         Messages         -->
+<!-- ************************ -->
+
+  <data name="ru_project_title"><![CDATA[david]]></data>
+
+
+  <data name="ru_panogroup82_title"><![CDATA[main deck]]></data>
+
+  <data name="ru_pano51_title"><![CDATA[Kitchen]]></data>
+  <data name="ru_pano63_title"><![CDATA[Starboard Walkway]]></data>
+  <data name="ru_pano59_title"><![CDATA[Rear Deck Table]]></data>
+  <data name="ru_pano61_title"><![CDATA[Salon Door]]></data>
+  <data name="ru_pano62_title"><![CDATA[Salon]]></data>
+  <data name="ru_pano43_title"><![CDATA[Dining Area]]></data>
+  <data name="ru_pano57_title"><![CDATA[Port Side Walkway]]></data>
+  <data name="ru_pano166_title"><![CDATA[Helm Station]]></data>
+  <data name="ru_pano45_title"><![CDATA[Front Deck Lounge]]></data>
+  <data name="ru_pano58_title"><![CDATA[Rear Deck Platform]]></data>
+  <data name="ru_pano65_title"><![CDATA[Swim Platform]]></data>
+  <data name="ru_pano66_title"><![CDATA[Titanic People]]></data>
+  <data name="ru_pano64_title"><![CDATA[Sunset People]]></data>
+
+  <data name="ru_panogroup75_title"><![CDATA[flybridge]]></data>
+
+  <data name="ru_pano56_title"><![CDATA[Open Sunroof]]></data>
+  <data name="ru_pano39_title"><![CDATA[Closed Sunroof]]></data>
+  <data name="ru_pano68_title"><![CDATA[Upper Deck Kitchen]]></data>
+  <data name="ru_pano60_title"><![CDATA[Rooftop]]></data>
+
+  <data name="ru_panogroup80_title"><![CDATA[lower deck]]></data>
+
+  <data name="ru_pano67_title"><![CDATA[Twin Cabin]]></data>
+  <data name="ru_pano41_title"><![CDATA[Crew Bath]]></data>
+  <data name="ru_pano151_title"><![CDATA[Bunk Cabin]]></data>
+  <data name="ru_pano154_title"><![CDATA[Crew Area Enterance]]></data>
+  <data name="ru_pano157_title"><![CDATA[Crew Cabin 2]]></data>
+  <data name="ru_pano160_title"><![CDATA[Guest Bed]]></data>
+  <data name="ru_pano169_title"><![CDATA[Master Bed]]></data>
+  <data name="ru_pano172_title"><![CDATA[Master Bedroom_]]></data>
+  <data name="ru_pano175_title"><![CDATA[Master Lounge]]></data>
+  <data name="ru_pano52_title"><![CDATA[Master Bath]]></data>
+  <data name="ru_pano49_title"><![CDATA[Hall Bath]]></data>
+  <data name="ru_pano46_title"><![CDATA[Guest Bath]]></data>
+  <data name="ru_pano163_title"><![CDATA[Guest Cabin Bed]]></data>
+  <data name="ru_pano44_title"><![CDATA[Engine Room]]></data>
+
+
+	<data name="ru_spotmap3071_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3072_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3073_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3074_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3075_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3076_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3077_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3078_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3079_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3080_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3081_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3082_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3083_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3084_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3085_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3086_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3087_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3088_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3089_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3090_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3091_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3092_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3093_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3094_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3095_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3096_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3097_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3098_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3099_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3100_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap3101_tooltip"><![CDATA[]]></data>
+
+
+	<data name="ru_project_floor_title"><![CDATA[david]]></data>
+
+	<data name="ru_panogroup82_floor_title"><![CDATA[main deck]]></data>
+	<data name="ru_spotmap767_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap768_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap769_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap770_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap771_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap772_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap773_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap774_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap2174_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap2175_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap2176_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap2177_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap2178_tooltip"><![CDATA[]]></data>
+	<data name="ru_panogroup75_floor_title"><![CDATA[flybridge]]></data>
+	<data name="ru_spotmap763_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap764_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap765_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap1627_tooltip"><![CDATA[]]></data>
+	<data name="ru_panogroup80_floor_title"><![CDATA[lower deck]]></data>
+	<data name="ru_spotmap777_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap959_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap960_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap961_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap962_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap964_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap965_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap966_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap967_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap1444_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap1445_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap1446_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap1447_tooltip"><![CDATA[]]></data>
+	<data name="ru_spotmap1448_tooltip"><![CDATA[]]></data>
+
+  <data name="ru_logowebsiteurl"><![CDATA[]]></data>
+  <data name="ru_logotooltipText"><![CDATA[]]></data>
+  <data name="ru_controlBar_classic1displayFloorplanTip"><![CDATA[Show floorplan]]></data>
+  <data name="ru_controlBar_classic1hideFloorplanTip"><![CDATA[Hide floorplan]]></data>
+  <data name="ru_webvrbuttontooltip"><![CDATA[]]></data>
+  <data name="ru_buttontooltip"><![CDATA[]]></data>
+
+
+  <data name="ru_vr_setup_hmd0"><![CDATA[SELECT YOUR HMD]]></data>
+  <data name="ru_vr_setup_advanced"><![CDATA[ADVANCED SETTINGS]]></data>
+  <data name="ru_vr_setup_title"><![CDATA[WEB VR SETTINGS]]></data>
+  <data name="ru_vr_setup_dvn1"><![CDATA[Device:]]></data>
+  <data name="ru_vr_setup_siz1"><![CDATA[Screen size:]]></data>
+  <data name="ru_vr_setup_ipd1"><![CDATA[IPD:]]></data>
+  <data name="ru_vr_setup_hmd1"><![CDATA[HMD:]]></data>
+  <data name="ru_vr_setup_hmd3"><![CDATA[Customize]]></data>
+  <data name="ru_vr_setup_cal"><![CDATA[Calibrate gyroscope]]></data>
+  <data name="ru_vr_setup_sav"><![CDATA[SAVE]]></data>
+  <data name="ru_vr_setup_rst"><![CDATA[RESET]]></data>
+  <data name="ru_vr_setup_simple"><![CDATA[SIMPLE]]></data>
+  <data name="ru_vr_setup_cls"><![CDATA[CLOSE]]></data>
+  <data name="ru_vr_setup_m31"><![CDATA[HMD SETTINGS]]></data>
+  <data name="ru_vr_setup_fov1"><![CDATA[FOV:]]></data>
+  <data name="ru_vr_setup_dst1"><![CDATA[Distortion:]]></data>
+  <data name="ru_vr_setup_d2tx"><![CDATA[Distortion 2:]]></data>
+  <data name="ru_vr_setup_vig1"><![CDATA[Vignette:]]></data>
+  <data name="ru_vr_setup_cac1"><![CDATA[Chromatic aberration:]]></data>
+  <data name="ru_vr_setup_olp1"><![CDATA[Overlap:]]></data>
+  <data name="ru_vr_setup_m35"><![CDATA[RETURN]]></data>
+  <data name="ru_vr_setup_cb1"><![CDATA[GYROSCOPE]]></data>
+  <data name="ru_vr_setup_cb2"><![CDATA[Place the device on a flat and[br]stable surface and tab CALIBRATE[br]to correct a gyroscope drifting.]]></data>
+  <data name="ru_vr_setup_cb3"><![CDATA[CALIBRATE]]></data>
+  <data name="ru_vr_setup_cb4"><![CDATA[RESET]]></data>
+  <data name="ru_vr_setup_cb5"><![CDATA[RETURN]]></data>
+  <data name="ru_vr_setup_cb6"><![CDATA[Calibrating...]]></data>
+  <data name="ru_vr_setup_cb7"><![CDATA[Successful calibration]]></data>
+  <data name="ru_vr_setup_cb8"><![CDATA[Calibration failed]]></data>
+  <data name="ru_vr_setup_unavailable"><![CDATA[VR mode[br]is unavailable on your device]]></data>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</krpano>
