@@ -818,7 +818,7 @@ stopautorotation();
 
 		<layer name="webvr_button_text" 
 			url="%FIRSTXML%/graphics/textfield.swf"
-			html="mcy70 "
+			html="Monte Carlo Yachts 70"
 			background="false"
 			align="center"
 			edge="bottom"

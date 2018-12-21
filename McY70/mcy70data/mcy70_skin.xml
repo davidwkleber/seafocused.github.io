@@ -406,7 +406,7 @@
 							<spot name="spotmap3936" posX="0.813952982" posY="0.201922998" heading="0" desc="spotmap3936_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano163" jsClick="spotmap3936ActionSpotFloorPlan">
 								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
 							</spot>
-							<spot name="spotmap3937" posX="0.863636017" posY="0.704886973" heading="0" desc="spotmap3937_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano41" jsClick="spotmap3937ActionSpotFloorPlan">
+							<spot name="spotmap3937" posX="0.812641084" posY="0.686567187" heading="0" desc="spotmap3937_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano154" jsClick="spotmap3937ActionSpotFloorPlan">
 								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
 							</spot>
 							<spot name="spotmap3938" posX="0.734090984" posY="0.676692009" heading="0" desc="spotmap3938_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano157" jsClick="spotmap3938ActionSpotFloorPlan">
@@ -494,9 +494,9 @@ floorPlanActivateDefaultSpot();););
           mainloadscene(pano163);lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
 
 </action>
-			<action name="spotmap3937ActionSpotFloorPlan">if(xml.scene == pano41,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+			<action name="spotmap3937ActionSpotFloorPlan">if(xml.scene == pano154,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 floorPlanActivateDefaultSpot();););
-          mainloadscene(pano41);lookat(-153.900000, 4.050000, 90.000000);
+          mainloadscene(pano154);lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
 
 </action>
 			<action name="spotmap3938ActionSpotFloorPlan">if(xml.scene == pano157,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
@@ -861,119 +861,32 @@ if(tour_displayfloorplan,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 	<action name="showwebvrbutton">if(tour_displaycontrols,if(layer[webvrbutton].blocked == false,set(layer[webvrbutton].visible, true););,hidewebvrbutton(););</action>
 
 
-<!-- ********* -->
-<!-- Gyroscope -->
-<!-- ********* -->
-
-
-
-<plugin name="gyroscope"
-        url="%FIRSTXML%/graphics/gyro.js"
-        keep="true"
-        devices="no-desktop.and.html5"
-
-
-        friction="0.5"
-        onavailable="delayedcall(1, checkGyroAvailability(););"
-        enabled="false"
-        activated="false"
-        />
-
-<events name="gyroscopeEvents" onnewpano="planarGyroscopeTest();" keep="true" />
-
-<action name="planarGyroscopeTest">
-  if(plugin[gyroscope],
-    ifnot (plugin[gyroscope].available === undefined,
-      if (plugin[gyroscope].available,
-        if(scene[get(xml.scene)].planar,
-          if(plugin[gyroscope].enabled,
-            switch(plugin[gyroscope].enabled);
-            if (plugin[gyroscope].enabled, events.dispatch(ongyroscopeon);, events.dispatch(ongyroscopeoff););
-          );
-        ,
-          if(scene[get(xml.scene)].full360,
-            set(sceneisfull360, false);
-            sub(viewhfov, panoview.hmax, panoview.hmin);
-            if (viewhfov == 360,
-              sub(viewvfov, panoview.vmax, panoview.vmin);
-              if (viewvfov == 180,
-                set(sceneisfull360, true);
-              );
-            );
-            if (sceneisfull360,
-              set(plugin[gyroscope].camroll, true);
-            ,
-              set(plugin[gyroscope].camroll, false);
-            );
-          ,
-            set(plugin[gyroscope].camroll, false);
-          );
-          if(plugin[gyroscope].activated,
-            ifnot(plugin[gyroscope].enabled,
-              switch(plugin[gyroscope].enabled);
-              if (plugin[gyroscope].enabled, events.dispatch(ongyroscopeon);, events.dispatch(ongyroscopeoff););
-            );
-          );
-        );
-
-      );
-    );
-  );
-</action>
-
-<action name="changeGyroscopeState">
-  if(plugin[gyroscope],
-    ifnot (plugin[gyroscope].available === undefined,
-      if (plugin[gyroscope].available,
-        if(%1,
-          set(plugin[gyroscope].activated,true);
-        ,
-          set(plugin[gyroscope].activated,false);
-        );
-        if (%1 != plugin[gyroscope].enabled,
-          if(plugin[gyroscope].activated,
-            switch(plugin[gyroscope].enabled);
-          ,
-            set(plugin[gyroscope].enabled, false);
-          );
-          if (plugin[gyroscope].enabled, events.dispatch(ongyroscopeon);, events.dispatch(ongyroscopeoff););
-        );
-      );
-    );
-  );
-</action>
-
-<action name="checkGyroAvailability">
-  if(plugin[gyroscope],
-    ifnot (plugin[gyroscope].available === undefined, 
-      if (plugin[gyroscope].available,
-      ifnot(tour_firstlittleplanet,
-        ifnot(scene[get(xml.scene)].planar,
-        switch(plugin[gyroscope].enabled);
-        set(plugin[gyroscope].activated,true);
-        );
-        set(tour_gyroscopedevices, true);
-        events.dispatch(ongyroscopeavailable);
-      ,
-        delayedcall(1, checkGyroAvailability(););
-      );
-      ,
-        set(tour_gyroscopedevices, false);
-      );
-    ,
-      set(tour_gyroscopedevices, false);
-    );
-    if (plugin[gyroscope].enabled, events.dispatch(ongyroscopeon);, events.dispatch(ongyroscopeoff););
-  ,
-    checkGyroUnavailable();
-  );
-</action>
-
-
   <!-- FLOORPLAN -->
   <action name="hideFloorplan">set(tour_displayfloorplan, false);events.dispatch(onhidetourfloorplan);</action>
   <action name="showFloorplan">set(tour_displayfloorplan, true); events.dispatch(onshowtourfloorplan);</action>
 
+
+  <!-- Hide / Show Controls -->
+  <action name="hideTourControls">set(tour_displaycontrols, false);events.dispatch(hidetourcontrols);</action>
+  <action name="showTourControls">set(tour_displaycontrols, true); events.dispatch(showtourcontrols);</action>
+
+
+  <!-- Fullscreen Management -->
+  <action name="exitFullScreen" devices="fullscreensupport">set(tour_fullscreen,false);js(setFullscreen(false));</action>
+  <action name="enterFullScreen" devices="fullscreensupport">set(tour_fullscreen,true);js(setFullscreen(true));</action>
+  <action name="switchFullScreen">if(tour_fullscreen,exitFullScreen();,enterFullScreen(););</action>
+
+  
+  <events name="krpanoExitFullscreenEvent"
+    onexitfullscreen="if(tour_fullscreen,exitFullScreenChangeEvent(););"
+    keep="true" />
+
+  <action name="exitFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,false);events.dispatch(onexitfullscreen);</action>
+  <action name="enterFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,true);events.dispatch(onenterfullscreen);</action>
+  <action name="exitFullScreenFallback">set(fullscreen,false);</action>
+  <action name="enterFullScreenFallback">set(fullscreen,true);</action>
+  
+  <action name="resizeFullScreenEvent">delayedcall(0,updatescreen(););</action>
 
 	<!-- WebVR plugin for VR availability tests -->
 
@@ -1002,26 +915,4 @@ if(tour_displayfloorplan,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 		set(tour_vrdevices, false);
 		events.dispatch(onvrunavailable);
 	</action>
-  <!-- Hide / Show Controls -->
-  <action name="hideTourControls">set(tour_displaycontrols, false);events.dispatch(hidetourcontrols);</action>
-  <action name="showTourControls">set(tour_displaycontrols, true); events.dispatch(showtourcontrols);</action>
-
-
-  <!-- Fullscreen Management -->
-  <action name="exitFullScreen" devices="fullscreensupport">set(tour_fullscreen,false);js(setFullscreen(false));</action>
-  <action name="enterFullScreen" devices="fullscreensupport">set(tour_fullscreen,true);js(setFullscreen(true));</action>
-  <action name="switchFullScreen">if(tour_fullscreen,exitFullScreen();,enterFullScreen(););</action>
-
-  
-  <events name="krpanoExitFullscreenEvent"
-    onexitfullscreen="if(tour_fullscreen,exitFullScreenChangeEvent(););"
-    keep="true" />
-
-  <action name="exitFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,false);events.dispatch(onexitfullscreen);</action>
-  <action name="enterFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,true);events.dispatch(onenterfullscreen);</action>
-  <action name="exitFullScreenFallback">set(fullscreen,false);</action>
-  <action name="enterFullScreenFallback">set(fullscreen,true);</action>
-  
-  <action name="resizeFullScreenEvent">delayedcall(0,updatescreen(););</action>
-
 </krpano>
