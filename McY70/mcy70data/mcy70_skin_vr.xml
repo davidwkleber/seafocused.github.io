@@ -86,7 +86,8 @@
          onhover="onhoverIconDefaultPointSpotStyle"
          onout="onoutIconDefaultPointSpotStyle"
 
-
+         height="10"
+         width="100"
          />
 
   <action name="onhoverIconDefaultPointSpotStyle">

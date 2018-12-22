@@ -102,37 +102,37 @@
   <data name="en_pano154_title"><![CDATA[Crew Area Enterance]]></data>
 
 
-	<data name="en_spotmap4529_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4530_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4531_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4532_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4533_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4534_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4535_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4536_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4537_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4538_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4539_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4540_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4541_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4542_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4543_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4544_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4545_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4546_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4547_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4548_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4549_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4550_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4551_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4552_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4553_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4554_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4555_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4556_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4557_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4558_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4559_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5441_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5442_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5443_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5444_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5445_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5446_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5447_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5448_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5449_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5450_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5451_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5452_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5453_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5454_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5455_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5456_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5457_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5458_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5459_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5460_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5461_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5462_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5463_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5464_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5465_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5466_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5467_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5468_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5469_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5470_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5471_tooltip"><![CDATA[]]></data>
 
 
 	<data name="en_project_floor_title"><![CDATA[Monte Carlo Yachts 70]]></data>
@@ -156,7 +156,10 @@
   <data name="en_floorPlanmenu_label"><![CDATA[Select a floor plan]]></data>
   <data name="en_buttontooltip"><![CDATA[]]></data>
   <data name="en_button1tooltip"><![CDATA[]]></data>
-  <data name="en_webvrbuttontooltip"><![CDATA[]]></data>
+  <data name="en_logowebsiteurl"><![CDATA[]]></data>
+  <data name="en_logotooltipText"><![CDATA[]]></data>
+  <data name="en_logo1websiteurl"><![CDATA[]]></data>
+  <data name="en_logo1tooltipText"><![CDATA[Open website]]></data>
 
 
   <data name="en_vr_setup_hmd0"><![CDATA[SELECT YOUR HMD]]></data>

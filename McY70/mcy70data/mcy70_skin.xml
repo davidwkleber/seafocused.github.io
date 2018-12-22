@@ -83,7 +83,8 @@
          onhover="onhoverIconDefaultPointSpotStyle"
          onout="onoutIconDefaultPointSpotStyle"
 
-
+         height="10"
+         width="100"
          />
 
   <action name="onhoverIconDefaultPointSpotStyle">
@@ -362,11 +363,11 @@
 				<floorplanItem 
 					name="fpitemmain" 
 					width="706" 
-					height="852" 
+					height="906" 
 					groupName="" 
-					url="floorplan/floor.png" 
+					url="floorplan/floor2.png" 
 					title="project_floor_title"
-					heading="5">
+					heading="0">
 							<spot name="spotmap3919" posX="0.200000003" posY="0.638462007" heading="0" desc="spotmap3919_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano56" jsClick="spotmap3919ActionSpotFloorPlan">
 								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
 							</spot>
@@ -379,10 +380,10 @@
 							<spot name="spotmap3926" posX="0.506977022" posY="0.955769002" heading="0" desc="spotmap3926_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano65" jsClick="spotmap3926ActionSpotFloorPlan">
 								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
 							</spot>
-							<spot name="spotmap3927" posX="0.497673988" posY="0.0596153997" heading="0" desc="spotmap3927_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano64" jsClick="spotmap3927ActionSpotFloorPlan">
+							<spot name="spotmap3927" posX="0.492908001" posY="0.184572995" heading="0" desc="spotmap3927_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano45" jsClick="spotmap3927ActionSpotFloorPlan">
 								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
 							</spot>
-							<spot name="spotmap3928" posX="0.49534899" posY="0.678846002" heading="0" desc="spotmap3928_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano62" jsClick="spotmap3928ActionSpotFloorPlan">
+							<spot name="spotmap3928" posX="0.496453911" posY="0.630854011" heading="0" desc="spotmap3928_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano62" jsClick="spotmap3928ActionSpotFloorPlan">
 								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
 							</spot>
 							<spot name="spotmap3929" posX="0.469767004" posY="0.434614986" heading="0" desc="spotmap3929_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano43" jsClick="spotmap3929ActionSpotFloorPlan">
@@ -406,7 +407,7 @@
 							<spot name="spotmap3936" posX="0.813952982" posY="0.201922998" heading="0" desc="spotmap3936_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano163" jsClick="spotmap3936ActionSpotFloorPlan">
 								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
 							</spot>
-							<spot name="spotmap3937" posX="0.812641084" posY="0.686567187" heading="0" desc="spotmap3937_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano154" jsClick="spotmap3937ActionSpotFloorPlan">
+							<spot name="spotmap3937" posX="0.812641025" posY="0.686567008" heading="0" desc="spotmap3937_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano154" jsClick="spotmap3937ActionSpotFloorPlan">
 								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
 							</spot>
 							<spot name="spotmap3938" posX="0.734090984" posY="0.676692009" heading="0" desc="spotmap3938_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano157" jsClick="spotmap3938ActionSpotFloorPlan">
@@ -431,12 +432,12 @@
 		<!-- floorplan main spots counter : 15 -->
 			<action name="spotmap3919ActionSpotFloorPlan">if(xml.scene == pano56,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 floorPlanActivateDefaultSpot();););
-          mainloadscene(pano56);lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+          mainloadscene(pano56);lookat(-1.350000, 4.050000, 90.000000);
 
 </action>
 			<action name="spotmap3920ActionSpotFloorPlan">if(xml.scene == pano60,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 floorPlanActivateDefaultSpot();););
-          mainloadscene(pano60);lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+          mainloadscene(pano60);lookat(-134.100000, 31.950000, 90.000000);
 
 </action>
 			<action name="spotmap3921ActionSpotFloorPlan">if(xml.scene == pano68,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
@@ -446,62 +447,62 @@ floorPlanActivateDefaultSpot();););
 </action>
 			<action name="spotmap3926ActionSpotFloorPlan">if(xml.scene == pano65,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 floorPlanActivateDefaultSpot();););
-          mainloadscene(pano65);lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+          mainloadscene(pano65);lookat(6.000000, -31.100000, 81.000000);
 
 </action>
-			<action name="spotmap3927ActionSpotFloorPlan">if(xml.scene == pano64,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+			<action name="spotmap3927ActionSpotFloorPlan">if(xml.scene == pano45,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 floorPlanActivateDefaultSpot();););
-          mainloadscene(pano64);lookat(19.350000, 83.250000, 90.000000);
+          mainloadscene(pano45);lookat(9.000000, -1.800000, 90.000000);
 
 </action>
 			<action name="spotmap3928ActionSpotFloorPlan">if(xml.scene == pano62,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 floorPlanActivateDefaultSpot();););
-          mainloadscene(pano62);lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+          mainloadscene(pano62);lookat(11.250000, 8.100000, 90.000000);
 
 </action>
 			<action name="spotmap3929ActionSpotFloorPlan">if(xml.scene == pano43,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 floorPlanActivateDefaultSpot();););
-          mainloadscene(pano43);lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+          mainloadscene(pano43);lookat(-134.100000, 3.150000, 90.000000);
 
 </action>
 			<action name="spotmap3930ActionSpotFloorPlan">if(xml.scene == pano59,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 floorPlanActivateDefaultSpot();););
-          mainloadscene(pano59);lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+          mainloadscene(pano59);lookat(12.150000, 3.150000, 90.000000);
 
 </action>
 			<action name="spotmap3932ActionSpotFloorPlan">if(xml.scene == pano169,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 floorPlanActivateDefaultSpot();););
-          mainloadscene(pano169);lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+          mainloadscene(pano169);lookat(39.127700, 8.825210, 81.818200);
 
 </action>
 			<action name="spotmap3933ActionSpotFloorPlan">if(xml.scene == pano44,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 floorPlanActivateDefaultSpot();););
-          mainloadscene(pano44);lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+          mainloadscene(pano44);lookat(2.250000, 3.600000, 90.000000);
 
 </action>
 			<action name="spotmap3934ActionSpotFloorPlan">if(xml.scene == pano67,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 floorPlanActivateDefaultSpot();););
-          mainloadscene(pano67);lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+          mainloadscene(pano67);lookat(6.995790, 8.169310, 74.380200);
 
 </action>
 			<action name="spotmap3935ActionSpotFloorPlan">if(xml.scene == pano49,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 floorPlanActivateDefaultSpot();););
-          mainloadscene(pano49);lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+          mainloadscene(pano49);lookat(71.100000, 6.750000, 90.000000);
 
 </action>
 			<action name="spotmap3936ActionSpotFloorPlan">if(xml.scene == pano163,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 floorPlanActivateDefaultSpot();););
-          mainloadscene(pano163);lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+          mainloadscene(pano163);lookat(-3.686550, 4.812400, 67.618300);
 
 </action>
 			<action name="spotmap3937ActionSpotFloorPlan">if(xml.scene == pano154,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 floorPlanActivateDefaultSpot();););
-          mainloadscene(pano154);lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+          mainloadscene(pano154);lookat(1.800000, 5.686360, 81.818200);
 
 </action>
 			<action name="spotmap3938ActionSpotFloorPlan">if(xml.scene == pano157,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 floorPlanActivateDefaultSpot();););
-          mainloadscene(pano157);lookat(-170.100000, 1.350000, 90.000000);
+          mainloadscene(pano157);lookat(-178.486000, 3.190910, 81.818200);
 
 </action>
 	
@@ -804,7 +805,7 @@ if(tour_displayfloorplan,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 
   <layer name="button1"
          keep="true"
-         url="%FIRSTXML%/graphics/button1/logo_1.png" 
+         url="%FIRSTXML%/graphics/button1/btn_enter_fs.png" 
          align="topright"
          x="10"
          y="10"
@@ -829,36 +830,79 @@ if(tour_displayfloorplan,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 
 
 <!-- ********** -->
-<!-- WebVR Button -->
-<!-- id : webvrbutton -->
+<!-- Logo -->
+<!-- id : logo -->
 <!-- ********** -->
 
-	<layer name="webvrbutton"
-		keep="true"
-		blocked="false"
-		alpha="1"
-		url="%FIRSTXML%/graphics/webvrbutton/btn_webvr.png" 
-		align="topleft"
-		x="10"
-		y="10"
-		zorder="5"
-		visible="false"
-		onclick="js(accessWebVr());
-"
+  <layer align="topleft"
+         x="15"
+         y="15"
+         zorder="5"
+         name="logo"
+         keep="true"
+         visible="false"
+         capture="false"
 
-		width="50"
-		height="prop"
-		crop="0|0|100|63"
-		/>
+			enabled="false"
+         url="%FIRSTXML%/graphics/logo/logo_4.png" 
+         handcursor="false"
 
-	<events name="webvrbuttonevents"
-		onvrunavailable="hidewebvrbutton(true);"
-		onTourStart="showwebvrbutton();"
-		hidetourcontrols="hidewebvrbutton();" 
-		showtourcontrols="showwebvrbutton();" 
-		keep="true" />
-	<action name="hidewebvrbutton">if(%1 == true,set(layer[webvrbutton].blocked, true););set(layer[webvrbutton].visible, false);</action>
-	<action name="showwebvrbutton">if(tour_displaycontrols,if(layer[webvrbutton].blocked == false,set(layer[webvrbutton].visible, true););,hidewebvrbutton(););</action>
+         height="10%"
+         width="prop"
+
+         />
+
+  <events name="logoevents" 
+    onTourStart="showlogo();"
+    keep="true" />
+
+  <action name="hidelogo">
+    set(layer[logo].visible, false);
+  </action>
+  <action name="showlogo">
+      set(layer[logo].visible, true);
+  </action>
+
+
+
+
+<!-- ********** -->
+<!-- Logo1 -->
+<!-- id : logo1 -->
+<!-- ********** -->
+
+  <layer align="bottom"
+         x="10"
+         y="10"
+         zorder="6"
+         name="logo1"
+         keep="true"
+         visible="false"
+         capture="false"
+
+			tooltip="logo1tooltipText"
+			onhover="showTooltip('plugin');"
+			onout="hideTooltip();"
+         url="%FIRSTXML%/graphics/logo1/logo_3.png" 
+         handcursor="false"
+
+         width="50%"
+         height="prop"
+
+         />
+
+  <events name="logo1events" 
+    onTourStart="showlogo1();"
+    keep="true" />
+
+  <action name="hidelogo1">
+    set(layer[logo1].visible, false);
+  </action>
+  <action name="showlogo1">
+      set(layer[logo1].visible, true);
+  </action>
+
+
 
 
   <!-- FLOORPLAN -->
@@ -888,31 +932,4 @@ if(tour_displayfloorplan,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
   
   <action name="resizeFullScreenEvent">delayedcall(0,updatescreen(););</action>
 
-	<!-- WebVR plugin for VR availability tests -->
-
-	<plugin name="ptpvrmode" devices="html5" keep="true"
-		url="%FIRSTXML%/graphics/webvr.js"
-		mobilevr_support="true"
-		mobilevr_fake_support="true"
-		vr_cursor=""
-		vr_cursor_enabled="false"
-		onavailable="delayedcall(1, checkVrAvailability(););"
-		onunavailable="checkVrUnavailable();"
-		/>
-	<action name="checkVrAvailability">
-		if(plugin[ptpvrmode],
-			if (plugin[ptpvrmode].isavailable,
-				set(tour_vrdevices, true);
-				events.dispatch(onvravailable);
-			,
-				set(tour_vrdevices, false);
-			);
-		,
-			checkVrUnavailable();
-		);
-	</action>
-	<action name="checkVrUnavailable">
-		set(tour_vrdevices, false);
-		events.dispatch(onvrunavailable);
-	</action>
 </krpano>
