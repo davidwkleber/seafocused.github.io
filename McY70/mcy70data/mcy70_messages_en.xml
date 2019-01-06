@@ -102,37 +102,37 @@
   <data name="en_pano154_title"><![CDATA[Crew Area Enterance]]></data>
 
 
-	<data name="en_spotmap5441_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5442_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5443_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5444_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5445_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5446_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5447_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5448_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5449_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5450_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5451_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5452_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5453_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5454_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5455_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5456_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5457_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5458_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5459_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5460_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5461_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5462_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5463_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5464_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5465_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5466_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5467_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5468_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5469_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5470_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap5471_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4793_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4794_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4795_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4796_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4797_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4798_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4799_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4800_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4801_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4802_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4803_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4804_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4805_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4806_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4807_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4808_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4809_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4810_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4811_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4812_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4813_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4814_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4815_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4816_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4817_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4818_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4819_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4820_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4821_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4822_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap4823_tooltip"><![CDATA[]]></data>
 
 
 	<data name="en_project_floor_title"><![CDATA[Monte Carlo Yachts 70]]></data>
@@ -154,6 +154,7 @@
 
 
   <data name="en_floorPlanmenu_label"><![CDATA[Select a floor plan]]></data>
+  <data name="en_floorPlandisplay_close_text"><![CDATA[Close]]></data>
   <data name="en_buttontooltip"><![CDATA[]]></data>
   <data name="en_button1tooltip"><![CDATA[]]></data>
   <data name="en_logowebsiteurl"><![CDATA[]]></data>
