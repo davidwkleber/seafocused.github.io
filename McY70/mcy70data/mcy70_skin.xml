@@ -4,14 +4,14 @@
     
   <!-- Spot Style - Default Point Spot Style -->
   <style name="IconDefaultPointSpotStyle"
-         url="%FIRSTXML%/spots/hotspot_animated_user_defaultpoint0.png"
+         url="%FIRSTXML%/spots/hotspot_plan_sequence_user_defaultpoint0.png"
          visible="false"
          frame="0"
-         lastframe="19"
-         framewidth="64"
-         frameheight="64"
+         lastframe="9"
+         framewidth="67"
+         frameheight="67"
          stopspotsequence="false"
-         crop="0|0|64|64"
+         crop="0|0|67|67"
          onloaded="startspotanimation(0.1);"
          onhover="onhoverIconDefaultPointSpotStyle"
          onout="onoutIconDefaultPointSpotStyle"
@@ -39,14 +39,14 @@
     
   <!-- Spot Style - Default Point Spot Style -->
   <style name="IconDefaultPointSpotStyle"
-         url="%FIRSTXML%/spots/hotspot_animated_user_defaultpoint01.png"
+         url="%FIRSTXML%/spots/hotspot_plan_sequence_user_defaultpoint01.png"
          visible="false"
          frame="0"
-         lastframe="19"
-         framewidth="64"
-         frameheight="64"
+         lastframe="9"
+         framewidth="67"
+         frameheight="67"
          stopspotsequence="false"
-         crop="0|0|64|64"
+         crop="0|0|67|67"
          onloaded="startspotanimation(0.1);"
          onhover="onhoverIconDefaultPointSpotStyle"
          onout="onoutIconDefaultPointSpotStyle"
@@ -71,19 +71,19 @@
     
   <!-- Spot Style - Default Point Spot Style -->
   <style name="IconDefaultPointSpotStyle"
-         url="%FIRSTXML%/spots/hotspot_animated_user_defaultpoint011.png"
+         url="%FIRSTXML%/spots/hotspot_plan_sequence_user_defaultpoint011.png"
          visible="false"
          frame="0"
-         lastframe="19"
-         framewidth="64"
-         frameheight="64"
+         lastframe="9"
+         framewidth="67"
+         frameheight="67"
          stopspotsequence="false"
-         crop="0|0|64|64"
+         crop="0|0|67|67"
          onloaded="startspotanimation(0.1);"
          onhover="onhoverIconDefaultPointSpotStyle"
          onout="onoutIconDefaultPointSpotStyle"
 
-         height="100"
+         height="10"
          width="100"
          />
 
@@ -383,7 +383,7 @@
 							<spot name="spotmap3927" posX="0.492908001" posY="0.184572995" heading="0" desc="spotmap3927_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano45" jsClick="spotmap3927ActionSpotFloorPlan">
 								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
 							</spot>
-							<spot name="spotmap3928" posX="0.496454" posY="0.630854011" heading="0" desc="spotmap3928_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano62" jsClick="spotmap3928ActionSpotFloorPlan">
+							<spot name="spotmap3928" posX="0.496453911" posY="0.630854011" heading="0" desc="spotmap3928_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano62" jsClick="spotmap3928ActionSpotFloorPlan">
 								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
 							</spot>
 							<spot name="spotmap3929" posX="0.469767004" posY="0.434614986" heading="0" desc="spotmap3929_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano43" jsClick="spotmap3929ActionSpotFloorPlan">
@@ -662,7 +662,7 @@ floorPlanActivateDefaultSpot();););
 		<option name="title_weight" value="normal" type="string" />
 		<option name="title_decoration" value="normal" type="string" />
 		<option name="title_color" value="000000" type="string" />
-		<option name="close_displayed" value="true" type="bool" />
+		<option name="close_displayed" value="false" type="bool" />
 		<option name="close_text" value="floorPlandisplay_close_text" type="string" />
 
 		<option name="background_color" value="f2f2f2" type="string" />
@@ -680,7 +680,7 @@ floorPlanActivateDefaultSpot();););
 		<option name="area_border_color" value="252525" type="string" />
 		<option name="area_border_alpha" value="0.40000000000000002" type="float" />
 		<option name="area_width" value="40" type="int" />
-		<option name="area_height" value="30" type="int" />
+		<option name="area_height" value="80" type="int" />
 		<option name="area_width_unit" value="percent" type="string" />
 		<option name="area_height_unit" value="percent" type="string" />
 		<option name="animation" value="false" type="bool" />
@@ -910,6 +910,11 @@ if(tour_displayfloorplan,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
   <action name="showFloorplan">set(tour_displayfloorplan, true); events.dispatch(onshowtourfloorplan);</action>
 
 
+  <!-- Hide / Show Controls -->
+  <action name="hideTourControls">set(tour_displaycontrols, false);events.dispatch(hidetourcontrols);</action>
+  <action name="showTourControls">set(tour_displaycontrols, true); events.dispatch(showtourcontrols);</action>
+
+
   <!-- Fullscreen Management -->
   <action name="exitFullScreen" devices="fullscreensupport">set(tour_fullscreen,false);js(setFullscreen(false));</action>
   <action name="enterFullScreen" devices="fullscreensupport">set(tour_fullscreen,true);js(setFullscreen(true));</action>
@@ -926,10 +931,5 @@ if(tour_displayfloorplan,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
   <action name="enterFullScreenFallback">set(fullscreen,true);</action>
   
   <action name="resizeFullScreenEvent">delayedcall(0,updatescreen(););</action>
-
-  <!-- Hide / Show Controls -->
-  <action name="hideTourControls">set(tour_displaycontrols, false);events.dispatch(hidetourcontrols);</action>
-  <action name="showTourControls">set(tour_displaycontrols, true); events.dispatch(showtourcontrols);</action>
-
 
 </krpano>
