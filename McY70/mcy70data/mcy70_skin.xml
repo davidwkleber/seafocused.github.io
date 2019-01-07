@@ -679,8 +679,8 @@ floorPlanActivateDefaultSpot();););
 		<option name="area_border_width" value="0" type="int" />
 		<option name="area_border_color" value="252525" type="string" />
 		<option name="area_border_alpha" value="0.40000000000000002" type="float" />
-		<option name="area_width" value="40" type="int" />
-		<option name="area_height" value="30" type="int" />
+		<option name="area_width" value="50" type="int" />
+		<option name="area_height" value="45" type="int" />
 		<option name="area_width_unit" value="percent" type="string" />
 		<option name="area_height_unit" value="percent" type="string" />
 		<option name="animation" value="false" type="bool" />
@@ -905,11 +905,6 @@ if(tour_displayfloorplan,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 
 
 
-  <!-- FLOORPLAN -->
-  <action name="hideFloorplan">set(tour_displayfloorplan, false);events.dispatch(onhidetourfloorplan);</action>
-  <action name="showFloorplan">set(tour_displayfloorplan, true); events.dispatch(onshowtourfloorplan);</action>
-
-
   <!-- Fullscreen Management -->
   <action name="exitFullScreen" devices="fullscreensupport">set(tour_fullscreen,false);js(setFullscreen(false));</action>
   <action name="enterFullScreen" devices="fullscreensupport">set(tour_fullscreen,true);js(setFullscreen(true));</action>
@@ -930,6 +925,11 @@ if(tour_displayfloorplan,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
   <!-- Hide / Show Controls -->
   <action name="hideTourControls">set(tour_displaycontrols, false);events.dispatch(hidetourcontrols);</action>
   <action name="showTourControls">set(tour_displaycontrols, true); events.dispatch(showtourcontrols);</action>
+
+
+  <!-- FLOORPLAN -->
+  <action name="hideFloorplan">set(tour_displayfloorplan, false);events.dispatch(onhidetourfloorplan);</action>
+  <action name="showFloorplan">set(tour_displayfloorplan, true); events.dispatch(onshowtourfloorplan);</action>
 
 
 </krpano>
