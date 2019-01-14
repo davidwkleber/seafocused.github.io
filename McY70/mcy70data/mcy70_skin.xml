@@ -697,12 +697,16 @@ floorPlanActivateDefaultSpot();););
 	<action name="kolorAreaJsReady_floorPlanArea">
 		set(ptplugin[floorPlanArea].jsready, true);
 
+		inc(tour_autorotation_openatstartplugin);
+		set(ptplugin[floorPlanArea].autorotateBlocked, true);
+
 	</action>
 	
 	<action name="openKolorArea_floorPlanArea">
 		ifnot(ptplugin[floorPlanArea].isOpen,
 			set(ptplugin[floorPlanArea].isOpen, true);
-			
+			pauseautorotation(forceplugin);
+
 			js(showKolorArea(floorPlanArea, &lt;div id="floorPlanArea_floorplanDIV"&gt;&lt;/div&gt;));
 			events.dispatch(onremovedisplayedobject);
 		);
@@ -723,6 +727,10 @@ floorPlanActivateDefaultSpot();););
 	</action>
 	
 	<action name="closeKolorAreaCallback_floorPlanArea">
+		if(ptplugin[floorPlanArea].isOpen,resumeautorotation(forceplugin);
+
+			if(ptplugin[floorPlanArea].autorotateBlocked,if(tour_autorotation_openatstartplugin GT 0,dec(tour_autorotation_openatstartplugin);set(ptplugin[floorPlanArea].autorotateBlocked,false);););
+		);
 		set(ptplugin[floorPlanArea].isOpen, false);hideFloorplan();
 
 	</action>
@@ -733,13 +741,16 @@ floorPlanActivateDefaultSpot();););
 	
 	<action name="showKolorArea_floorPlanArea">
 		set(ptplugin[floorPlanArea].isOpen, true);
-		
+		pauseautorotation(forceplugin);
+
 		js(invokePluginFunction(floorPlanArea, showKolorArea, %1));
 		events.dispatch(onremovedisplayedobject);
 	</action>
 		
 	<action name="hideKolorArea_floorPlanArea">
-		
+		resumeautorotation(forceplugin);
+
+		if(ptplugin[floorPlanArea].autorotateBlocked,if(tour_autorotation_openatstartplugin GT 0,dec(tour_autorotation_openatstartplugin);set(ptplugin[floorPlanArea].autorotateBlocked,false);););
 		set(ptplugin[floorPlanArea].isOpen, false);
 		js(invokePluginFunction(floorPlanArea, hideKolorArea, %1));
 	</action>
@@ -796,13 +807,13 @@ if(tour_displayfloorplan,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
          keep="true"
          url="%FIRSTXML%/graphics/button1/btn_enter_fs.png" 
          align="topright"
-         x="15"
-         y="15"
+         x="10"
+         y="10"
          zorder="4"
          visible="false"
          onclick="button1OnClick"
-         height="30"
-         width="30"
+         height="50"
+         width="50"
          />
   <action name="button1OnClick">switchFullscreen();
 
@@ -825,7 +836,7 @@ if(tour_displayfloorplan,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 
   <layer align="topleft"
          x="15"
-         y="65"
+         y="15"
          zorder="5"
          name="logo"
          keep="true"
@@ -836,7 +847,7 @@ if(tour_displayfloorplan,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
          url="%FIRSTXML%/graphics/logo/logo_4.png" 
          handcursor="false"
 
-         height="55"
+         height="10%"
          width="prop"
 
          />
@@ -894,423 +905,6 @@ if(tour_displayfloorplan,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
 
 
 
-<!-- ********** -->
-<!-- Classic Control Bar -->
-<!-- id : controlBar_classic -->
-<!-- ********** -->
-
-  <krpano controlBar_classicbarbuilt="false" controlBar_classicbackgroundwidthwhenclosed="0" controlBar_classicbackgroundwidthwhenopened="0" controlBar_classicIsOpened="false" />
-  <events name="controlBar_classicevents" 
-    onxmlcomplete="controlBar_classicbuildMenuBar();" 
-
-
-    keep="true" />
-
-
-
-  <action name="controlBar_classicbuildMenuBar">
-    ifnot (controlBar_classicbarbuilt, controlBar_classicbuildMenu(); set(controlBar_classicbarbuilt, true););
-  </action>
-
-  <action name="controlBar_classicbuildMenu">
-    
-    set(controlBar_classicbutton_pos, 20);
-
-
-
-
-
-    set(layer[controlBar_classicbtn_autorotate_on ].x, get(controlBar_classicbutton_pos));
-    set(layer[controlBar_classicbtn_autorotate_off].x, get(controlBar_classicbutton_pos));
-    inc(controlBar_classicbutton_pos, 36);
-
-
-
-
-
-
-
-
-
-    inc(controlBar_classicbutton_pos, 20);
-
-    set(controlBar_classicbackgroundwidthwhenopened, get(controlBar_classicbutton_pos));
-
-
-
-    
-    add(controlBar_classicVerifyVisibility, 20, 20);
-    if(controlBar_classicbackgroundwidthwhenopened == controlBar_classicVerifyVisibility,
-      set(controlBar_classicbackgroundwidthwhenopened, 0);
-
-
-    );
-
-	
-	
-  </action>
-
-	<events name="controlBar_classicStartTourEvents" onTourStart="controlBar_classicCallOnStartTour();" keep="true" />
-
-	<action name="controlBar_classicCallOnStartTour">
-		
-		set(layer[controlBar_classicmenu_controlbar_bg_img].width, get(controlBar_classicbutton_pos));
-		set(layer[controlBar_classicmenu_controlbar_bg].width, get(controlBar_classicbutton_pos));
-		controlBar_classicshowMenuControls();
-	</action>
-
-
-
-  <style name="controlBar_classic_btn_style"
-         keep="true"
-         alpha="0.8"
-         edge="right" align="right"
-         width="36" height="36"
-         zorder="9"
-         onover="controlBar_classicctrlbaronoveraction();"
-         onout="controlBar_classicctrlbaronoutaction();"
-         onhover="showTooltip('plugin', controlBar_classicmenuTooltipStyle, top);"
-         />
-  <action name="controlBar_classicctrlbaronoveraction">
-    tween(alpha,1,0.1,easeoutquad);
-    tween(y,-2,0.1,easeoutquad);
-  </action>  
-  <action name="controlBar_classicctrlbaronoutaction">
-    tween(alpha,0.8);
-    tween(y,0,0.1,easeoutquad);
-    hideTooltip();
-  </action>
-
-  <layer name="controlBar_classicmenu_controlbar_bg_img"
-         keep="true"
-         align="topright"
-         x="25" y="10"
-         url="%FIRSTXML%/graphics/classiccontrolbar/footer.png"
-         zorder="7"
-         width="40"
-         height="40"
-         scale9grid="10|10|80|80"
-         visible="false"
-         />
-  <layer name="controlBar_classicmenu_controlbar_bg"
-         keep="true"
-         align="topright"
-         x="25" y="10"
-         type="container"
-         zorder="8"
-         width="40"
-         height="40"
-         visible="false"
-         alpha="1.0"
-         >
-
-
-
-
-
-
-
-    <layer name="controlBar_classicbtn_autorotate_on"
-            url="%FIRSTXML%/graphics/classiccontrolbar/btn_start_autorotation.png"
-            onclick="resumeautorotation();
-"
-            style="controlBar_classic_btn_style"
-            visible="false"
-            tooltip="controlBar_classicautorotateOnTip"
-            />
-    <layer name="controlBar_classicbtn_autorotate_off"
-            url="%FIRSTXML%/graphics/classiccontrolbar/btn_stop_autorotation.png"
-            onclick="pauseautorotation();
-"
-            style="controlBar_classic_btn_style"
-            visible="false"
-            tooltip="controlBar_classicautorotateOffTip"
-            />
-
-
-
-
-
-  </layer>
-
-
-
-
-
-  <action name="controlBar_classichideMenuControls">
-    set(controlBar_classicIsOpened, false);
-
-
-    controlBar_classicupdateAutorotationButtons();
-
-
-
-
-
-
-
-
-    if(controlBar_classicbackgroundwidthwhenclosed == 0,
-      set(layer[controlBar_classicmenu_controlbar_bg_img].visible, false);
-      set(layer[controlBar_classicmenu_controlbar_bg].visible, false);
-    ,
-      set(layer[controlBar_classicmenu_controlbar_bg_img].visible, true);
-      set(layer[controlBar_classicmenu_controlbar_bg].visible, true);
-    );
-    tween(layer[controlBar_classicmenu_controlbar_bg_img].width,get(controlBar_classicbackgroundwidthwhenclosed),0.5,easeOutQuad);
-    tween(layer[controlBar_classicmenu_controlbar_bg].width,get(controlBar_classicbackgroundwidthwhenclosed),0.5,easeOutQuad);
-    tween(layer[controlBar_classicmenu_controlbar_bg_img].alpha,1.0,0.5,easeOutQuad);
-  </action>
-  <action name="controlBar_classicshowMenuControls">
-    set(controlBar_classicIsOpened, true);
-    if(controlBar_classicbackgroundwidthwhenopened == 0,
-      set(layer[controlBar_classicmenu_controlbar_bg_img].visible, false);
-      set(layer[controlBar_classicmenu_controlbar_bg].visible, false);
-    ,
-      set(layer[controlBar_classicmenu_controlbar_bg_img].visible, true);
-      set(layer[controlBar_classicmenu_controlbar_bg].visible, true);
-    );
-    tween(layer[controlBar_classicmenu_controlbar_bg_img].alpha,1.0,0.5,easeOutQuad);
-    controlBar_classicshowMenuButtons();
-
-
-      tween(layer[controlBar_classicmenu_controlbar_bg_img].width, get(controlBar_classicbackgroundwidthwhenopened),0.5,easeOutQuad);
-      tween(layer[controlBar_classicmenu_controlbar_bg].width, get(controlBar_classicbackgroundwidthwhenopened),0.5,easeOutQuad);
-
-
-  </action>
-  <action name="controlBar_classicshowMenuButtons">
-
-
-
-
-
-
-
-
-    controlBar_classicupdateAutorotationButtons();
-
-
-  </action>
-
-
-
-	<events name="controlBar_classicAutorotationEvents"
-		onstartautorotation="controlBar_classicupdateAutorotationButtons();"
-		onresumeautorotation="controlBar_classicupdateAutorotationButtons();"
-		onstopautorotation="controlBar_classicupdateAutorotationButtons();"
-		onpauseautorotation="controlBar_classicupdateAutorotationButtons();"
-		keep="true"/>
-	<action name="controlBar_classicHideAutorotationButtons">
-		set(layer[controlBar_classicbtn_autorotate_off].visible, false);
-		set(layer[controlBar_classicbtn_autorotate_on].visible , false);
-	</action>
-	<action name="controlBar_classicShowAutorotationButtons">
-		if(autorotate.enabled == false,
-			set(layer[controlBar_classicbtn_autorotate_off].visible, false);
-			set(layer[controlBar_classicbtn_autorotate_on].visible , true);
-		,
-			set(layer[controlBar_classicbtn_autorotate_off].visible, true);
-			set(layer[controlBar_classicbtn_autorotate_on].visible , false);
-		);
-	</action>
-	<action name="controlBar_classicupdateAutorotationButtons">
-		if (controlBar_classicIsOpened,
-			controlBar_classicShowAutorotationButtons();
-		,
-			controlBar_classicHideAutorotationButtons();
-		);
-	</action>
-
-
-
-
-<layer name="controlBar_classicmenuTooltipStyle"
-	keep="true"
-	enabled="false"
-	capture="false"
-	url="%FIRSTXML%/graphics/textfield.swf"
-	align="center"
-	background="true"
-	backgroundcolor="0xffffff"
-	backgroundalpha="0.80000000000000004"
-	border="false"
-	shadow="1" shadowrange="4.0" shadowangle="45" shadowcolor="0x000000" shadowalpha="1"
-	textshadow="1" textshadowrange="4.0" textshadowangle="45" textshadowcolor="0x000000" textshadowalpha="1"
-	css="color:#e6e6e6;font-family:Helvetica;font-weight:bold;font-size:14px;text-align:left;"
-	height="20"
-	autoheight="true"
-	autowidth="auto"
-	selectable="false"
-	zorder="0"
-	visible="false"
-	html=""
-	padding="2"
-	xoffset="0"
-	yoffset="0"
-	edge="top"
-	/>
-
-
-<!-- ********** -->
-<!-- WebVR Button -->
-<!-- id : webvrbutton -->
-<!-- ********** -->
-
-	<layer name="webvrbutton"
-		keep="true"
-		blocked="false"
-		alpha="1"
-		url="%FIRSTXML%/graphics/webvrbutton/btn_webvr.png" 
-		align="topleft"
-		x="15"
-		y="10"
-		zorder="10"
-		visible="false"
-		onclick="js(accessWebVr());
-"
-
-		width="70"
-		height="prop"
-		crop="0|0|100|63"
-		/>
-
-	<events name="webvrbuttonevents"
-		onvrunavailable="hidewebvrbutton(true);"
-		onTourStart="showwebvrbutton();"
-		hidetourcontrols="hidewebvrbutton();" 
-		showtourcontrols="showwebvrbutton();" 
-		keep="true" />
-	<action name="hidewebvrbutton">if(%1 == true,set(layer[webvrbutton].blocked, true););set(layer[webvrbutton].visible, false);</action>
-	<action name="showwebvrbutton">if(tour_displaycontrols,if(layer[webvrbutton].blocked == false,set(layer[webvrbutton].visible, true););,hidewebvrbutton(););</action>
-
-
-<!-- ********* -->
-<!-- Gyroscope -->
-<!-- ********* -->
-
-
-
-<plugin name="gyroscope"
-        url="%FIRSTXML%/graphics/gyro2.js"
-        keep="true"
-        devices="no-desktop.and.html5"
-
-        onunavailable="checkGyroUnavailable();"
-        sensor_mode="1"
-        friction="auto"
-        autocalibration="true"
-        touch_mode="full"
-        onavailable="delayedcall(1, checkGyroAvailability(););"
-        enabled="false"
-        activated="false"
-        />
-
-<events name="gyroscopeEvents" onnewpano="planarGyroscopeTest();" keep="true" />
-
-<action name="planarGyroscopeTest">
-  if(plugin[gyroscope],
-          if(scene[get(xml.scene)].full360,
-            set(sceneisfull360, false);
-            sub(viewhfov, panoview.hmax, panoview.hmin);
-            if (viewhfov == 360,
-              sub(viewvfov, panoview.vmax, panoview.vmin);
-              if (viewvfov == 180,
-                set(sceneisfull360, true);
-              );
-            );
-            if (sceneisfull360,
-              set(plugin[gyroscope].camroll, true);
-            ,
-              set(plugin[gyroscope].camroll, false);
-            );
-          ,
-            set(plugin[gyroscope].camroll, false);
-          );
-  );
-</action>
-
-<action name="changeGyroscopeState">
-  if(plugin[gyroscope],
-    if (plugin[gyroscope].isavailable,
-        if(%1,
-          set(plugin[gyroscope].activated,true);
-        ,
-          set(plugin[gyroscope].activated,false);
-        );
-        if (%1 != plugin[gyroscope].enabled,
-          if(plugin[gyroscope].activated,
-            switch(plugin[gyroscope].enabled);
-          ,
-            set(plugin[gyroscope].enabled, false);
-          );
-          if (plugin[gyroscope].enabled, events.dispatch(ongyroscopeon);, events.dispatch(ongyroscopeoff););
-        );
-    );
-  );
-</action>
-
-<action name="checkGyroAvailability">
-  if(plugin[gyroscope],
-    if (plugin[gyroscope].isavailable,
-      ifnot(tour_firstlittleplanet,
-        
-        switch(plugin[gyroscope].enabled);
-        set(plugin[gyroscope].activated,true);
-        
-        set(tour_gyroscopedevices, true);
-        events.dispatch(ongyroscopeavailable);
-      ,
-        delayedcall(1, checkGyroAvailability(););
-      );
-    ,
-      set(tour_gyroscopedevices, false);
-    );
-    if (plugin[gyroscope].enabled, events.dispatch(ongyroscopeon);, events.dispatch(ongyroscopeoff););
-  ,
-    checkGyroUnavailable();
-  );
-</action>
-
-<action name="checkGyroUnavailable">
-  set(plugin[gyroscope].activated, false);
-  set(plugin[gyroscope].enabled, false);
-  set(tour_gyroscopedevices, false);
-  events.dispatch(ongyroscopeunavailable);
-</action>
-
-  <!-- FLOORPLAN -->
-  <action name="hideFloorplan">set(tour_displayfloorplan, false);events.dispatch(onhidetourfloorplan);</action>
-  <action name="showFloorplan">set(tour_displayfloorplan, true); events.dispatch(onshowtourfloorplan);</action>
-
-
-	<!-- WebVR plugin for VR availability tests -->
-
-	<plugin name="ptpvrmode" devices="html5" keep="true"
-		url="%FIRSTXML%/graphics/webvr.js"
-		mobilevr_support="true"
-		mobilevr_fake_support="true"
-		vr_cursor=""
-		vr_cursor_enabled="false"
-		onavailable="delayedcall(1, checkVrAvailability(););"
-		onunavailable="checkVrUnavailable();"
-		/>
-	<action name="checkVrAvailability">
-		if(plugin[ptpvrmode],
-			if (plugin[ptpvrmode].isavailable,
-				set(tour_vrdevices, true);
-				events.dispatch(onvravailable);
-			,
-				set(tour_vrdevices, false);
-			);
-		,
-			checkVrUnavailable();
-		);
-	</action>
-	<action name="checkVrUnavailable">
-		set(tour_vrdevices, false);
-		events.dispatch(onvrunavailable);
-	</action>
   <!-- Fullscreen Management -->
   <action name="exitFullScreen" devices="fullscreensupport">set(tour_fullscreen,false);js(setFullscreen(false));</action>
   <action name="enterFullScreen" devices="fullscreensupport">set(tour_fullscreen,true);js(setFullscreen(true));</action>
@@ -1327,6 +921,11 @@ if(tour_displayfloorplan,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
   <action name="enterFullScreenFallback">set(fullscreen,true);</action>
   
   <action name="resizeFullScreenEvent">delayedcall(0,updatescreen(););</action>
+
+  <!-- FLOORPLAN -->
+  <action name="hideFloorplan">set(tour_displayfloorplan, false);events.dispatch(onhidetourfloorplan);</action>
+  <action name="showFloorplan">set(tour_displayfloorplan, true); events.dispatch(onshowtourfloorplan);</action>
+
 
   <!-- Hide / Show Controls -->
   <action name="hideTourControls">set(tour_displaycontrols, false);events.dispatch(hidetourcontrols);</action>

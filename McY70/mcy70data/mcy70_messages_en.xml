@@ -102,37 +102,37 @@
   <data name="en_pano154_title"><![CDATA[Crew Area Enterance]]></data>
 
 
-	<data name="en_spotmap4793_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4794_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4795_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4796_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4797_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4798_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4799_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4800_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4801_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4802_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4803_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4804_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4805_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4806_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4807_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4808_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4809_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4810_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4811_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4812_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4813_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4814_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4815_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4816_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4817_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4818_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4819_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4820_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4821_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4822_tooltip"><![CDATA[]]></data>
-	<data name="en_spotmap4823_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5200_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5201_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5202_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5203_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5204_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5205_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5206_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5207_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5208_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5209_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5210_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5211_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5212_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5213_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5214_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5215_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5216_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5217_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5218_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5219_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5220_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5221_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5222_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5223_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5224_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5225_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5226_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5227_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5228_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5229_tooltip"><![CDATA[]]></data>
+	<data name="en_spotmap5230_tooltip"><![CDATA[]]></data>
 
 
 	<data name="en_project_floor_title"><![CDATA[Monte Carlo Yachts 70]]></data>
@@ -161,9 +161,6 @@
   <data name="en_logotooltipText"><![CDATA[]]></data>
   <data name="en_logo1websiteurl"><![CDATA[]]></data>
   <data name="en_logo1tooltipText"><![CDATA[Open website]]></data>
-  <data name="en_controlBar_classicautorotateOnTip"><![CDATA[Start autorotation]]></data>
-  <data name="en_controlBar_classicautorotateOffTip"><![CDATA[Stop autorotation]]></data>
-  <data name="en_webvrbuttontooltip"><![CDATA[]]></data>
 
 
   <data name="en_vr_setup_hmd0"><![CDATA[SELECT YOUR HMD]]></data>
