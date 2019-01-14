@@ -1,0 +1,935 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano version="1.19">
+
+    
+  <!-- Spot Style - Default Point Spot Style -->
+  <style name="IconDefaultPointSpotStyle"
+         url="%FIRSTXML%/spots/hotspot_plan_sequence_user_defaultpoint0.png"
+         visible="false"
+         frame="0"
+         lastframe="9"
+         framewidth="67"
+         frameheight="67"
+         stopspotsequence="false"
+         crop="0|0|67|67"
+         onloaded="startspotanimation(0.1);"
+         onhover="onhoverIconDefaultPointSpotStyle"
+         onout="onoutIconDefaultPointSpotStyle"
+
+
+         />
+
+  <action name="onhoverIconDefaultPointSpotStyle">
+    showtooltip('hotspot');
+  </action>
+
+
+  <action name="onoutIconDefaultPointSpotStyle">
+    hideTooltip();
+
+
+
+  </action>
+
+
+
+  <!-- unsupported kind of display : PointMap -->
+
+
+    
+  <!-- Spot Style - Default Point Spot Style -->
+  <style name="IconDefaultPointSpotStyle"
+         url="%FIRSTXML%/spots/hotspot_plan_sequence_user_defaultpoint01.png"
+         visible="false"
+         frame="0"
+         lastframe="9"
+         framewidth="67"
+         frameheight="67"
+         stopspotsequence="false"
+         crop="0|0|67|67"
+         onloaded="startspotanimation(0.1);"
+         onhover="onhoverIconDefaultPointSpotStyle"
+         onout="onoutIconDefaultPointSpotStyle"
+
+
+         />
+
+  <action name="onhoverIconDefaultPointSpotStyle">
+    showtooltip('hotspot');
+  </action>
+
+
+  <action name="onoutIconDefaultPointSpotStyle">
+    hideTooltip();
+
+
+
+  </action>
+
+
+
+    
+  <!-- Spot Style - Default Point Spot Style -->
+  <style name="IconDefaultPointSpotStyle"
+         url="%FIRSTXML%/spots/hotspot_plan_sequence_user_defaultpoint011.png"
+         visible="false"
+         frame="0"
+         lastframe="9"
+         framewidth="67"
+         frameheight="67"
+         stopspotsequence="false"
+         crop="0|0|67|67"
+         onloaded="startspotanimation(0.1);"
+         onhover="onhoverIconDefaultPointSpotStyle"
+         onout="onoutIconDefaultPointSpotStyle"
+
+         height="100"
+         width="100"
+         />
+
+  <action name="onhoverIconDefaultPointSpotStyle">
+    showtooltip('hotspot');
+  </action>
+
+
+  <action name="onoutIconDefaultPointSpotStyle">
+    hideTooltip();
+
+
+
+  </action>
+
+
+
+  <!-- unsupported kind of display : PointMap -->
+
+
+<!-- ********** -->
+<!-- Thumbnails Stack -->
+<!-- id : stackthumbs -->
+<!-- ********** -->
+
+  <krpano stackthumbsIsOpen="false" stackthumbsFirstLoad="true" />
+
+  <events name="stackthumbsEvents"
+          onnewpano="stackthumbsClose(0);"
+          onTourStart="stackthumbsBuild();"
+          hidetourcontrols="stackthumbsHide();"
+          showtourcontrols="stackthumbsShow();"
+          hidetourthumbnails="stackthumbsHide();"
+          showtourthumbnails="stackthumbsShow();"
+          keep="true"/>
+
+  <layer name="stackthumbsMainLayer" type="container" zorder="1" width="1" height="1" alpha="1" keep="true" x="0" y="0" visible="true" align="bottomleft" />
+
+  <action name="stackthumbsHide">
+    set(hstcstackthumbsi_wait,30);
+    for (set(hstcstackthumbsi, 0), hstcstackthumbsi LT scene.count, inc(hstcstackthumbsi),
+      if(hstcstackthumbsi_wait == hstcstackthumbsi,
+        add(hstcstackthumbsi_wait, 30);
+        wait(0);
+      );
+      txtadd(thumbname,'stackthumbs_', get(hstcstackthumbsi));
+      txtadd(thumbnameimg, get(thumbname), '_img');
+      set(layer[get(thumbname)].visible, false);
+      set(layer[get(thumbnameimg)].visible, false);
+    );
+  </action>
+  <action name="stackthumbsShow">
+  if (tour_displaythumbnails, 
+    set(sstcstackthumbsi_wait,30);
+    for (set(sstcstackthumbsi, 0), sstcstackthumbsi LT scene.count, inc(sstcstackthumbsi),
+      if(sstcstackthumbsi_wait == sstcstackthumbsi,
+        add(sstcstackthumbsi_wait, 30);
+        wait(0);
+      );
+      txtadd(thumbname,'stackthumbs_', get(sstcstackthumbsi));
+      txtadd(thumbnameimg, get(thumbname), '_img');
+      set(layer[get(thumbname)].visible, true);
+      set(layer[get(thumbnameimg)].visible, true);
+    );
+  );
+  </action>
+
+  <action name="stackthumbsMagnify">
+    tween(layer[%1].alpha,  1.0, 0.3, easeInQuad);
+    tween(layer[%1].scale, 1.05, 0.3, easeInQuad);
+    tween(layer[get(layer[%1].thumbborder)].alpha,  1.0, 0.3, easeInQuad);
+    tween(layer[get(layer[%1].thumbborder)].scale, 1.05, 0.3, easeInQuad);
+    set(layer[get(layer[%1].thumbborder)].bgborder, '2 0xffffff 1');
+  </action>
+
+  <action name="stackthumbsLies">
+    tween(layer[%1].alpha, 0.8, 0.3, easeInQuad);
+    tween(layer[%1].scale, 1.0, 0.3, easeInQuad);
+    tween(layer[get(layer[%1].thumbborder)].alpha, 0.8, 0.3, easeInQuad);
+    tween(layer[get(layer[%1].thumbborder)].scale, 1.0, 0.3, easeInQuad);
+    set(layer[get(layer[%1].thumbborder)].bgborder, '2 0xffffff 0.20000000000000001');
+  </action>
+
+
+<krpano stackthumbsBuilt="false"/>
+
+  <action name="stackthumbsBuild">
+    ifnot (stackthumbsBuilt,
+    set(bststackthumbsi_wait,30);
+    for (set(bststackthumbsi, 0), bststackthumbsi LT scene.count, inc(bststackthumbsi),
+      if(bststackthumbsi_wait == bststackthumbsi,
+        add(bststackthumbsi_wait, 30);
+        wait(0);
+      );
+
+        copy(thumburl, scene[get(bststackthumbsi)].thumburl);
+        txtadd(thumbname,'stackthumbs_', get(bststackthumbsi));
+        txtadd(thumbnameimg, get(thumbname), '_img');
+
+        addplugin(get(thumbname));
+        addplugin(get(thumbnameimg));
+        set(layer[get(thumbnameimg)].parent, "stackthumbsMainLayer");
+        set(layer[get(thumbname)].parent, get(thumbnameimg));
+        set(layer[get(thumbnameimg)].url   , get(thumburl));
+        set(layer[get(thumbname)].type, 'container');
+        set(layer[get(thumbnameimg)].keep  , true);
+        set(layer[get(thumbname)].keep  , true);
+        set(layer[get(thumbnameimg)].align , bottomleft);
+        set(layer[get(thumbname)].align , topleft);
+        set(layer[get(thumbnameimg)].edge  , center);
+
+        set(layer[get(thumbnameimg)].width , 50);
+        set(layer[get(thumbnameimg)].height, 25);
+        set(layer[get(thumbname)].width , 50);
+        set(layer[get(thumbname)].height, 25);
+
+        set(layer[get(thumbnameimg)].alpha , 0.8);
+        set(layer[get(thumbnameimg)].visible , false);
+        set(layer[get(thumbname)].alpha , 0.8);
+        set(layer[get(thumbname)].visible , false);
+
+        if (bststackthumbsi GE 4, set(reali, 4), set(reali, get(bststackthumbsi)));
+
+        mul(layer[get(thumbnameimg)].x, get(reali),3);
+        mul(layer[get(thumbnameimg)].y, get(reali),3);
+
+        add(closedthumboffsetx, 10, 25);
+        add(layer[get(thumbnameimg)].x, get(closedthumboffsetx));
+
+        add(closedthumboffsety, 10, 12);
+        add(layer[get(thumbnameimg)].y, get(closedthumboffsety));
+
+        copy(layer[get(thumbnameimg)].xsmall, layer[get(thumbnameimg)].x);
+        copy(layer[get(thumbnameimg)].ysmall, layer[get(thumbnameimg)].y);
+
+        add(layer[get(thumbnameimg)].zorder, 0, bststackthumbsi);
+        add(layer[get(thumbname)].zorder, 0, bststackthumbsi);
+        set(layer[get(thumbname)].bgborder, '2 0xffffff 0.20000000000000001');
+
+          set(layer[get(thumbnameimg)].tooltip,get(scene[get(bststackthumbsi)].titleid));
+        set(layer[get(thumbnameimg)].thumbborder, get(thumbname));
+        set(layer[get(thumbnameimg)].thumbpos, get(bststackthumbsi));
+        set(layer[get(thumbnameimg)].linkedpano, get(scene[get(bststackthumbsi)].name) );
+        set(layer[get(thumbnameimg)].onclick, stackthumbsOpen() );
+      );
+
+      set(stackthumbsBuilt, true);
+
+      stackthumbsShow();
+
+      
+    );
+  </action>
+
+  <action name="stackthumbsOpenThumb">
+    if(%3 != NEXT,
+      set(pos,0);
+      copy(curpos, layer[%1].thumbpos);
+      set(xdst, 0);
+      set(ydst, 0);
+    );
+    if (pos LT curpos,
+      inc(pos);
+
+        inc(ydst, 60);
+        if (ishtml5,
+          sub(ymax, stageheight, 50);
+         ,
+          sub(ymax, area.pixelheight, 50);
+        );
+        dec(ymax, 30);
+        if(ydst GT ymax,
+          inc(xdst, 110);
+          set(ydst,0);
+        );
+
+      stackthumbsOpenThumb(%1,%2,NEXT);
+     ,
+      set(openthumboffsetx, 50);
+      add(openthumboffsetx, 10);
+      add(xdst, get(openthumboffsetx));
+
+      set(openthumboffsety, 25);
+      add(openthumboffsety, 10);
+      add(ydst, get(openthumboffsety));
+
+      tween(layer[%1].x, get(xdst) );
+      tween(layer[%1].y, get(ydst) );
+      tween(layer[%1].width , 100);
+      tween(layer[%1].height, 50);
+      tween(layer[%2].width , 100);
+      tween(layer[%2].height, 50);
+    );
+  </action>
+
+  <action name="stackthumbsOpen">
+    set(oststackthumbsi_wait,30);
+    for (set(oststackthumbsi, 0), oststackthumbsi LT scene.count, inc(oststackthumbsi),
+    if(oststackthumbsi_wait == oststackthumbsi,
+      add(oststackthumbsi_wait, 30);
+      wait(0);
+    );
+      txtadd(thumbname,'stackthumbs_',get(oststackthumbsi));
+      txtadd(thumbnameimg, get(thumbname), '_img');
+      stackthumbsOpenThumb(get(thumbnameimg), get(thumbname));
+      set(layer[get(thumbnameimg)].onover, stackthumbsMagnify(get(name)); );
+      set(layer[get(thumbnameimg)].onout, stackthumbsLies(get(name)); hideTooltip(); );
+      set(layer[get(thumbnameimg)].onhover, showTooltip('plugin'); );
+      set(layer[get(thumbnameimg)].onclick, stackthumbsLies(get(name)); stackthumbsClose(0); mainloadscene(get(linkedpano)); );
+    );
+    
+    set(stackthumbsIsOpen, true);
+  </action>
+
+  <action name="stackthumbsClose">
+    if (stackthumbsIsOpen,
+    set(cststackthumbsi_wait,30);
+    for (set(cststackthumbsi, 0), cststackthumbsi LT scene.count, inc(cststackthumbsi),
+      if(cststackthumbsi_wait == cststackthumbsi,
+        add(cststackthumbsi_wait, 30);
+        wait(0);
+      );
+      txtadd(thumbname,'stackthumbs_', get(cststackthumbsi));
+      txtadd(thumbnameimg, get(thumbname), '_img');
+      stackthumbsCloseThumb(get(thumbnameimg), get(thumbname));
+    );
+    
+    set(stackthumbsIsOpen, false);
+    );
+  </action>
+  <action name="stackthumbsCloseThumb">
+    tween(layer[%1].x, get(layer[%1].xsmall));
+    tween(layer[%1].y, get(layer[%1].ysmall));
+    tween(layer[%1].width, 50);
+    tween(layer[%1].height, 25);
+    tween(layer[%2].width, 50);
+    tween(layer[%2].height, 25);
+    set(layer[%1].alpha, 0.8);
+    set(layer[%1].onover, '');
+    set(layer[%1].onout, '');
+    set(layer[%1].onhover, '');hideTooltip();
+    set(layer[%1].onclick, stackthumbsOpen() );
+  </action>
+
+
+<!-- ********** -->
+<!-- Floor plan -->
+<!-- id : floorPlan -->
+<!-- ********** -->
+
+	<ptplugin name="floorPlan" engine="KolorFloorPlan">
+		<settings>
+			<option name="background_color" value="f2f2f2" type="string" />
+			<option name="background_lighter_color" value="ffffff" type="string" />
+			<option name="background_darker_color" value="cacaca" type="string" />
+			<option name="background_alpha" value="0" type="float" />
+			<option name="text_color" value="000000" type="string" />
+			<option name="resize" value="true" type="bool" />
+			<option name="fp_selector" value="multiple" type="string" />
+			<option name="fp_selector_label" value="floorPlanmenu_label" type="string" />
+			<option name="display_title" value="false" type="bool" />
+			<option name="title_font" value="Verdana" type="string" />
+			<option name="title_size" value="14" type="int" />
+			<option name="title_weight" value="normal" type="string" />
+			<option name="title_decoration" value="normal" type="string" />
+			<option name="title_color" value="000000" type="string" />
+			<option name="display_orientation" value="false" type="bool" />
+			<option name="display_radar" value="false" type="bool" />
+			<option name="close_on_click" value="true" type="bool" />
+			<option name="position" value="bottomright" type="string" />
+			<option name="zorder" value="2" type="int" />
+			<option name="use_i18n" value="true" type="bool" />
+		</settings>
+		
+		<floorplanItems selectedItem="fpitemmain" selectedSpot="" selectedSpotScene="" selectedSpotHeading="" selectedSpotFov="">
+				
+				<floorplanItem 
+					name="fpitemmain" 
+					width="706" 
+					height="906" 
+					groupName="" 
+					url="floorplan/floor2.png" 
+					title="project_floor_title"
+					heading="0">
+							<spot name="spotmap3919" posX="0.200000003" posY="0.638462007" heading="0" desc="spotmap3919_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano56" jsClick="spotmap3919ActionSpotFloorPlan">
+								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
+							</spot>
+							<spot name="spotmap3920" posX="0.193022996" posY="0.507691979" heading="0" desc="spotmap3920_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano60" jsClick="spotmap3920ActionSpotFloorPlan">
+								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
+							</spot>
+							<spot name="spotmap3921" posX="0.181394994" posY="0.817308009" heading="0" desc="spotmap3921_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano68" jsClick="spotmap3921ActionSpotFloorPlan">
+								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
+							</spot>
+							<spot name="spotmap3926" posX="0.506977022" posY="0.955769002" heading="0" desc="spotmap3926_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano65" jsClick="spotmap3926ActionSpotFloorPlan">
+								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
+							</spot>
+							<spot name="spotmap3927" posX="0.492908001" posY="0.184572995" heading="0" desc="spotmap3927_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano45" jsClick="spotmap3927ActionSpotFloorPlan">
+								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
+							</spot>
+							<spot name="spotmap3928" posX="0.496454" posY="0.630854011" heading="0" desc="spotmap3928_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano62" jsClick="spotmap3928ActionSpotFloorPlan">
+								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
+							</spot>
+							<spot name="spotmap3929" posX="0.469767004" posY="0.434614986" heading="0" desc="spotmap3929_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano43" jsClick="spotmap3929ActionSpotFloorPlan">
+								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
+							</spot>
+							<spot name="spotmap3930" posX="0.502326012" posY="0.761538029" heading="0" desc="spotmap3930_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano59" jsClick="spotmap3930ActionSpotFloorPlan">
+								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
+							</spot>
+							<spot name="spotmap3932" posX="0.827907026" posY="0.501923025" heading="0" desc="spotmap3932_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano169" jsClick="spotmap3932ActionSpotFloorPlan">
+								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
+							</spot>
+							<spot name="spotmap3933" posX="0.844186008" posY="0.824999988" heading="0" desc="spotmap3933_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano44" jsClick="spotmap3933ActionSpotFloorPlan">
+								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
+							</spot>
+							<spot name="spotmap3934" posX="0.741859972" posY="0.305768996" heading="0" desc="spotmap3934_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano67" jsClick="spotmap3934ActionSpotFloorPlan">
+								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
+							</spot>
+							<spot name="spotmap3935" posX="0.86046499" posY="0.301923007" heading="0" desc="spotmap3935_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano49" jsClick="spotmap3935ActionSpotFloorPlan">
+								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
+							</spot>
+							<spot name="spotmap3936" posX="0.813952982" posY="0.201922998" heading="0" desc="spotmap3936_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano163" jsClick="spotmap3936ActionSpotFloorPlan">
+								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
+							</spot>
+							<spot name="spotmap3937" posX="0.812641025" posY="0.686567008" heading="0" desc="spotmap3937_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano154" jsClick="spotmap3937ActionSpotFloorPlan">
+								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
+							</spot>
+							<spot name="spotmap3938" posX="0.734090984" posY="0.676692009" heading="0" desc="spotmap3938_tooltip" descType="tooltip" groupName="" isScene="true" planar="false" scene="pano157" jsClick="spotmap3938ActionSpotFloorPlan">
+								<icon url="spots/pin_thin_3d_user_defaultmap01.png" iconWidth="32" iconHeight="32" iconAnchor="center" />
+							</spot>
+				</floorplanItem>
+			
+			
+		</floorplanItems>
+	</ptplugin>
+	
+	<action name="kolorFloorplanJsReady_floorPlan">
+		set(ptplugin[floorPlan].jsready, true);
+		
+		ifnot(ptplugin[floorPlan].floorplanItems[0].selectedSpot == "",
+			set(ptplugin[floorPlan].floorplanItems[0].selectedSpotFov, get(view.hfov));
+			js(invokePluginFunction(floorPlan, setKolorFloorPlanSelectedSpotOptions, get(xml.scene), get(view.hlookat), get(view.hfov)));
+		);
+	</action>
+	
+	
+		<!-- floorplan main spots counter : 15 -->
+			<action name="spotmap3919ActionSpotFloorPlan">if(xml.scene == pano56,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+floorPlanActivateDefaultSpot();););
+          mainloadscene(pano56);lookat(-1.350000, 4.050000, 90.000000);
+
+</action>
+			<action name="spotmap3920ActionSpotFloorPlan">if(xml.scene == pano60,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+floorPlanActivateDefaultSpot();););
+          mainloadscene(pano60);lookat(-134.100000, 31.950000, 90.000000);
+
+</action>
+			<action name="spotmap3921ActionSpotFloorPlan">if(xml.scene == pano68,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+floorPlanActivateDefaultSpot();););
+          mainloadscene(pano68);lookat(157.050000, 11.250000, 90.000000);
+
+</action>
+			<action name="spotmap3926ActionSpotFloorPlan">if(xml.scene == pano65,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+floorPlanActivateDefaultSpot();););
+          mainloadscene(pano65);lookat(6.000000, -31.100000, 81.000000);
+
+</action>
+			<action name="spotmap3927ActionSpotFloorPlan">if(xml.scene == pano45,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+floorPlanActivateDefaultSpot();););
+          mainloadscene(pano45);lookat(9.000000, -1.800000, 90.000000);
+
+</action>
+			<action name="spotmap3928ActionSpotFloorPlan">if(xml.scene == pano62,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+floorPlanActivateDefaultSpot();););
+          mainloadscene(pano62);lookat(11.250000, 8.100000, 90.000000);
+
+</action>
+			<action name="spotmap3929ActionSpotFloorPlan">if(xml.scene == pano43,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+floorPlanActivateDefaultSpot();););
+          mainloadscene(pano43);lookat(-134.100000, 3.150000, 90.000000);
+
+</action>
+			<action name="spotmap3930ActionSpotFloorPlan">if(xml.scene == pano59,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+floorPlanActivateDefaultSpot();););
+          mainloadscene(pano59);lookat(12.150000, 3.150000, 90.000000);
+
+</action>
+			<action name="spotmap3932ActionSpotFloorPlan">if(xml.scene == pano169,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+floorPlanActivateDefaultSpot();););
+          mainloadscene(pano169);lookat(39.127700, 8.825210, 81.818200);
+
+</action>
+			<action name="spotmap3933ActionSpotFloorPlan">if(xml.scene == pano44,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+floorPlanActivateDefaultSpot();););
+          mainloadscene(pano44);lookat(2.250000, 3.600000, 90.000000);
+
+</action>
+			<action name="spotmap3934ActionSpotFloorPlan">if(xml.scene == pano67,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+floorPlanActivateDefaultSpot();););
+          mainloadscene(pano67);lookat(6.995790, 8.169310, 74.380200);
+
+</action>
+			<action name="spotmap3935ActionSpotFloorPlan">if(xml.scene == pano49,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+floorPlanActivateDefaultSpot();););
+          mainloadscene(pano49);lookat(71.100000, 6.750000, 90.000000);
+
+</action>
+			<action name="spotmap3936ActionSpotFloorPlan">if(xml.scene == pano163,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+floorPlanActivateDefaultSpot();););
+          mainloadscene(pano163);lookat(-3.686550, 4.812400, 67.618300);
+
+</action>
+			<action name="spotmap3937ActionSpotFloorPlan">if(xml.scene == pano154,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+floorPlanActivateDefaultSpot();););
+          mainloadscene(pano154);lookat(1.800000, 5.686360, 81.818200);
+
+</action>
+			<action name="spotmap3938ActionSpotFloorPlan">if(xml.scene == pano157,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+floorPlanActivateDefaultSpot();););
+          mainloadscene(pano157);lookat(-178.486000, 3.190910, 81.818200);
+
+</action>
+	
+	
+	
+	<events name="floorPlanEvents" 
+	onxmlcomplete="ifnot(floorPlanFloorPlanLoaded,set(tour_displayfloorplan,true););floorPlanActivateDefaultSpot();" 
+	onhidetourfloorplan="floorPlanCloseTourFloorPlan();" 
+	onshowtourfloorplan="if(tour_displayfloorplan,floorPlanOpenTourFloorPlan(););" 
+	onTourStart="set(loadedState_floorPlanArea, get(tour_displaycontrols));floorPlanOpenTourFloorPlan();"
+	changetourlanguage="floorPlanChangeLanguage();"
+	keep="true" />
+	
+	<action name="floorPlanChangeLanguage">
+		if(ptplugin[floorPlan].jsready,
+			stopdelayedcall(delay_floorPlan);
+			js(invokePluginFunction(floorPlan, changeLanguage));
+			js(invokePluginFunction(floorPlanArea, changeLanguage, false));
+		,
+			delayedcall(delay_floorPlan, 0.1, floorPlanChangeLanguage(););
+		);
+	</action>
+	
+	
+	<krpano floorPlanFloorPlanLoaded="false" />
+	
+	<action name="floorPlanHideTourFloorPlan">
+		hideKolorArea_floorPlanArea(false);
+	</action>
+	
+	<action name="floorPlanCloseTourFloorPlan">
+		closeKolorArea_floorPlanArea();
+	</action>
+	
+	<action name="floorPlanShowTourFloorPlan">
+		if(ptplugin[floorPlanArea].isOpen === null,
+			openKolorArea_floorPlanArea();
+		,
+			showKolorArea_floorPlanArea(false);
+		);
+	</action>
+	
+	<action name="floorPlanOpenTourFloorPlan">
+		openKolorArea_floorPlanArea();
+	</action>
+	
+	
+	<action name="floorPlanActivateSpot">
+		
+		set(ptplugin[floorPlan].floorplanItems[0].selectedSpot, %1);
+		set(ptplugin[floorPlan].floorplanItems[0].selectedItem, %2);
+		
+		if(%1 !== "",
+			set(ptplugin[floorPlan].floorplanItems[0].selectedSpotScene, get(xml.scene));
+			set(ptplugin[floorPlan].floorplanItems[0].selectedSpotHeading, get(view.hlookat));
+			set(ptplugin[floorPlan].floorplanItems[0].selectedSpotFov, get(view.hfov));
+		);
+		
+		js(invokePluginFunction(floorPlan, selectSpot, %1, %2, %3));
+
+	</action>
+	
+	<action name="floorPlanDeactivateSpot">
+		set(ptplugin[floorPlan].floorplanItems[0].selectedSpot, "");
+		
+		js(invokePluginFunction(floorPlan, unselectSpot));
+	</action>
+	
+	<action name="floorPlanActivateDefaultSpot">
+		set(floorPlanFloorPlanLoaded, true);
+		
+		set(floorPlanSpotFound, "");
+		set(floorPlanSpotScene, "");
+		set(floorPlanItemFound, "");
+		set(floorPlanItemSearch, true);
+		set(floorPlanSpotSearchActivated, true);
+		set(floorPlanSpotSearchContinue, true);
+		
+		
+		set(defaultfloorplaniteminc_wait,50);
+		for(set(defaultfloorplaniteminc,0), defaultfloorplaniteminc LT ptplugin[floorPlan].floorplanItems[0].floorplanItem.count , inc(defaultfloorplaniteminc),
+			if(defaultfloorplaniteminc_wait == defaultfloorplaniteminc,
+				add(defaultfloorplaniteminc_wait,50);
+				wait(0);
+			);
+			if(floorPlanSpotSearchActivated == true,
+				
+				if(ptplugin[floorPlan].floorplanItems[0].floorplanItem[get(defaultfloorplaniteminc)].groupName == scene[get(xml.scene)].group,
+					set(floorPlanItemFound, get(ptplugin[floorPlan].floorplanItems[0].floorplanItem[get(defaultfloorplaniteminc)].name));
+					set(ptplugin[floorPlan].floorplanItems[0].selectedItem, get(ptplugin[floorPlan].floorplanItems[0].floorplanItem[get(defaultfloorplaniteminc)].name));
+					set(floorPlanItemSearch, false);
+				,
+					
+					if(floorPlanItemFound == "",
+						set(floorPlanItemFound, get(ptplugin[floorPlan].floorplanItems[0].floorplanItem[fpitemmain].name));
+						set(ptplugin[floorPlan].floorplanItems[0].selectedItem, get(ptplugin[floorPlan].floorplanItems[0].floorplanItem[fpitemmain].name));
+					);
+				);
+			);
+			if(floorPlanSpotSearchActivated == true,
+				set(defaultspotinc_wait,50);
+				for(set(defaultspotinc,0), defaultspotinc LT ptplugin[floorPlan].floorplanItems[0].floorplanItem[get(defaultfloorplaniteminc)].spot.count , inc(defaultspotinc),
+					if(defaultspotinc_wait == defaultspotinc,
+						add(defaultspotinc_wait,50);
+						wait(0);
+					);
+					if(ptplugin[floorPlan].floorplanItems[0].floorplanItem[get(defaultfloorplaniteminc)].spot[get(defaultspotinc)].isScene == true,
+					
+						if(floorPlanSpotSearchContinue == true,
+							if(ptplugin[floorPlan].floorplanItems[0].floorplanItem[get(defaultfloorplaniteminc)].spot[get(defaultspotinc)].scene == xml.scene,
+								set(floorPlanSpotFound, get(ptplugin[floorPlan].floorplanItems[0].floorplanItem[get(defaultfloorplaniteminc)].spot[get(defaultspotinc)].name));
+								set(floorPlanSpotScene, get(ptplugin[floorPlan].floorplanItems[0].floorplanItem[get(defaultfloorplaniteminc)].spot[get(defaultspotinc)].scene));
+								set(ptplugin[floorPlan].floorplanItems[0].selectedItem, get(ptplugin[floorPlan].floorplanItems[0].floorplanItem[get(defaultfloorplaniteminc)].name));
+								if(floorPlanItemSearch == false,
+									set(floorPlanSpotSearchContinue, false);
+									set(floorPlanSpotSearchActivated, false);
+								);
+							);
+						);
+					);
+					
+				);
+			);
+		);
+		
+		if(floorPlanSpotFound == "",
+			
+			
+			floorPlanDeactivateSpot();
+			
+			
+			set(ptplugin[floorPlan].floorplanItems[0].selectedItem, get(floorPlanItemFound));
+			
+			
+			ifnot(ptplugin[floorPlan].floorplanItems[0].selectedItem == "",
+				floorPlanActivateSpot("", get(ptplugin[floorPlan].floorplanItems[0].selectedItem), "");
+			);
+		,
+			
+			floorPlanActivateSpot(get(floorPlanSpotFound), get(ptplugin[floorPlan].floorplanItems[0].selectedItem), get(floorPlanSpotScene));
+		);
+	</action>
+	
+	<action name="floorPlanChangeTitle">
+		js(invokePluginFunction(floorPlan, changeTitle, %1));
+	</action>
+	
+	<ptplugin name="floorPlanArea" engine="kolorArea">
+	<settings>
+		<option name="position" value="bottomright" type="string" />
+		<option name="start_position" value="left" type="string" />
+		<option name="margin_x" value="0" type="int" />
+		<option name="margin_y" value="0" type="int" />
+		<option name="display_title" value="true" type="bool" />
+		<option name="title_font" value="Verdana" type="string" />
+		<option name="title_size" value="14" type="int" />
+		<option name="title_weight" value="normal" type="string" />
+		<option name="title_decoration" value="normal" type="string" />
+		<option name="title_color" value="000000" type="string" />
+		<option name="close_displayed" value="true" type="bool" />
+		<option name="close_text" value="floorPlandisplay_close_text" type="string" />
+
+		<option name="background_color" value="f2f2f2" type="string" />
+		<option name="background_alpha" value="0" type="float" />
+		<option name="overlay_displayed" value="false" type="bool" />
+		<option name="overlay_color" value="000000" type="string" />
+		<option name="overlay_alpha" value="0.50000762951094835" type="float" />
+
+		<option name="padding" value="15" type="int" />
+		<option name="topleft_radius" value="0" type="int" />
+		<option name="topright_radius" value="0" type="int" />
+		<option name="bottomleft_radius" value="0" type="int" />
+		<option name="bottomright_radius" value="0" type="int" />
+		<option name="area_border_width" value="0" type="int" />
+		<option name="area_border_color" value="252525" type="string" />
+		<option name="area_border_alpha" value="0.40000000000000002" type="float" />
+		<option name="area_width" value="50" type="int" />
+		<option name="area_height" value="45" type="int" />
+		<option name="area_width_unit" value="percent" type="string" />
+		<option name="area_height_unit" value="percent" type="string" />
+		<option name="animation" value="false" type="bool" />
+		<option name="animation_duration" value="500" type="int" />
+		<option name="close_on_click" value="true" type="bool" />
+		<option name="refresh_content" value="false" type="bool" />
+		<option name="open_callback" value="addKolorFloorPlan('floorPlan', 'floorPlanArea_floorplanDIV');" type="string" />
+		<option name="close_callback" value="invokeKrFunction('closeKolorAreaCallback_floorPlanArea')" type="string" />
+		<option name="zorder" value="2" type="int" />
+		<option name="use_i18n" value="true" type="bool" />
+	</settings>
+	</ptplugin>
+	
+	<action name="kolorAreaJsReady_floorPlanArea">
+		set(ptplugin[floorPlanArea].jsready, true);
+
+		inc(tour_autorotation_openatstartplugin);
+		set(ptplugin[floorPlanArea].autorotateBlocked, true);
+
+	</action>
+	
+	<action name="openKolorArea_floorPlanArea">
+		ifnot(ptplugin[floorPlanArea].isOpen,
+			set(ptplugin[floorPlanArea].isOpen, true);
+			pauseautorotation(forceplugin);
+
+			js(showKolorArea(floorPlanArea, &lt;div id="floorPlanArea_floorplanDIV"&gt;&lt;/div&gt;));
+			events.dispatch(onremovedisplayedobject);
+		);
+	</action>
+	
+	<action name="closeKolorArea_floorPlanArea">
+		if(ptplugin[floorPlanArea].isOpen,
+			js(invokePluginFunction(floorPlanArea, closeKolorArea));
+		);
+	</action>
+	
+	<action name="toggleKolorArea_floorPlanArea">
+		if(ptplugin[floorPlanArea].isOpen,
+			closeKolorArea_floorPlanArea();
+		,
+			openKolorArea_floorPlanArea();
+		);
+	</action>
+	
+	<action name="closeKolorAreaCallback_floorPlanArea">
+		if(ptplugin[floorPlanArea].isOpen,resumeautorotation(forceplugin);
+
+			if(ptplugin[floorPlanArea].autorotateBlocked,if(tour_autorotation_openatstartplugin GT 0,dec(tour_autorotation_openatstartplugin);set(ptplugin[floorPlanArea].autorotateBlocked,false);););
+		);
+		set(ptplugin[floorPlanArea].isOpen, false);hideFloorplan();
+
+	</action>
+	
+	<action name="changeTitleKolorArea_floorPlanArea">
+		js(invokePluginFunction(floorPlanArea, changeTitle, %1));
+	</action>
+	
+	<action name="showKolorArea_floorPlanArea">
+		set(ptplugin[floorPlanArea].isOpen, true);
+		pauseautorotation(forceplugin);
+
+		js(invokePluginFunction(floorPlanArea, showKolorArea, %1));
+		events.dispatch(onremovedisplayedobject);
+	</action>
+		
+	<action name="hideKolorArea_floorPlanArea">
+		resumeautorotation(forceplugin);
+
+		if(ptplugin[floorPlanArea].autorotateBlocked,if(tour_autorotation_openatstartplugin GT 0,dec(tour_autorotation_openatstartplugin);set(ptplugin[floorPlanArea].autorotateBlocked,false);););
+		set(ptplugin[floorPlanArea].isOpen, false);
+		js(invokePluginFunction(floorPlanArea, hideKolorArea, %1));
+	</action>
+	
+	<events name="kolorAreaEvents_floorPlanArea" 
+		keep="true"
+		hidetourcontrols="if(loadedState_floorPlanArea,if(ptplugin[floorPlanArea].isOpen,set(restore_floorPlanArea, true);hideKolorArea_floorPlanArea(false);,set(restore_floorPlanArea, false);););"
+		showtourcontrols="if(tour_displayfloorplan,if(restore_floorPlanArea,showKolorArea_floorPlanArea(false);););set(loadedState_floorPlanArea, get(tour_displaycontrols));"
+		onremovepano="if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+);"
+	/>
+	
+<!-- ********** -->
+<!-- Simple Button -->
+<!-- id : button -->
+<!-- ********** -->
+
+  <layer name="button"
+         keep="true"
+         url="%FIRSTXML%/graphics/button/floor.png" 
+         align="bottomright"
+         x="10"
+         y="10"
+         zorder="3"
+         visible="false"
+         onclick="buttonOnClick"
+         height="70"
+         width="60"
+         />
+  <action name="buttonOnClick">
+if(tour_displayfloorplan,if(ptplugin[floorPlanArea].isOpen,hideFloorplan();
+,showFloorplan();
+);,showFloorplan();
+);
+
+
+  </action>
+
+  <events name="buttonevents" 
+    onTourStart="showbutton();"
+    hidetourcontrols="hidebutton();" 
+    showtourcontrols="showbutton();" 
+    keep="true" />
+  <action name="hidebutton">set(layer[button].visible, false);</action>
+  <action name="showbutton">if(tour_displaycontrols,set(layer[button].visible, true);,hidebutton(););</action>
+
+
+<!-- ********** -->
+<!-- Simple Button1 -->
+<!-- id : button1 -->
+<!-- ********** -->
+
+  <layer name="button1"
+         keep="true"
+         url="%FIRSTXML%/graphics/button1/btn_enter_fs.png" 
+         align="topright"
+         x="10"
+         y="10"
+         zorder="4"
+         visible="false"
+         onclick="button1OnClick"
+         height="50"
+         width="50"
+         />
+  <action name="button1OnClick">switchFullscreen();
+
+
+  </action>
+
+  <events name="button1events" 
+    onTourStart="showbutton1();"
+    hidetourcontrols="hidebutton1();" 
+    showtourcontrols="showbutton1();" 
+    keep="true" />
+  <action name="hidebutton1">set(layer[button1].visible, false);</action>
+  <action name="showbutton1">if(tour_displaycontrols,set(layer[button1].visible, true);,hidebutton1(););</action>
+
+
+<!-- ********** -->
+<!-- Logo -->
+<!-- id : logo -->
+<!-- ********** -->
+
+  <layer align="topleft"
+         x="15"
+         y="15"
+         zorder="5"
+         name="logo"
+         keep="true"
+         visible="false"
+         capture="false"
+
+			enabled="false"
+         url="%FIRSTXML%/graphics/logo/logo_4.png" 
+         handcursor="false"
+
+         height="10%"
+         width="prop"
+
+         />
+
+  <events name="logoevents" 
+    onTourStart="showlogo();"
+    keep="true" />
+
+  <action name="hidelogo">
+    set(layer[logo].visible, false);
+  </action>
+  <action name="showlogo">
+      set(layer[logo].visible, true);
+  </action>
+
+
+
+
+<!-- ********** -->
+<!-- Logo1 -->
+<!-- id : logo1 -->
+<!-- ********** -->
+
+  <layer align="bottom"
+         x="10"
+         y="10"
+         zorder="6"
+         name="logo1"
+         keep="true"
+         visible="false"
+         capture="false"
+
+			tooltip="logo1tooltipText"
+			onhover="showTooltip('plugin');"
+			onout="hideTooltip();"
+         url="%FIRSTXML%/graphics/logo1/logo_3.png" 
+         handcursor="false"
+
+         width="50%"
+         height="prop"
+
+         />
+
+  <events name="logo1events" 
+    onTourStart="showlogo1();"
+    keep="true" />
+
+  <action name="hidelogo1">
+    set(layer[logo1].visible, false);
+  </action>
+  <action name="showlogo1">
+      set(layer[logo1].visible, true);
+  </action>
+
+
+
+
+  <!-- Fullscreen Management -->
+  <action name="exitFullScreen" devices="fullscreensupport">set(tour_fullscreen,false);js(setFullscreen(false));</action>
+  <action name="enterFullScreen" devices="fullscreensupport">set(tour_fullscreen,true);js(setFullscreen(true));</action>
+  <action name="switchFullScreen">if(tour_fullscreen,exitFullScreen();,enterFullScreen(););</action>
+
+  
+  <events name="krpanoExitFullscreenEvent"
+    onexitfullscreen="if(tour_fullscreen,exitFullScreenChangeEvent(););"
+    keep="true" />
+
+  <action name="exitFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,false);events.dispatch(onexitfullscreen);</action>
+  <action name="enterFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,true);events.dispatch(onenterfullscreen);</action>
+  <action name="exitFullScreenFallback">set(fullscreen,false);</action>
+  <action name="enterFullScreenFallback">set(fullscreen,true);</action>
+  
+  <action name="resizeFullScreenEvent">delayedcall(0,updatescreen(););</action>
+
+  <!-- FLOORPLAN -->
+  <action name="hideFloorplan">set(tour_displayfloorplan, false);events.dispatch(onhidetourfloorplan);</action>
+  <action name="showFloorplan">set(tour_displayfloorplan, true); events.dispatch(onshowtourfloorplan);</action>
+
+
+  <!-- Hide / Show Controls -->
+  <action name="hideTourControls">set(tour_displaycontrols, false);events.dispatch(hidetourcontrols);</action>
+  <action name="showTourControls">set(tour_displaycontrols, true); events.dispatch(showtourcontrols);</action>
+
+
+</krpano>
