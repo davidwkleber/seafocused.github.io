@@ -243,6 +243,11 @@
     );
   </action>
   <events name="autorotation_events" onnewpano="if(tour_autorotation_pauseplugin LE 0,resumeautorotation(forceresume););" ongyroscopeon="pauseautorotation(forceplugin);" ongyroscopeoff="resumeautorotation(forceplugin);" keep="true"/>
+  <events name="autorotationstartevents" onTourStart="autorotationatstart();" keep="true"/>
+  <action name="autorotationatstart">
+    if (norotation === null, startautorotation(););
+    set(events[autorotationstartevents].keep, false);
+  </action>
 
 
   <!-- AUTOTOUR -->
