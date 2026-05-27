@@ -1,0 +1,1487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>The Strategy Blueprint · NovatioAi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --navy:#0b1f3a;
+    --navy-2:#142a4a;
+    --navy-soft:#1b3560;
+    --gold:#c9a14a;
+    --gold-soft:#e2c98a;
+    --cream:#f5efe2;
+    --paper:#fbf8f1;
+    --ink:#0b1f3a;
+    --muted:#6b6657;
+    --line:rgba(11,31,58,0.12);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:400;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--gold)}
+
+  /* HEADER */
+  header{
+    background:var(--navy);
+    color:var(--cream);
+    padding:48px 32px 56px;
+    border-bottom:1px solid rgba(201,161,74,0.25);
+    position:relative;
+    overflow:hidden;
+  }
+  header::after{
+    content:"";position:absolute;inset:auto 0 0 0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)
+  }
+  .wrap{max-width:1120px;margin:0 auto}
+  .eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+  h1{font-family:'Playfair Display',serif;font-weight:500;font-size:clamp(34px,4.6vw,54px);line-height:1.05;margin:0 0 14px;color:var(--cream)}
+  h1 em{font-style:italic;color:var(--gold-soft);font-weight:400}
+  .lead{max-width:680px;color:rgba(245,239,226,.78);font-size:16px}
+  .brand{
+    position:absolute;top:24px;right:32px;
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:rgba(245,239,226,.55)
+  }
+  .brand b{color:var(--gold);font-weight:500}
+
+  /* SYNC BAR */
+  .sync-bar{
+    background:var(--navy-2);
+    padding:9px 32px;
+    display:flex;align-items:center;gap:14px;
+    font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+    color:rgba(245,239,226,.45);
+    border-bottom:1px solid rgba(201,161,74,.12);
+  }
+  .sync-bar b{color:var(--gold-soft);font-weight:500}
+  #sync-status{margin-left:8px;color:rgba(245,239,226,.35)}
+  .sync-btn{
+    margin-left:auto;padding:5px 13px;
+    background:transparent;border:1px solid rgba(201,161,74,.35);border-radius:2px;
+    color:var(--gold);font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;
+    cursor:pointer;transition:.15s;
+  }
+  .sync-btn:hover{background:rgba(201,161,74,.12)}
+  .sync-btn:disabled{opacity:.35;cursor:default}
+
+  /* MAIN */
+  main{padding:48px 32px 64px}
+  .section{margin:0 0 56px;border:1px solid var(--line);background:#fff;border-radius:2px;overflow:hidden}
+  .section-head{
+    display:flex;align-items:baseline;gap:18px;
+    padding:22px 28px;background:linear-gradient(180deg,#fff,#fbf6e9);
+    border-bottom:1px solid var(--line);
+  }
+  .section-num{
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;
+    color:var(--gold);text-transform:uppercase;
+  }
+  .section-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:500;margin:0}
+  .section-body{padding:22px 28px}
+
+  .q{padding:18px 0;border-top:1px dashed var(--line)}
+  .q:first-child{border-top:none}
+  .q-prompt{
+    display:flex;gap:12px;align-items:baseline;
+    font-size:15.5px;color:var(--navy);margin-bottom:12px;font-weight:500
+  }
+  .q-num{
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;
+    color:var(--gold);min-width:32px;
+  }
+  .q-tag{
+    font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--muted);
+    border:1px solid var(--line);padding:2px 8px;border-radius:99px;margin-left:auto
+  }
+  .opts{display:flex;flex-wrap:wrap;gap:8px;padding-left:44px}
+  .opt{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:8px 14px;border:1px solid var(--line);border-radius:999px;
+    background:#fff;cursor:pointer;font-size:13.5px;color:var(--navy);
+    transition:.15s ease all;user-select:none
+  }
+  .opt:hover{border-color:var(--gold);background:#fdf7e6}
+  .opt.selected{background:var(--navy);color:var(--cream);border-color:var(--navy)}
+  .opt input{display:none}
+
+  /* SUBMIT */
+  .submit-row{
+    position:sticky;bottom:16px;z-index:5;
+    display:flex;justify-content:center;gap:12px;flex-wrap:wrap;
+    margin:32px auto 0;
+  }
+  .btn{
+    font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;
+    padding:14px 28px;border:1px solid var(--navy);border-radius:2px;
+    background:var(--navy);color:var(--cream);cursor:pointer;letter-spacing:.04em;
+    transition:.18s ease all;box-shadow:0 10px 30px -12px rgba(11,31,58,.45)
+  }
+  .btn:hover{background:var(--navy-soft);transform:translateY(-1px)}
+  .btn.ghost{background:transparent;color:var(--navy);box-shadow:none}
+  .btn.ghost:hover{background:var(--navy);color:var(--cream)}
+  .btn.gold{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+  .btn.gold:hover{background:#b6913f}
+
+  /* RESULTS */
+  #results{display:none;margin-top:48px;border-top:2px solid var(--navy);padding-top:48px}
+  #results.show{display:block}
+  .results-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px}
+  .results-head h2{font-family:'Playfair Display',serif;font-weight:500;font-size:36px;margin:0}
+  .results-head .meta{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+
+  .results-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:32px}
+  @media (max-width:900px){.results-grid{grid-template-columns:1fr}}
+
+  .chart-card{
+    background:var(--navy);border-radius:2px;padding:28px;
+    color:var(--cream);position:relative;overflow:hidden
+  }
+  .chart-card::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(60% 40% at 50% 0%,rgba(201,161,74,.18),transparent 70%);pointer-events:none
+  }
+  .chart-card h3{font-family:'Playfair Display',serif;font-weight:500;font-size:20px;margin:0 0 4px;color:var(--cream)}
+  .chart-card .sub{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+  .chart-wrap{position:relative;aspect-ratio:1/1;width:100%;max-width:520px;margin:0 auto}
+
+  .text-card{background:#fff;border:1px solid var(--line);padding:28px;border-radius:2px}
+  .text-card h3{font-family:'Playfair Display',serif;font-weight:500;font-size:20px;margin:0 0 4px}
+  .text-card .sub{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+
+  .dim{padding:14px 0;border-top:1px dashed var(--line)}
+  .dim:first-of-type{border-top:none;padding-top:0}
+  .dim-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px}
+  .dim-name{font-weight:500;font-size:15px}
+  .dim-score{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.1em;color:var(--navy)}
+  .bar{height:5px;background:var(--cream);border-radius:99px;overflow:hidden;margin:6px 0 10px}
+  .bar > span{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--navy));transition:width .9s ease}
+  .dim ul{margin:6px 0 0;padding:0 0 0 18px;font-size:13.5px;color:var(--navy)}
+  .dim ul li{margin:3px 0}
+  .dim .empty{font-size:13px;color:var(--muted);font-style:italic}
+
+  .insight{
+    margin-top:32px;padding:22px 24px;background:var(--cream);
+    border-left:3px solid var(--gold);border-radius:0 2px 2px 0
+  }
+  .insight h4{font-family:'Playfair Display',serif;font-weight:500;font-size:18px;margin:0 0 8px}
+  .insight p{margin:0;color:var(--navy);font-size:14.5px}
+
+  footer{padding:32px;text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;border-top:1px solid var(--line)}
+  footer b{color:var(--gold);font-weight:500}
+
+  @media print{
+    .submit-row,.sync-bar,.opt:not(.selected){display:none}
+    header{break-inside:avoid}
+    .section{break-inside:avoid}
+    #results{break-before:page}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">NOVATIO<b>AI</b> · BANGKOK</div>
+    <div class="eyebrow">The Strategy Blueprint</div>
+    <h1>Executive AI <em>Strategy Blueprint</em> Assessment</h1>
+    <p class="lead">A structured advisory diagnostic across ten dimensions of AI strategy, execution readiness, governance, change management, ROI alignment and future positioning. Complete the assessment and generate a blueprint profile — visual and written — to anchor the executive and board-level conversation.</p>
+  </div>
+</header>
+
+<div class="sync-bar">
+  <span>Source: <b>Google Sheets</b></span>
+  <span id="sync-status">Built-in Strategy Blueprint question set · live sheet sync optional</span>
+  <button class="sync-btn" onclick="syncFromSheet()">↻ Sync from Sheet</button>
+</div>
+
+<main class="wrap" id="form-area">
+  <div id="sections"></div>
+
+  <div class="submit-row">
+    <button class="btn" onclick="generateResults()">Generate Strategy Blueprint →</button>
+    <button class="btn ghost" onclick="resetAll()">Reset</button>
+  </div>
+
+  <section id="results">
+    <div class="results-head">
+      <div>
+        <div class="eyebrow" style="color:var(--gold)">Output · Strategy Blueprint Profile</div>
+        <h2>Where execution pressure and readiness sit</h2>
+      </div>
+      <div class="meta" id="results-meta"></div>
+    </div>
+
+    <div class="results-grid">
+      <div class="chart-card">
+        <h3>Readiness Across Ten Dimensions</h3>
+        <div class="sub">High score = Readiness · Low score = Execution Pressure</div>
+        <div class="chart-wrap"><canvas id="radar"></canvas></div>
+      </div>
+      <div class="text-card">
+        <h3>Blueprint Diagnostic Summary</h3>
+        <div class="sub">Selections grouped by dimension</div>
+        <div id="text-output"></div>
+      </div>
+    </div>
+
+    <div class="insight" id="headline-insight"></div>
+
+    <div class="submit-row">
+      <button class="btn gold" onclick="window.print()">Print / Save as PDF</button>
+      <button class="btn ghost" onclick="document.getElementById('form-area').scrollIntoView({behavior:'smooth'})">Back to top</button>
+    </div>
+  </section>
+</main>
+
+<footer>NOVATIO<b>AI</b> · The Strategy Blueprint · Vendor-Neutral AI Advisory</footer>
+
+<script>
+/* ==============================================================
+   CONFIGURATION
+   To update questions: edit the SNAPSHOT array below, or click
+   "Sync from Sheet" to pull live data from the Google Sheet.
+   To point at a different sheet: change SHEET_ID.
+   ============================================================== */
+const SHEET_ID = ''; // Optional: add a Google Sheet ID if you want live sync
+
+/* ==============================================================
+   SNAPSHOT — Strategy Blueprint question set, 60 questions
+   https://docs.google.com/spreadsheets/d/1B6tqhfQV0tgG4vJlhgq-jRdj9ls7kxsgGC9Xhi33oWU
+
+   Question types:
+     'pain'        → multi-select; each selection = a pressure point (lowers clarity score)
+     'progression' → single-select; later option = higher maturity (raises clarity score)
+     'aspiration'  → multi-select; informational only, does not affect score
+   ============================================================== */
+const SNAPSHOT = [
+  {
+    "section": "Strategic Alignment & Executive Sponsorship",
+    "questions": [
+      {
+        "n": 1,
+        "t": "progression",
+        "q": "How clearly is AI linked to your company’s strategic priorities today?",
+        "o": [
+          "No clear linkage exists",
+          "AI is discussed informally",
+          "Some departments see relevance",
+          "Leadership sees operational value",
+          "AI is included in strategic planning",
+          "AI is tied to measurable business objectives"
+        ]
+      },
+      {
+        "n": 2,
+        "t": "pain",
+        "q": "What currently creates the greatest uncertainty around AI strategy?",
+        "o": [
+          "Unclear business value",
+          "Lack of internal expertise",
+          "Too many competing priorities",
+          "Difficulty identifying use cases",
+          "Lack of executive ownership",
+          "Vendor confusion",
+          "Security and compliance concerns",
+          "Fear of failed implementation"
+        ]
+      },
+      {
+        "n": 3,
+        "t": "pain",
+        "q": "Which leadership challenge slows strategic execution the most?",
+        "o": [
+          "Slow decision-making",
+          "Too many manual approvals",
+          "Poor visibility into operations",
+          "Lack of accountability",
+          "Departmental silos",
+          "Weak prioritisation",
+          "Inconsistent reporting",
+          "Reactive management culture"
+        ]
+      },
+      {
+        "n": 4,
+        "t": "aspiration",
+        "q": "What strategic outcome matters most from an AI initiative?",
+        "o": [
+          "Operational efficiency",
+          "Revenue growth",
+          "Faster decision-making",
+          "Improved customer experience",
+          "Scalability",
+          "Cost reduction",
+          "Innovation acceleration",
+          "Competitive advantage"
+        ]
+      },
+      {
+        "n": 5,
+        "t": "progression",
+        "q": "How mature is executive understanding of AI capabilities and limitations?",
+        "o": [
+          "Very limited understanding",
+          "Basic awareness only",
+          "Some operational understanding",
+          "Leaders understand practical use cases",
+          "Leadership actively evaluates AI opportunities",
+          "Leadership treats AI as strategic infrastructure"
+        ]
+      },
+      {
+        "n": 6,
+        "t": "pain",
+        "q": "What currently prevents faster strategic transformation?",
+        "o": [
+          "Lack of execution capacity",
+          "Too many legacy processes",
+          "Insufficient budget clarity",
+          "Weak change management",
+          "Poor cross-functional coordination",
+          "Technology limitations",
+          "Leadership misalignment",
+          "Risk avoidance culture"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "Operational Efficiency & Process Friction",
+    "questions": [
+      {
+        "n": 7,
+        "t": "pain",
+        "q": "Which operational process consumes the most unnecessary employee time?",
+        "o": [
+          "Manual reporting",
+          "Data entry",
+          "Searching for information",
+          "Email coordination",
+          "Approvals and sign-offs",
+          "Meeting administration",
+          "Customer follow-up",
+          "Spreadsheet consolidation"
+        ]
+      },
+      {
+        "n": 8,
+        "t": "pain",
+        "q": "Where does operational inefficiency create the greatest financial cost?",
+        "o": [
+          "Manual rework",
+          "Delayed approvals",
+          "Duplicate work",
+          "Reporting delays",
+          "Poor forecasting",
+          "Customer response delays",
+          "Operational bottlenecks",
+          "Knowledge dependency on individuals"
+        ]
+      },
+      {
+        "n": 9,
+        "t": "pain",
+        "q": "Which department experiences the greatest operational overload today?",
+        "o": [
+          "Operations",
+          "Finance",
+          "Sales",
+          "Customer support",
+          "HR",
+          "IT",
+          "Project management",
+          "Executive management"
+        ]
+      },
+      {
+        "n": 10,
+        "t": "progression",
+        "q": "How standardised are your core operational workflows?",
+        "o": [
+          "Mostly undocumented",
+          "Highly inconsistent",
+          "Some standard processes exist",
+          "Most workflows are defined",
+          "Processes are measurable and managed",
+          "Continuous optimisation practices exist"
+        ]
+      },
+      {
+        "n": 11,
+        "t": "pain",
+        "q": "What creates the biggest bottleneck in daily execution?",
+        "o": [
+          "Slow communication",
+          "Lack of visibility",
+          "Too many manual tasks",
+          "Dependency on key people",
+          "Disconnected systems",
+          "Approval delays",
+          "Data inconsistencies",
+          "Resource constraints"
+        ]
+      },
+      {
+        "n": 12,
+        "t": "aspiration",
+        "q": "Which operational improvement would create the highest business value?",
+        "o": [
+          "Reduced manual work",
+          "Faster reporting",
+          "Better coordination",
+          "Improved forecasting",
+          "Higher productivity",
+          "Lower operational costs",
+          "Faster customer response",
+          "Better scalability"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "Data Environment & Reporting Readiness",
+    "questions": [
+      {
+        "n": 13,
+        "t": "progression",
+        "q": "How would you describe your current reporting environment?",
+        "o": [
+          "Mostly manual spreadsheets",
+          "Fragmented reporting",
+          "Reports are delayed",
+          "Some dashboards exist",
+          "Leadership has reasonable visibility",
+          "Real-time operational visibility exists"
+        ]
+      },
+      {
+        "n": 14,
+        "t": "pain",
+        "q": "What is the biggest challenge with business data today?",
+        "o": [
+          "Data inconsistency",
+          "Poor accessibility",
+          "Slow reporting cycles",
+          "Duplicate systems",
+          "Lack of trust in data",
+          "Missing operational visibility",
+          "Limited analytics capability",
+          "Disconnected departments"
+        ]
+      },
+      {
+        "n": 15,
+        "t": "pain",
+        "q": "Which reporting activity consumes the most management time?",
+        "o": [
+          "Weekly reporting",
+          "Board reporting",
+          "Forecasting",
+          "Financial consolidation",
+          "Performance analysis",
+          "Data validation",
+          "Operational tracking",
+          "Cross-department reporting"
+        ]
+      },
+      {
+        "n": 16,
+        "t": "progression",
+        "q": "How mature is KPI tracking across the organisation?",
+        "o": [
+          "KPIs are largely absent",
+          "Metrics are inconsistent",
+          "Departments track separate KPIs",
+          "Core KPIs exist but are manual",
+          "KPIs are linked to business objectives",
+          "KPI management is systematic and proactive"
+        ]
+      },
+      {
+        "n": 17,
+        "t": "pain",
+        "q": "What limits forecasting accuracy the most?",
+        "o": [
+          "Poor historical data",
+          "Manual planning",
+          "Weak collaboration",
+          "Changing market conditions",
+          "Delayed reporting",
+          "Disconnected systems",
+          "Limited analytics tools",
+          "Lack of ownership"
+        ]
+      },
+      {
+        "n": 18,
+        "t": "aspiration",
+        "q": "Which analytics capability would provide the greatest value?",
+        "o": [
+          "Real-time dashboards",
+          "Predictive forecasting",
+          "Automated reporting",
+          "Executive summaries",
+          "Operational benchmarking",
+          "Customer insights",
+          "Financial visibility",
+          "Risk monitoring"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "AI Readiness & Opportunity Identification",
+    "questions": [
+      {
+        "n": 19,
+        "t": "progression",
+        "q": "Which statement best reflects your company’s AI readiness?",
+        "o": [
+          "We are still exploring AI",
+          "We are gathering information",
+          "We are evaluating use cases",
+          "We are preparing pilot projects",
+          "We are ready for implementation",
+          "AI is becoming strategically integrated"
+        ]
+      },
+      {
+        "n": 20,
+        "t": "pain",
+        "q": "What creates the greatest hesitation around AI adoption?",
+        "o": [
+          "Unclear ROI",
+          "Security concerns",
+          "Lack of internal expertise",
+          "Fear of disruption",
+          "Employee resistance",
+          "Vendor uncertainty",
+          "Compliance risks",
+          "Implementation complexity"
+        ]
+      },
+      {
+        "n": 21,
+        "t": "aspiration",
+        "q": "Which AI opportunity appears most valuable for your organisation?",
+        "o": [
+          "Process automation",
+          "Customer support automation",
+          "Executive productivity",
+          "Sales enablement",
+          "Knowledge management",
+          "Forecasting and planning",
+          "Document processing",
+          "Operational reporting"
+        ]
+      },
+      {
+        "n": 22,
+        "t": "pain",
+        "q": "Which process appears most suitable for AI automation today?",
+        "o": [
+          "Invoice processing",
+          "Customer inquiries",
+          "Reporting workflows",
+          "Meeting management",
+          "HR onboarding",
+          "Document handling",
+          "Sales qualification",
+          "Procurement approvals"
+        ]
+      },
+      {
+        "n": 23,
+        "t": "progression",
+        "q": "How confident is leadership in identifying viable AI use cases?",
+        "o": [
+          "No confidence",
+          "Limited understanding",
+          "Some promising ideas exist",
+          "Leadership can identify practical opportunities",
+          "Prioritisation discussions are underway",
+          "AI opportunities are evaluated systematically"
+        ]
+      },
+      {
+        "n": 24,
+        "t": "pain",
+        "q": "What would create the greatest confidence in moving forward with AI?",
+        "o": [
+          "Clear ROI analysis",
+          "Pilot success examples",
+          "Governance structure",
+          "Implementation roadmap",
+          "External advisory support",
+          "Employee readiness",
+          "Board alignment",
+          "Operational impact visibility"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "Change Management & Organisational Adoption",
+    "questions": [
+      {
+        "n": 25,
+        "t": "progression",
+        "q": "How adaptable is your organisation to operational change?",
+        "o": [
+          "Highly resistant",
+          "Cautious but hesitant",
+          "Mixed across teams",
+          "Leadership supports change",
+          "Teams are generally adaptable",
+          "Transformation capability is strong"
+        ]
+      },
+      {
+        "n": 26,
+        "t": "pain",
+        "q": "What creates the greatest risk to successful adoption?",
+        "o": [
+          "Employee resistance",
+          "Lack of communication",
+          "Weak leadership sponsorship",
+          "Insufficient training",
+          "Change fatigue",
+          "Poor process clarity",
+          "Operational disruption",
+          "Lack of accountability"
+        ]
+      },
+      {
+        "n": 27,
+        "t": "pain",
+        "q": "Which workforce challenge concerns leadership the most?",
+        "o": [
+          "Skill gaps",
+          "Low productivity",
+          "Poor collaboration",
+          "High workload",
+          "Knowledge silos",
+          "Staff turnover",
+          "Slow onboarding",
+          "Low engagement"
+        ]
+      },
+      {
+        "n": 28,
+        "t": "progression",
+        "q": "How effectively do departments collaborate today?",
+        "o": [
+          "Departments operate independently",
+          "Collaboration is inconsistent",
+          "Coordination depends on individuals",
+          "Some structured collaboration exists",
+          "Cross-functional collaboration is improving",
+          "Collaboration is embedded operationally"
+        ]
+      },
+      {
+        "n": 29,
+        "t": "pain",
+        "q": "What currently limits innovation internally?",
+        "o": [
+          "Lack of time",
+          "Operational overload",
+          "Fear of failure",
+          "Weak incentives",
+          "Unclear ownership",
+          "Legacy systems",
+          "Slow approvals",
+          "Poor communication"
+        ]
+      },
+      {
+        "n": 30,
+        "t": "aspiration",
+        "q": "Which organisational capability would most improve transformation success?",
+        "o": [
+          "Stronger leadership alignment",
+          "Better employee communication",
+          "More structured training",
+          "Clearer accountability",
+          "Cross-functional coordination",
+          "Operational transparency",
+          "Faster decision-making",
+          "Continuous improvement culture"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "Governance, Risk & Compliance",
+    "questions": [
+      {
+        "n": 31,
+        "t": "progression",
+        "q": "How mature is governance around AI and digital initiatives?",
+        "o": [
+          "No governance exists",
+          "Governance is informal",
+          "Policies are inconsistent",
+          "Basic governance structures exist",
+          "Governance is becoming formalised",
+          "Governance is integrated into strategic planning"
+        ]
+      },
+      {
+        "n": 32,
+        "t": "pain",
+        "q": "Which governance concern creates the greatest executive risk?",
+        "o": [
+          "Security breaches",
+          "Compliance failures",
+          "Weak accountability",
+          "Vendor dependency",
+          "Poor data governance",
+          "Ethical concerns",
+          "Lack of auditability",
+          "Operational disruption"
+        ]
+      },
+      {
+        "n": 33,
+        "t": "pain",
+        "q": "What creates the greatest implementation risk?",
+        "o": [
+          "Unclear ownership",
+          "Weak governance",
+          "Poor planning",
+          "Technology integration issues",
+          "Employee adoption challenges",
+          "Insufficient resources",
+          "Leadership misalignment",
+          "Vendor dependency"
+        ]
+      },
+      {
+        "n": 34,
+        "t": "progression",
+        "q": "How structured are decision-making responsibilities across the organisation?",
+        "o": [
+          "Highly unclear",
+          "Mostly informal",
+          "Depends on individuals",
+          "Defined in some departments",
+          "Generally structured",
+          "Clearly governed and documented"
+        ]
+      },
+      {
+        "n": 35,
+        "t": "pain",
+        "q": "Which compliance area creates the most operational pressure?",
+        "o": [
+          "Data privacy",
+          "Cybersecurity",
+          "Audit readiness",
+          "Industry regulations",
+          "Document retention",
+          "Access control",
+          "Approval tracking",
+          "Vendor management"
+        ]
+      },
+      {
+        "n": 36,
+        "t": "aspiration",
+        "q": "Which governance outcome would create the most confidence?",
+        "o": [
+          "Clear accountability",
+          "Risk visibility",
+          "Security assurance",
+          "Compliance readiness",
+          "Executive oversight",
+          "Vendor transparency",
+          "Operational control",
+          "Decision traceability"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "Technology Environment & Integration Readiness",
+    "questions": [
+      {
+        "n": 37,
+        "t": "progression",
+        "q": "How would you describe your current technology environment?",
+        "o": [
+          "Highly manual",
+          "Disconnected legacy systems",
+          "Some cloud platforms exist",
+          "Mixed modern and legacy systems",
+          "Reasonably integrated environment",
+          "Modern scalable digital ecosystem"
+        ]
+      },
+      {
+        "n": 38,
+        "t": "pain",
+        "q": "What technology limitation impacts operations the most?",
+        "o": [
+          "Disconnected systems",
+          "Manual workflows",
+          "Poor integrations",
+          "Slow systems",
+          "Lack of automation",
+          "Data silos",
+          "Limited reporting capability",
+          "Outdated infrastructure"
+        ]
+      },
+      {
+        "n": 39,
+        "t": "pain",
+        "q": "Which area creates the greatest technical complexity?",
+        "o": [
+          "System integration",
+          "Data management",
+          "Security requirements",
+          "Vendor coordination",
+          "Infrastructure limitations",
+          "Application support",
+          "Workflow automation",
+          "User access management"
+        ]
+      },
+      {
+        "n": 40,
+        "t": "progression",
+        "q": "How capable is your internal technical team in supporting AI initiatives?",
+        "o": [
+          "No internal capability",
+          "Limited IT support only",
+          "Basic technical capability",
+          "Internal developers are available",
+          "Technical teams actively explore AI",
+          "Strong technical enablement capability"
+        ]
+      },
+      {
+        "n": 41,
+        "t": "pain",
+        "q": "What currently slows technology-driven improvements?",
+        "o": [
+          "Budget constraints",
+          "Vendor dependency",
+          "Weak prioritisation",
+          "Lack of technical resources",
+          "Integration complexity",
+          "Security concerns",
+          "Poor planning",
+          "Operational disruption risk"
+        ]
+      },
+      {
+        "n": 42,
+        "t": "aspiration",
+        "q": "Which technical improvement would create the greatest operational value?",
+        "o": [
+          "System integration",
+          "Workflow automation",
+          "Better analytics",
+          "Cloud modernisation",
+          "Operational dashboards",
+          "Knowledge management",
+          "Data centralisation",
+          "Process orchestration"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "Investment Readiness & ROI Alignment",
+    "questions": [
+      {
+        "n": 43,
+        "t": "progression",
+        "q": "How ready is leadership to invest in AI and operational transformation?",
+        "o": [
+          "Exploration only",
+          "Careful evaluation",
+          "Interested in pilot programs",
+          "Ready for prioritised investment",
+          "Prepared for implementation",
+          "Prepared for strategic transformation"
+        ]
+      },
+      {
+        "n": 44,
+        "t": "pain",
+        "q": "What is the biggest barrier to approving AI investment?",
+        "o": [
+          "Unclear ROI",
+          "Budget pressure",
+          "Implementation risk",
+          "Vendor uncertainty",
+          "Security concerns",
+          "Operational disruption",
+          "Lack of roadmap",
+          "Weak leadership alignment"
+        ]
+      },
+      {
+        "n": 45,
+        "t": "pain",
+        "q": "Which KPI area matters most when evaluating AI investment?",
+        "o": [
+          "Cost reduction",
+          "Productivity improvement",
+          "Revenue growth",
+          "Customer satisfaction",
+          "Operational speed",
+          "Error reduction",
+          "Cash-flow improvement",
+          "Employee efficiency"
+        ]
+      },
+      {
+        "n": 46,
+        "t": "progression",
+        "q": "How well are business initiatives currently measured against outcomes?",
+        "o": [
+          "Measurement is inconsistent",
+          "Metrics are mostly manual",
+          "Some KPI tracking exists",
+          "Operational reporting is structured",
+          "KPIs guide prioritisation",
+          "Measurement is embedded strategically"
+        ]
+      },
+      {
+        "n": 47,
+        "t": "pain",
+        "q": "Which financial pressure is most important to address?",
+        "o": [
+          "Rising labor costs",
+          "Operational inefficiency",
+          "Slow collections",
+          "Margin pressure",
+          "Revenue leakage",
+          "Customer churn",
+          "High overhead",
+          "Poor scalability"
+        ]
+      },
+      {
+        "n": 48,
+        "t": "aspiration",
+        "q": "Which investment outcome would most justify AI adoption?",
+        "o": [
+          "Faster payback",
+          "Operational savings",
+          "Revenue acceleration",
+          "Improved scalability",
+          "Better visibility",
+          "Reduced risk",
+          "Higher employee productivity",
+          "Competitive differentiation"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "Execution Planning & Delivery Readiness",
+    "questions": [
+      {
+        "n": 49,
+        "t": "progression",
+        "q": "How mature is your organisation’s project execution capability?",
+        "o": [
+          "Execution is inconsistent",
+          "Projects often stall",
+          "Some structure exists",
+          "Project delivery is improving",
+          "Execution is generally reliable",
+          "Execution capability is highly structured"
+        ]
+      },
+      {
+        "n": 50,
+        "t": "pain",
+        "q": "What most commonly causes transformation projects to fail internally?",
+        "o": [
+          "Lack of ownership",
+          "Poor communication",
+          "Weak planning",
+          "Insufficient resources",
+          "Scope changes",
+          "Leadership misalignment",
+          "Low adoption",
+          "Technology complexity"
+        ]
+      },
+      {
+        "n": 51,
+        "t": "pain",
+        "q": "Which implementation challenge concerns leadership most?",
+        "o": [
+          "Operational disruption",
+          "Employee adoption",
+          "Vendor selection",
+          "Project overruns",
+          "Security risks",
+          "Lack of expertise",
+          "Unclear KPIs",
+          "Insufficient governance"
+        ]
+      },
+      {
+        "n": 52,
+        "t": "progression",
+        "q": "How clearly are responsibilities assigned during strategic initiatives?",
+        "o": [
+          "Roles are unclear",
+          "Responsibilities overlap",
+          "Depends on individuals",
+          "Some ownership structures exist",
+          "Responsibilities are mostly clear",
+          "Execution accountability is formalised"
+        ]
+      },
+      {
+        "n": 53,
+        "t": "pain",
+        "q": "What currently limits execution speed the most?",
+        "o": [
+          "Approval delays",
+          "Lack of resources",
+          "Weak coordination",
+          "Manual processes",
+          "Too many priorities",
+          "Poor communication",
+          "Technology bottlenecks",
+          "Unclear ownership"
+        ]
+      },
+      {
+        "n": 54,
+        "t": "aspiration",
+        "q": "Which execution capability would most improve project success?",
+        "o": [
+          "Clear governance",
+          "Executive sponsorship",
+          "Operational visibility",
+          "Dedicated resources",
+          "Change management support",
+          "Cross-functional collaboration",
+          "Better KPI tracking",
+          "Structured roadmap planning"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "Future Readiness & Competitive Positioning",
+    "questions": [
+      {
+        "n": 55,
+        "t": "pain",
+        "q": "What is the greatest long-term risk of not evolving operationally?",
+        "o": [
+          "Falling behind competitors",
+          "Increasing costs",
+          "Slower execution",
+          "Customer dissatisfaction",
+          "Talent retention issues",
+          "Innovation stagnation",
+          "Reduced profitability",
+          "Leadership losing visibility"
+        ]
+      },
+      {
+        "n": 56,
+        "t": "aspiration",
+        "q": "Which future capability is most strategically important?",
+        "o": [
+          "Operational scalability",
+          "AI-assisted decision-making",
+          "Automation at scale",
+          "Predictive analytics",
+          "Customer responsiveness",
+          "Cross-functional agility",
+          "Knowledge-driven operations",
+          "Innovation capability"
+        ]
+      },
+      {
+        "n": 57,
+        "t": "progression",
+        "q": "How important will AI become in your industry over the next 3–5 years?",
+        "o": [
+          "Limited importance",
+          "Useful in selected areas",
+          "Increasingly relevant",
+          "Strategically important",
+          "Critical for competitiveness",
+          "Industry-transforming"
+        ]
+      },
+      {
+        "n": 58,
+        "t": "pain",
+        "q": "Which external pressure concerns leadership the most?",
+        "o": [
+          "Competitor innovation",
+          "Changing customer expectations",
+          "Labor market challenges",
+          "Economic uncertainty",
+          "Technology disruption",
+          "Margin pressure",
+          "Regulatory change",
+          "Operational scalability"
+        ]
+      },
+      {
+        "n": 59,
+        "t": "aspiration",
+        "q": "If this initiative succeeds, what would improve most?",
+        "o": [
+          "Leadership visibility",
+          "Operational efficiency",
+          "Employee productivity",
+          "Customer experience",
+          "Strategic execution",
+          "Decision-making speed",
+          "Scalability",
+          "Competitive positioning"
+        ]
+      },
+      {
+        "n": 60,
+        "t": "progression",
+        "q": "How prepared is your organisation for long-term AI-driven transformation?",
+        "o": [
+          "Not prepared",
+          "Early exploration stage",
+          "Considering future readiness",
+          "Building foundational capabilities",
+          "Actively preparing strategically",
+          "Positioning AI as core competitive infrastructure"
+        ]
+      }
+    ]
+  }
+];
+
+/* ==============================================================
+   STATE
+   ============================================================== */
+let ASSESSMENT = SNAPSHOT;
+const state = {};
+
+/* ==============================================================
+   LIVE SYNC — optional, progressive enhancement.
+   Tries two CORS-safe methods; if both fail the snapshot stays.
+   Browser security (CORS) may block direct sheet access —
+   the embedded snapshot guarantees the app always works.
+   ============================================================== */
+async function syncFromSheet() {
+  if (!SHEET_ID) {
+    document.getElementById('sync-status').textContent = 'Built-in Strategy Blueprint question set · live sheet sync not configured';
+    return;
+  }
+  const btn    = document.querySelector('.sync-btn');
+  const status = document.getElementById('sync-status');
+  btn.disabled = true;
+  btn.textContent = '↻ Syncing…';
+  status.textContent = 'Contacting Google Sheets…';
+
+  const methods = [
+    () => fetchGviz(),
+    () => fetchViaProxy()
+  ];
+
+  for (const method of methods) {
+    try {
+      const data = await method();
+      if (data && data.length) {
+        ASSESSMENT = data;
+        Object.keys(state).forEach(k => delete state[k]);
+        renderForm();
+        document.getElementById('results').classList.remove('show');
+        const t = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+        status.textContent = `✓ Synced at ${t}`;
+        btn.textContent = '↻ Sync from Sheet';
+        btn.disabled = false;
+        return;
+      }
+    } catch(e) { /* try next method */ }
+  }
+
+  status.textContent = '⚠ Sheet unreachable — using built-in data';
+  btn.textContent = '↻ Sync from Sheet';
+  btn.disabled = false;
+}
+
+async function fetchGviz() {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+  const r = await fetch(url, {mode:'cors'});
+  if (!r.ok) throw new Error('gviz failed');
+  const text = await r.text();
+  const json = JSON.parse(text.replace(/^[^{]*/, '').replace(/\);?\s*$/, ''));
+  return parseGviz(json);
+}
+
+async function fetchViaProxy() {
+  const target = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
+  const url = `https://api.allorigins.win/get?url=${encodeURIComponent(target)}`;
+  const r = await fetch(url);
+  if (!r.ok) throw new Error('proxy failed');
+  const data = await r.json();
+  return parseCSV(data.contents);
+}
+
+function toTypeCode(raw) {
+  const l = (raw || '').toLowerCase();
+  if (l.includes('pain'))                          return 'pain';
+  if (l.includes('progression') || l.includes('maturity')) return 'progression';
+  return 'aspiration';
+}
+
+function parseGviz(gviz) {
+  const cols = gviz.table.cols.map(c => c.label.toLowerCase());
+  const cell = (row, name) => {
+    const i = cols.indexOf(name.toLowerCase());
+    const c = i >= 0 ? row.c[i] : null;
+    return c && c.v != null ? String(c.v).trim() : '';
+  };
+  const map = new Map();
+  gviz.table.rows.forEach(row => {
+    const qn = cell(row,'question number');
+    const q  = cell(row,'question');
+    const sec = cell(row,'section');
+    if (!qn || !q) return;
+    if (!map.has(sec)) map.set(sec, []);
+    const opts = [];
+    for (let i = 1; i <= 9; i++) { const v = cell(row,`option ${i}`); if (v) opts.push(v); }
+    map.get(sec).push({n:+qn, t:toTypeCode(cell(row,'type')), q, o:opts});
+  });
+  return Array.from(map.entries()).map(([section,questions]) => ({section,questions}));
+}
+
+function parseCSV(text) {
+  const lines = []; let cur = '', inQ = false, row = [];
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === '"') { if (inQ && text[i+1] === '"') { cur += '"'; i++; } else inQ = !inQ; }
+    else if (ch === ',' && !inQ) { row.push(cur.trim()); cur = ''; }
+    else if ((ch === '\n' || ch === '\r') && !inQ) {
+      if (ch === '\r' && text[i+1] === '\n') i++;
+      row.push(cur.trim()); cur = '';
+      if (row.some(c => c !== '')) lines.push(row);
+      row = [];
+    } else cur += ch;
+  }
+  if (cur || row.length) { row.push(cur.trim()); lines.push(row); }
+  if (lines.length < 2) return null;
+  const hdr = lines[0].map(h => h.toLowerCase());
+  const col = name => hdr.indexOf(name.toLowerCase());
+  const map = new Map();
+  lines.slice(1).forEach(row => {
+    const qn = row[col('question number')];
+    const q  = row[col('question')];
+    const sec = row[col('section')];
+    if (!qn || !q) return;
+    if (!map.has(sec)) map.set(sec, []);
+    const opts = [];
+    for (let i = 1; i <= 9; i++) { const v = row[col(`option ${i}`)]; if (v && v.trim()) opts.push(v.trim()); }
+    map.get(sec).push({n:+qn, t:toTypeCode(row[col('type')]), q, o:opts});
+  });
+  return Array.from(map.entries()).map(([section,questions]) => ({section,questions}));
+}
+
+/* ==============================================================
+   RENDER
+   ============================================================== */
+function renderForm() {
+  const root = document.getElementById('sections');
+  root.innerHTML = ASSESSMENT.map((sec, sIdx) => `
+    <section class="section">
+      <div class="section-head">
+        <div class="section-num">Dimension ${String(sIdx+1).padStart(2,'0')}</div>
+        <h2 class="section-title">${sec.section}</h2>
+      </div>
+      <div class="section-body">
+        ${sec.questions.map(q => `
+          <div class="q">
+            <div class="q-prompt">
+              <span class="q-num">${String(q.n).padStart(2,'0')}.</span>
+              <span>${q.q}</span>
+              <span class="q-tag">${q.t === 'pain' ? 'Pressure · multi' : q.t === 'progression' ? 'Maturity · single' : 'Aspiration · multi'}</span>
+            </div>
+            <div class="opts" data-qn="${q.n}" data-type="${q.t}">
+              ${q.o.map((opt, i) => `
+                <label class="opt" data-i="${i}">
+                  <input type="${q.t === 'progression' ? 'radio' : 'checkbox'}" name="q${q.n}" />
+                  <span>${opt}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+  `).join('');
+
+  document.querySelectorAll('.opts').forEach(group => {
+    const qn   = +group.dataset.qn;
+    const type = group.dataset.type;
+    group.querySelectorAll('.opt').forEach(opt => {
+      opt.addEventListener('click', e => {
+        e.preventDefault();
+        const i = +opt.dataset.i;
+        if (type === 'progression') {
+          group.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          state[qn] = i;
+        } else {
+          opt.classList.toggle('selected');
+          if (!state[qn]) state[qn] = new Set();
+          if (opt.classList.contains('selected')) state[qn].add(i);
+          else state[qn].delete(i);
+        }
+      });
+    });
+  });
+}
+
+/* ==============================================================
+   SCORING
+   ============================================================== */
+function scoreSection(sec) {
+  let scores = [], pains = [], aspirations = [], maturity = [];
+  sec.questions.forEach(q => {
+    const sel = state[q.n];
+    if (q.t === 'pain') {
+      const count   = sel ? sel.size : 0;
+      const clarity = Math.max(0, 100 - (count / q.o.length) * 100);
+      scores.push(clarity);
+      if (sel && sel.size > 0) sel.forEach(i => pains.push({q:q.q, option:q.o[i]}));
+    } else if (q.t === 'progression') {
+      if (sel === undefined) { scores.push(50); }
+      else {
+        const clarity = (sel / (q.o.length - 1)) * 100;
+        scores.push(clarity);
+        maturity.push({q:q.q, label:q.o[sel], position:sel+1, of:q.o.length});
+      }
+    } else {
+      if (sel && sel.size > 0) sel.forEach(i => aspirations.push({q:q.q, option:q.o[i]}));
+    }
+  });
+  const clarity = scores.length ? Math.round(scores.reduce((a,b) => a+b, 0) / scores.length) : 50;
+  return {clarity, pains, aspirations, maturity};
+}
+
+/* ==============================================================
+   RESULTS
+   ============================================================== */
+let chart;
+function generateResults() {
+  const results = ASSESSMENT.map(sec => ({section: sec.section, ...scoreSection(sec)}));
+  const labels  = results.map(r => r.section.replace(' & ', ' &\n').replace(', ', ',\n'));
+  const data    = results.map(r => r.clarity);
+  const panel   = document.getElementById('results');
+  panel.classList.add('show');
+
+  const ctx = document.getElementById('radar').getContext('2d');
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Readiness Score',
+        data,
+        backgroundColor: 'rgba(201,161,74,0.22)',
+        borderColor: '#c9a14a',
+        borderWidth: 2,
+        pointBackgroundColor: '#c9a14a',
+        pointBorderColor: '#0b1f3a',
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {display: false},
+        tooltip: {
+          backgroundColor: '#0b1f3a',
+          titleColor: '#c9a14a',
+          bodyColor: '#f5efe2',
+          titleFont: {family:'DM Mono', size:10},
+          bodyFont: {family:'DM Sans', size:13},
+          padding: 10,
+          callbacks: {
+            title: items => items[0].label.replace('\n',' '),
+            label: ctx  => `Readiness: ${ctx.parsed.r}/100`
+          }
+        }
+      },
+      scales: {
+        r: {
+          min: 0, max: 100,
+          ticks: {stepSize:25, color:'rgba(245,239,226,0.5)', backdropColor:'transparent', font:{family:'DM Mono',size:9}},
+          grid:        {color:'rgba(245,239,226,0.15)'},
+          angleLines:  {color:'rgba(245,239,226,0.2)'},
+          pointLabels: {color:'#f5efe2', font:{family:'DM Sans', size:11, weight:'500'}}
+        }
+      }
+    }
+  });
+
+  document.getElementById('text-output').innerHTML = results.map(r => `
+    <div class="dim">
+      <div class="dim-head">
+        <span class="dim-name">${r.section}</span>
+        <span class="dim-score">Readiness ${r.clarity}/100</span>
+      </div>
+      <div class="bar"><span style="width:${r.clarity}%"></span></div>
+      ${r.pains.length ? `<div style="font-size:12px;color:var(--muted);margin-top:6px;font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase">Pressure points</div>
+        <ul>${r.pains.map(p => `<li>${p.option}</li>`).join('')}</ul>` : ''}
+      ${r.maturity.length ? `<div style="font-size:12px;color:var(--muted);margin-top:8px;font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase">Maturity stance</div>
+        <ul>${r.maturity.map(m => `<li>${m.label} <span style="color:var(--muted)">(${m.position}/${m.of})</span></li>`).join('')}</ul>` : ''}
+      ${r.aspirations.length ? `<div style="font-size:12px;color:var(--muted);margin-top:8px;font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase">Stated aspirations</div>
+        <ul>${r.aspirations.map(a => `<li>${a.option}</li>`).join('')}</ul>` : ''}
+      ${!r.pains.length && !r.maturity.length && !r.aspirations.length ? `<div class="empty">No selections in this dimension.</div>` : ''}
+    </div>
+  `).join('');
+
+  const sorted  = [...results].sort((a,b) => a.clarity - b.clarity);
+  const lowest  = sorted[0];
+  const highest = sorted[sorted.length-1];
+  const avg     = Math.round(results.reduce((a,b) => a + b.clarity, 0) / results.length);
+  document.getElementById('headline-insight').innerHTML = `
+    <h4>Where to focus the executive conversation</h4>
+    <p>Overall readiness sits at <b>${avg}/100</b>. The greatest pressure is in <b>${lowest.section}</b> (${lowest.clarity}/100) — the natural anchor for the next executive session. The most settled dimension is <b>${highest.section}</b> (${highest.clarity}/100), where leadership has the strongest footing to build from.</p>
+  `;
+
+  const today = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+  document.getElementById('results-meta').textContent = `Generated ${today}`;
+  setTimeout(() => panel.scrollIntoView({behavior:'smooth', block:'start'}), 100);
+}
+
+function resetAll() {
+  Object.keys(state).forEach(k => delete state[k]);
+  document.querySelectorAll('.opt.selected').forEach(o => o.classList.remove('selected'));
+  document.getElementById('results').classList.remove('show');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// Boot immediately from snapshot — zero loading time, zero failure risk
+renderForm();
+</script>
+</body>
+</html>
