@@ -1,0 +1,1719 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>The Launch Package · NovatioAi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js">
+// Boot immediately from the built-in Launch Package snapshot, then allow optional Google Sheets sync.
+function bootLaunchPackageAssessment() {
+  if (!ASSESSMENT || !ASSESSMENT.length) {
+    ASSESSMENT = SNAPSHOT;
+  }
+  renderForm();
+  const status = document.getElementById('sync-status');
+  if (status) status.textContent = `Built-in Launch Package snapshot loaded · ${ASSESSMENT.reduce((sum, sec) => sum + sec.questions.length, 0)} questions · click to fetch live updates`;
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootLaunchPackageAssessment);
+} else {
+  bootLaunchPackageAssessment();
+}
+
+</script>
+<style>
+:root{--navy:#0b1f3a;--navy-2:#142a4a;--navy-soft:#1b3560;--gold:#c9a14a;--gold-soft:#e2c98a;--cream:#f5efe2;--paper:#fbf8f1;--ink:#0b1f3a;--muted:#6b6657;--line:rgba(11,31,58,.12)}
+*{box-sizing:border-box} html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased} a{color:var(--gold)}
+header{background:var(--navy);color:var(--cream);padding:48px 32px 56px;border-bottom:1px solid rgba(201,161,74,.25);position:relative;overflow:hidden} header:after{content:"";position:absolute;inset:auto 0 0 0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.wrap{max-width:1120px;margin:0 auto} .brand{position:absolute;top:24px;right:32px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,239,226,.55)} .brand b{color:var(--gold);font-weight:500}
+.eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px} h1{font-family:'Playfair Display',serif;font-weight:500;font-size:clamp(34px,4.6vw,54px);line-height:1.05;margin:0 0 14px;color:var(--cream)} h1 em{font-style:italic;color:var(--gold-soft);font-weight:400} .lead{max-width:760px;color:rgba(245,239,226,.78);font-size:16px}
+.setup-note{margin-top:18px;padding:14px 16px;background:rgba(201,161,74,.10);border:1px solid rgba(201,161,74,.28);font-size:13px;color:rgba(245,239,226,.78)} .setup-note code{font-family:'DM Mono',monospace;color:var(--gold-soft);font-size:11px}
+.sync-bar{background:var(--navy-2);padding:9px 32px;display:flex;align-items:center;gap:14px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(245,239,226,.45);border-bottom:1px solid rgba(201,161,74,.12)} .sync-bar b{color:var(--gold-soft);font-weight:500} #sync-status{margin-left:8px;color:rgba(245,239,226,.35)} .sync-btn{margin-left:auto;padding:5px 13px;background:transparent;border:1px solid rgba(201,161,74,.35);border-radius:2px;color:var(--gold);font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer} .sync-btn:hover{background:rgba(201,161,74,.12)} .sync-btn:disabled{opacity:.35;cursor:default}
+main{padding:48px 32px 64px} .section{margin:0 0 42px;border:1px solid var(--line);background:#fff;border-radius:2px;overflow:hidden} .section-head{display:flex;align-items:baseline;gap:18px;padding:22px 28px;background:linear-gradient(180deg,#fff,#fbf6e9);border-bottom:1px solid var(--line)} .section-num{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase} .section-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:500;margin:0} .section-body{padding:22px 28px}
+.q{padding:18px 0;border-top:1px dashed var(--line)} .q:first-child{border-top:none} .q-prompt{display:flex;gap:12px;align-items:baseline;font-size:15.5px;color:var(--navy);margin-bottom:12px;font-weight:500} .q-num{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;color:var(--gold);min-width:32px} .q-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:2px 8px;border-radius:99px;margin-left:auto;white-space:nowrap}
+.opts{display:flex;flex-wrap:wrap;gap:8px;padding-left:44px} .opt{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;cursor:pointer;font-size:13.5px;color:var(--navy);transition:.15s ease all;user-select:none} .opt:hover{border-color:var(--gold);background:#fdf7e6} .opt.selected{background:var(--navy);color:var(--cream);border-color:var(--navy)} .opt input{display:none}
+.submit-row{position:sticky;bottom:16px;z-index:5;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:32px auto 0} .btn{font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;padding:14px 28px;border:1px solid var(--navy);border-radius:2px;background:var(--navy);color:var(--cream);cursor:pointer;letter-spacing:.04em;transition:.18s ease all;box-shadow:0 10px 30px -12px rgba(11,31,58,.45)} .btn:hover{background:var(--navy-soft);transform:translateY(-1px)} .btn.ghost{background:transparent;color:var(--navy);box-shadow:none} .btn.ghost:hover{background:var(--navy);color:var(--cream)} .btn.gold{background:var(--gold);border-color:var(--gold);color:var(--navy)} .btn.gold:hover{background:#b6913f}
+#results{display:none;margin-top:48px;border-top:2px solid var(--navy);padding-top:48px} #results.show{display:block} .results-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px} .results-head h2{font-family:'Playfair Display',serif;font-weight:500;font-size:36px;margin:0} .results-head .meta{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)} .results-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:32px} @media(max-width:900px){.results-grid{grid-template-columns:1fr}.q-prompt{display:block}.q-tag{display:inline-block;margin:8px 0 0 44px}}
+.chart-card{background:var(--navy);border-radius:2px;padding:28px;color:var(--cream);position:relative;overflow:hidden} .chart-card:before{content:"";position:absolute;inset:0;background:radial-gradient(60% 40% at 50% 0%,rgba(201,161,74,.18),transparent 70%);pointer-events:none} .chart-card h3{font-family:'Playfair Display',serif;font-weight:500;font-size:20px;margin:0 0 4px;color:var(--cream)} .chart-card .sub,.text-card .sub{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:18px} .chart-wrap{position:relative;aspect-ratio:1/1;width:100%;max-width:520px;margin:0 auto} .text-card{background:#fff;border:1px solid var(--line);padding:28px;border-radius:2px} .text-card h3{font-family:'Playfair Display',serif;font-weight:500;font-size:20px;margin:0 0 4px}
+.dim{padding:14px 0;border-top:1px dashed var(--line)} .dim:first-of-type{border-top:none;padding-top:0} .dim-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px} .dim-name{font-weight:500;font-size:15px} .dim-score{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.1em;color:var(--navy)} .bar{height:5px;background:var(--cream);border-radius:99px;overflow:hidden;margin:6px 0 10px} .bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--navy));transition:width .9s ease} .dim ul{margin:6px 0 0;padding:0 0 0 18px;font-size:13.5px;color:var(--navy)} .dim ul li{margin:3px 0} .empty{font-size:13px;color:var(--muted);font-style:italic}
+.insight{margin-top:32px;padding:22px 24px;background:var(--cream);border-left:3px solid var(--gold);border-radius:0 2px 2px 0} .insight h4{font-family:'Playfair Display',serif;font-weight:500;font-size:18px;margin:16px 0 8px} .insight h4:first-child{margin-top:0} .insight p{margin:0;color:var(--navy);font-size:14.5px} .insight ul{font-size:14px;margin:8px 0 0 20px;padding:0} .insight li{margin:4px 0} .report-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px} @media(max-width:900px){.report-grid{grid-template-columns:1fr}}
+.sheet-status{margin-top:14px;padding:12px 14px;border:1px solid var(--line);background:#fff;border-left:3px solid var(--gold);font-size:13px;color:var(--navy)} .sheet-status code{font-family:'DM Mono',monospace;font-size:11px}
+footer{padding:32px;text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;border-top:1px solid var(--line)} footer b{color:var(--gold);font-weight:500}
+@media print{.submit-row,.sync-bar,.opt:not(.selected),.setup-note{display:none} header{break-inside:avoid} .section{break-inside:avoid} #results{break-before:page}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="brand">NOVATIO<b>AI</b> · BANGKOK/DENMARK</div><div class="eyebrow">The Launch Package</div><h1>AI Procurement & Implementation <em>Launch</em> Assessment</h1><p class="lead">A full-service procurement and implementation diagnostic for organisations ready to move from AI strategy into vendor selection, project scoping, risk control and investment-ready decision support within 60–120 days.</p><div class="setup-note">Question source: <code>https://docs.google.com/spreadsheets/d/1DIx49i-zV4M5iXOswGluTIDY7IM5Irkazz69gqUzB5M/edit</code><br>Results target: <code>Assessment Results / Launch Package Results</code>. To enable row inserts, deploy the included Apps Script backend and paste its Web App URL into <code>RESULTS_WEB_APP_URL</code>.</div></div></header>
+<div class="sync-bar"><span>Source: <b>Google Sheets</b></span><span id="sync-status">Built-in Launch Package snapshot · click to fetch live updates</span><button class="sync-btn" onclick="syncFromSheet()">↻ Sync from Sheet</button></div>
+<main class="wrap" id="form-area"><div id="sections"></div><div class="submit-row"><button class="btn" onclick="generateResults()">Generate Launch Report →</button><button class="btn ghost" onclick="resetAll()">Reset</button></div><section id="results"><div class="results-head"><div><div class="eyebrow" style="color:var(--gold)">Output · Launch Readiness Report</div><h2>Where procurement readiness and implementation risk sit</h2></div><div class="meta" id="results-meta"></div></div><div class="results-grid"><div class="chart-card"><h3>Launch Readiness Across Ten Dimensions</h3><div class="sub">High score = ready to launch · Low score = procurement / implementation risk</div><div class="chart-wrap"><canvas id="radar"></canvas></div></div><div class="text-card"><h3>Launch Diagnostic Summary</h3><div class="sub">Readiness, risk and procurement signals by dimension</div><div id="text-output"></div></div></div><div class="insight" id="headline-insight"></div><div class="sheet-status" id="sheet-save-status">Google Sheets save status: waiting for report generation.</div><div class="submit-row"><button class="btn gold" onclick="saveLatestResultsToSheet()">Save Results to Google Sheet</button><button class="btn" onclick="window.print()">Print / Save as PDF</button><button class="btn ghost" onclick="downloadResultsCSV()">Download Results CSV</button><button class="btn ghost" onclick="document.getElementById('form-area').scrollIntoView({behavior:'smooth'})">Back to top</button></div></section></main><footer>NOVATIO<b>AI</b> · The Launch Package · Vendor-Neutral AI Procurement Advisory</footer>
+<script>
+const QUESTION_SHEET_ID = '1DIx49i-zV4M5iXOswGluTIDY7IM5Irkazz69gqUzB5M';
+const RESULTS_SHEET_ID = '1s8LT-x8HnDN4QbLqAq_4iRmv6aG_AqB_R_mpDN-0-7w';
+const RESULT_TAB_NAME = 'Launch Package Results';
+const RESULT_HEADERS = [
+  "Timestamp",
+  "Assessment",
+  "Overall Launch Readiness",
+  "Readiness Band",
+  "Risk Band",
+  "Recommended Next Action",
+  "Lowest Dimension",
+  "Lowest Score",
+  "Highest Dimension",
+  "Highest Score",
+  "Dimension Scores JSON",
+  "Pressure Points JSON",
+  "Maturity Stance JSON",
+  "Aspirations JSON",
+  "Vendor Scorecard Focus JSON",
+  "Implementation Risk Register JSON",
+  "Q01 - How clearly has leadership agreed that the organisation is ready to procure and implement AI within 60–120 days?",
+  "Q02 - What currently creates the greatest barrier to moving from AI strategy into procurement?",
+  "Q03 - What outcome should the Launch Package most directly enable?",
+  "Q04 - Which executive concern must be resolved before approving vendor engagement?",
+  "Q05 - How clearly is the executive sponsor defined for the AI implementation?",
+  "Q06 - What decision-making issue could slow procurement approval?",
+  "Q07 - How prepared is leadership to compare multiple vendor proposals objectively?",
+  "Q08 - Which board-level output would be most useful from the engagement?",
+  "Q09 - Which process area should be prioritised first for vendor scoping?",
+  "Q10 - Where is the largest measurable operational friction today?",
+  "Q11 - How clearly has the organisation defined the target AI use case?",
+  "Q12 - Which business impact matters most for the first implementation?",
+  "Q13 - Which process characteristic makes automation most attractive?",
+  "Q14 - How well documented is the process being considered for AI implementation?",
+  "Q15 - What prevents accurate scoping of the target process?",
+  "Q16 - Which process documentation would be most valuable for procurement?",
+  "Q17 - How mature is KPI tracking for the process being considered?",
+  "Q18 - Which KPI is least understood today?",
+  "Q19 - What data gap most weakens the ROI case?",
+  "Q20 - Which KPI should be central to vendor comparison?",
+  "Q21 - How reliable is the data needed to estimate savings and payback?",
+  "Q22 - Which measurement issue could make vendor ROI claims difficult to verify?",
+  "Q23 - Which scorecard column should receive the most emphasis?",
+  "Q24 - How prepared is the organisation to track benefits after implementation?",
+  "Q25 - How prepared is the organisation to brief vendors on the required solution?",
+  "Q26 - What creates the greatest risk of choosing the wrong vendor?",
+  "Q27 - Which vendor selection factor should carry the most weight?",
+  "Q28 - Which proposal comparison area is likely to be hardest to evaluate?",
+  "Q29 - How clearly are vendor success criteria defined?",
+  "Q30 - Which vendor dependency would create the most concern?",
+  "Q31 - What should the side-by-side vendor scorecard clarify most?",
+  "Q32 - How ready is procurement to compare three curated vendor proposals?",
+  "Q33 - How clearly is ownership defined for the implementation phase?",
+  "Q34 - Which ownership issue creates the greatest delivery risk?",
+  "Q35 - Which governance structure would most improve implementation confidence?",
+  "Q36 - How structured is project governance for cross-functional initiatives today?",
+  "Q37 - What could cause scope creep during implementation?",
+  "Q38 - Which implementation control would be most valuable?",
+  "Q39 - How prepared is the organisation to manage vendor accountability?",
+  "Q40 - Which governance failure would have the greatest impact?",
+  "Q41 - How prepared is the organisation to assess AI security and compliance risks?",
+  "Q42 - Which risk area needs the most attention before vendor selection?",
+  "Q43 - What creates the greatest implementation risk from a compliance perspective?",
+  "Q44 - Which risk-register category should be strongest in the final output?",
+  "Q45 - How clearly are internal approval requirements defined for AI tools?",
+  "Q46 - Which vendor security issue would be a deal-breaker?",
+  "Q47 - Which mitigation would most reduce implementation risk?",
+  "Q48 - How prepared is the organisation to govern responsible AI use?",
+  "Q49 - How clearly is the current technology stack mapped for vendor scoping?",
+  "Q50 - Which integration issue could most affect implementation timeline?",
+  "Q51 - Which technical capability should vendors demonstrate clearly?",
+  "Q52 - How ready is IT to support implementation within 60–120 days?",
+  "Q53 - What technical limitation could weaken vendor proposals?",
+  "Q54 - Which system outcome should implementation prioritise?",
+  "Q55 - How prepared is the organisation to provide vendors with technical information?",
+  "Q56 - Which technology risk should appear in the implementation risk register?",
+  "Q57 - How ready are impacted teams to adopt an AI-enabled workflow?",
+  "Q58 - Which adoption issue could reduce ROI after implementation?",
+  "Q59 - Which change-management asset would be most useful?",
+  "Q60 - How clearly are impacted roles and responsibilities understood?",
+  "Q61 - Which stakeholder group requires the most careful engagement?",
+  "Q62 - What employee outcome should the implementation protect or improve?",
+  "Q63 - How prepared is management to communicate why the AI initiative is happening?",
+  "Q64 - Which change risk should be actively managed during vendor implementation?",
+  "Q65 - How ready is the organisation to launch implementation within 60–120 days?",
+  "Q66 - What could most delay implementation after vendor selection?",
+  "Q67 - Which implementation deliverable should be prioritised?",
+  "Q68 - How clearly are implementation milestones defined?",
+  "Q69 - Which delivery constraint is most important to manage?",
+  "Q70 - What should define a successful first 90 days?",
+  "Q71 - How prepared is the organisation to run a pilot or phased rollout?",
+  "Q72 - Which post-launch issue could undermine project success?",
+  "Q73 - How prepared is the organisation to compare vendor proposals using ROI and payback logic?",
+  "Q74 - Which investment question is hardest to answer today?",
+  "Q75 - Which financial output would be most useful for approval?",
+  "Q76 - Which procurement risk most needs to be controlled?",
+  "Q77 - How clear is the budget envelope for the implementation?",
+  "Q78 - Which vendor-cost item needs the most scrutiny?",
+  "Q79 - What should NovatioAi’s vendor recommendation emphasise most?",
+  "Q80 - How ready is the organisation to make a final procurement decision after receiving three proposals?"
+];
+
+/*
+Google Apps Script backend for saving rows:
+
+const SHEET_ID = '1s8LT-x8HnDN4QbLqAq_4iRmv6aG_AqB_R_mpDN-0-7w';
+const TAB_NAME = 'Launch Package Results';
+const HEADERS = [
+  "Timestamp",
+  "Assessment",
+  "Overall Launch Readiness",
+  "Readiness Band",
+  "Risk Band",
+  "Recommended Next Action",
+  "Lowest Dimension",
+  "Lowest Score",
+  "Highest Dimension",
+  "Highest Score",
+  "Dimension Scores JSON",
+  "Pressure Points JSON",
+  "Maturity Stance JSON",
+  "Aspirations JSON",
+  "Vendor Scorecard Focus JSON",
+  "Implementation Risk Register JSON",
+  "Q01 - How mature is your organisation’s capability in AI procurement?",
+  "Q02 - What currently creates the greatest challenge around vendor selection?",
+  "Q03 - Which outcome would create the greatest value regarding project governance?",
+  "Q04 - Which risk concerns leadership most regarding operational automation?",
+  "Q05 - How prepared is your organisation to execute initiatives related to customer support workflows?",
+  "Q06 - Which capability would most improve success in data visibility?",
+  "Q07 - What operational bottleneck most affects forecasting and analytics?",
+  "Q08 - How structured is decision-making around implementation planning?",
+  "Q09 - How mature is your organisation’s capability in security governance?",
+  "Q10 - What currently creates the greatest challenge around cross-functional collaboration?",
+  "Q11 - Which outcome would create the greatest value regarding ROI evaluation?",
+  "Q12 - Which risk concerns leadership most regarding vendor accountability?",
+  "Q13 - How prepared is your organisation to execute initiatives related to integration planning?",
+  "Q14 - Which capability would most improve success in change management?",
+  "Q15 - What operational bottleneck most affects executive reporting?",
+  "Q16 - How structured is decision-making around document automation?",
+  "Q17 - How mature is your organisation’s capability in risk management?",
+  "Q18 - What currently creates the greatest challenge around workflow orchestration?",
+  "Q19 - Which outcome would create the greatest value regarding board-level visibility?",
+  "Q20 - Which risk concerns leadership most regarding AI implementation readiness?",
+  "Q21 - How prepared is your organisation to execute initiatives related to AI procurement?",
+  "Q22 - Which capability would most improve success in vendor selection?",
+  "Q23 - What operational bottleneck most affects project governance?",
+  "Q24 - How structured is decision-making around operational automation?",
+  "Q25 - How mature is your organisation’s capability in customer support workflows?",
+  "Q26 - What currently creates the greatest challenge around data visibility?",
+  "Q27 - Which outcome would create the greatest value regarding forecasting and analytics?",
+  "Q28 - Which risk concerns leadership most regarding implementation planning?",
+  "Q29 - How prepared is your organisation to execute initiatives related to security governance?",
+  "Q30 - Which capability would most improve success in cross-functional collaboration?",
+  "Q31 - What operational bottleneck most affects ROI evaluation?",
+  "Q32 - How structured is decision-making around vendor accountability?",
+  "Q33 - How mature is your organisation’s capability in integration planning?",
+  "Q34 - What currently creates the greatest challenge around change management?",
+  "Q35 - Which outcome would create the greatest value regarding executive reporting?",
+  "Q36 - Which risk concerns leadership most regarding document automation?",
+  "Q37 - How prepared is your organisation to execute initiatives related to risk management?",
+  "Q38 - Which capability would most improve success in workflow orchestration?",
+  "Q39 - What operational bottleneck most affects board-level visibility?",
+  "Q40 - How structured is decision-making around AI implementation readiness?",
+  "Q41 - How mature is your organisation’s capability in AI procurement?",
+  "Q42 - What currently creates the greatest challenge around vendor selection?",
+  "Q43 - Which outcome would create the greatest value regarding project governance?",
+  "Q44 - Which risk concerns leadership most regarding operational automation?",
+  "Q45 - How prepared is your organisation to execute initiatives related to customer support workflows?",
+  "Q46 - Which capability would most improve success in data visibility?",
+  "Q47 - What operational bottleneck most affects forecasting and analytics?",
+  "Q48 - How structured is decision-making around implementation planning?",
+  "Q49 - How mature is your organisation’s capability in security governance?",
+  "Q50 - What currently creates the greatest challenge around cross-functional collaboration?",
+  "Q51 - Which outcome would create the greatest value regarding ROI evaluation?",
+  "Q52 - Which risk concerns leadership most regarding vendor accountability?",
+  "Q53 - How prepared is your organisation to execute initiatives related to integration planning?",
+  "Q54 - Which capability would most improve success in change management?",
+  "Q55 - What operational bottleneck most affects executive reporting?",
+  "Q56 - How structured is decision-making around document automation?",
+  "Q57 - How mature is your organisation’s capability in risk management?",
+  "Q58 - What currently creates the greatest challenge around workflow orchestration?",
+  "Q59 - Which outcome would create the greatest value regarding board-level visibility?",
+  "Q60 - Which risk concerns leadership most regarding AI implementation readiness?",
+  "Q61 - How prepared is your organisation to execute initiatives related to AI procurement?",
+  "Q62 - Which capability would most improve success in vendor selection?",
+  "Q63 - What operational bottleneck most affects project governance?",
+  "Q64 - How structured is decision-making around operational automation?",
+  "Q65 - How mature is your organisation’s capability in customer support workflows?",
+  "Q66 - What currently creates the greatest challenge around data visibility?",
+  "Q67 - Which outcome would create the greatest value regarding forecasting and analytics?",
+  "Q68 - Which risk concerns leadership most regarding implementation planning?",
+  "Q69 - How prepared is your organisation to execute initiatives related to security governance?",
+  "Q70 - Which capability would most improve success in cross-functional collaboration?",
+  "Q71 - What operational bottleneck most affects ROI evaluation?",
+  "Q72 - How structured is decision-making around vendor accountability?",
+  "Q73 - How mature is your organisation’s capability in integration planning?",
+  "Q74 - What currently creates the greatest challenge around change management?",
+  "Q75 - Which outcome would create the greatest value regarding executive reporting?",
+  "Q76 - Which risk concerns leadership most regarding document automation?",
+  "Q77 - How prepared is your organisation to execute initiatives related to risk management?",
+  "Q78 - Which capability would most improve success in workflow orchestration?",
+  "Q79 - What operational bottleneck most affects board-level visibility?",
+  "Q80 - How structured is decision-making around AI implementation readiness?"
+];
+
+function doPost(e) {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  let sheet = ss.getSheetByName(TAB_NAME);
+  if (!sheet) sheet = ss.insertSheet(TAB_NAME);
+  if (sheet.getLastRow() === 0) sheet.appendRow(HEADERS);
+  const payload = JSON.parse(e.postData.contents);
+  const row = HEADERS.map(h => payload.row && Object.prototype.hasOwnProperty.call(payload.row, h) ? payload.row[h] : '');
+  sheet.appendRow(row);
+  return ContentService.createTextOutput(JSON.stringify({status:'ok'})).setMimeType(ContentService.MimeType.JSON);
+}
+
+Deploy as Web App → Execute as Me → Anyone with link. Paste the Web App URL below.
+*/
+const RESULTS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxiX3B99hnGTS_v7BO2iFOVNGO2nu16tb__N8Uj6GZFPuN3Q_hHgMcP1s5b4Fj3CbVE_A/exec'; // Paste deployed Apps Script Web App URL here.
+
+const SNAPSHOT = [
+  {
+    "section": "Procurement Readiness & Executive Alignment",
+    "questions": [
+      {
+        "n": 1,
+        "t": "progression",
+        "q": "How clearly has leadership agreed that the organisation is ready to procure and implement AI within 60–120 days?",
+        "o": [
+          "No agreement exists",
+          "AI procurement is only exploratory",
+          "Leadership interest exists but no decision path",
+          "Budget and intent are partly aligned",
+          "Leadership is ready to evaluate vendors",
+          "Leadership is aligned and ready to proceed"
+        ]
+      },
+      {
+        "n": 2,
+        "t": "pain",
+        "q": "What currently creates the greatest barrier to moving from AI strategy into procurement?",
+        "o": [
+          "Unclear ownership",
+          "Unconfirmed budget",
+          "Lack of project scope",
+          "Vendor confusion",
+          "Risk concerns",
+          "Weak executive alignment",
+          "Internal capacity limitations",
+          "Unclear ROI"
+        ]
+      },
+      {
+        "n": 3,
+        "t": "aspiration",
+        "q": "What outcome should the Launch Package most directly enable?",
+        "o": [
+          "Investment-ready vendor proposals",
+          "Board-ready decision support",
+          "Clear implementation scope",
+          "Reduced procurement risk",
+          "Better vendor comparison",
+          "Faster project launch",
+          "Defined ownership model",
+          "Measurable ROI case"
+        ]
+      },
+      {
+        "n": 4,
+        "t": "pain",
+        "q": "Which executive concern must be resolved before approving vendor engagement?",
+        "o": [
+          "Implementation risk",
+          "Data security",
+          "Total cost",
+          "Vendor credibility",
+          "Internal adoption",
+          "Integration difficulty",
+          "Payback period",
+          "Operational disruption"
+        ]
+      },
+      {
+        "n": 5,
+        "t": "progression",
+        "q": "How clearly is the executive sponsor defined for the AI implementation?",
+        "o": [
+          "No sponsor identified",
+          "Potential sponsor discussed",
+          "Sponsor informally identified",
+          "Sponsor is confirmed but role unclear",
+          "Sponsor role is defined",
+          "Sponsor is active and accountable"
+        ]
+      },
+      {
+        "n": 6,
+        "t": "pain",
+        "q": "What decision-making issue could slow procurement approval?",
+        "o": [
+          "Too many stakeholders",
+          "Unclear sign-off authority",
+          "Finance review delays",
+          "Legal review delays",
+          "IT security review delays",
+          "Board hesitation",
+          "Departmental disagreement",
+          "Lack of business case"
+        ]
+      },
+      {
+        "n": 7,
+        "t": "progression",
+        "q": "How prepared is leadership to compare multiple vendor proposals objectively?",
+        "o": [
+          "Not prepared",
+          "Basic comparison criteria only",
+          "Some evaluation criteria exist",
+          "Scorecard thinking has started",
+          "Structured scoring is nearly ready",
+          "Formal vendor scorecard is ready"
+        ]
+      },
+      {
+        "n": 8,
+        "t": "aspiration",
+        "q": "Which board-level output would be most useful from the engagement?",
+        "o": [
+          "Executive recommendation",
+          "Vendor comparison matrix",
+          "Implementation risk register",
+          "ROI summary",
+          "Project roadmap",
+          "Procurement decision memo",
+          "Budget justification",
+          "KPI success framework"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "Business Process Prioritisation",
+    "questions": [
+      {
+        "n": 9,
+        "t": "pain",
+        "q": "Which process area should be prioritised first for vendor scoping?",
+        "o": [
+          "Invoice/AP automation",
+          "Billing automation",
+          "Customer support automation",
+          "Sales lead qualification",
+          "Document processing",
+          "HR self-service",
+          "Meeting automation",
+          "Forecasting and planning"
+        ]
+      },
+      {
+        "n": 10,
+        "t": "pain",
+        "q": "Where is the largest measurable operational friction today?",
+        "o": [
+          "High manual volume",
+          "Long handling times",
+          "Frequent rework",
+          "Slow approvals",
+          "Customer response delays",
+          "Poor reporting visibility",
+          "Knowledge bottlenecks",
+          "Disconnected systems"
+        ]
+      },
+      {
+        "n": 11,
+        "t": "progression",
+        "q": "How clearly has the organisation defined the target AI use case?",
+        "o": [
+          "No use case defined",
+          "Several broad ideas exist",
+          "One or two likely candidates exist",
+          "Primary use case is selected",
+          "Use case has preliminary scope",
+          "Use case is ready for vendor briefing"
+        ]
+      },
+      {
+        "n": 12,
+        "t": "aspiration",
+        "q": "Which business impact matters most for the first implementation?",
+        "o": [
+          "Cost reduction",
+          "Time saved",
+          "Revenue improvement",
+          "Cash-flow improvement",
+          "Customer experience",
+          "Error reduction",
+          "Employee productivity",
+          "Operational scalability"
+        ]
+      },
+      {
+        "n": 13,
+        "t": "pain",
+        "q": "Which process characteristic makes automation most attractive?",
+        "o": [
+          "High transaction volume",
+          "Repetitive work",
+          "Document-heavy workflow",
+          "Many exceptions",
+          "High staff time",
+          "High error cost",
+          "Cash-flow impact",
+          "Customer-facing delay"
+        ]
+      },
+      {
+        "n": 14,
+        "t": "progression",
+        "q": "How well documented is the process being considered for AI implementation?",
+        "o": [
+          "Not documented",
+          "Partly understood by individuals",
+          "Basic workflow notes exist",
+          "Process steps are mapped",
+          "Process has owners and KPIs",
+          "Process is vendor-scope ready"
+        ]
+      },
+      {
+        "n": 15,
+        "t": "pain",
+        "q": "What prevents accurate scoping of the target process?",
+        "o": [
+          "Unclear process ownership",
+          "Missing volume data",
+          "Unknown handling time",
+          "Poor error tracking",
+          "Incomplete system map",
+          "Limited stakeholder input",
+          "Unclear exceptions",
+          "No baseline KPIs"
+        ]
+      },
+      {
+        "n": 16,
+        "t": "aspiration",
+        "q": "Which process documentation would be most valuable for procurement?",
+        "o": [
+          "Current-state workflow",
+          "Future-state workflow",
+          "Automation opportunity map",
+          "Exception handling map",
+          "System integration map",
+          "KPI baseline",
+          "User roles map",
+          "Vendor scope document"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "Operational Data & KPI Maturity",
+    "questions": [
+      {
+        "n": 17,
+        "t": "progression",
+        "q": "How mature is KPI tracking for the process being considered?",
+        "o": [
+          "No KPI tracking",
+          "Informal metrics only",
+          "Some manual tracking exists",
+          "Core KPIs are tracked",
+          "KPIs are reliable enough for ROI",
+          "KPIs are procurement-ready"
+        ]
+      },
+      {
+        "n": 18,
+        "t": "pain",
+        "q": "Which KPI is least understood today?",
+        "o": [
+          "Monthly volume",
+          "Average handling time",
+          "Cost per transaction",
+          "Error rate",
+          "Rework rate",
+          "Cycle time",
+          "SLA compliance",
+          "FTE hours consumed"
+        ]
+      },
+      {
+        "n": 19,
+        "t": "pain",
+        "q": "What data gap most weakens the ROI case?",
+        "o": [
+          "No volume baseline",
+          "No labor-time estimate",
+          "No error-cost estimate",
+          "No revenue/cash impact data",
+          "No adoption baseline",
+          "No process-cost data",
+          "No cycle-time data",
+          "No implementation-cost view"
+        ]
+      },
+      {
+        "n": 20,
+        "t": "aspiration",
+        "q": "Which KPI should be central to vendor comparison?",
+        "o": [
+          "Cost per transaction",
+          "Minutes saved per item",
+          "Straight-through processing rate",
+          "Exception rate",
+          "Cycle-time reduction",
+          "SLA improvement",
+          "Revenue/cash impact",
+          "Adoption rate"
+        ]
+      },
+      {
+        "n": 21,
+        "t": "progression",
+        "q": "How reliable is the data needed to estimate savings and payback?",
+        "o": [
+          "Mostly unavailable",
+          "Available but unreliable",
+          "Partly reliable",
+          "Reliable for some processes",
+          "Reliable enough for estimates",
+          "Reliable enough for investment approval"
+        ]
+      },
+      {
+        "n": 22,
+        "t": "pain",
+        "q": "Which measurement issue could make vendor ROI claims difficult to verify?",
+        "o": [
+          "No baseline data",
+          "Different departmental metrics",
+          "Manual reporting errors",
+          "Unclear ownership",
+          "Poor system exports",
+          "No adoption tracking",
+          "No post-launch measurement plan",
+          "No financial validation"
+        ]
+      },
+      {
+        "n": 23,
+        "t": "aspiration",
+        "q": "Which scorecard column should receive the most emphasis?",
+        "o": [
+          "Process volume",
+          "Labor intensity",
+          "Error/rework rate",
+          "Cash/revenue impact",
+          "Cycle-time impact",
+          "Implementation ease",
+          "Adoption readiness",
+          "Payback period"
+        ]
+      },
+      {
+        "n": 24,
+        "t": "progression",
+        "q": "How prepared is the organisation to track benefits after implementation?",
+        "o": [
+          "No tracking plan",
+          "Benefits will be estimated manually",
+          "Some KPIs are identified",
+          "Baseline collection has started",
+          "Post-launch reporting is planned",
+          "Benefits tracking is governance-ready"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "AI Vendor Evaluation Readiness",
+    "questions": [
+      {
+        "n": 25,
+        "t": "progression",
+        "q": "How prepared is the organisation to brief vendors on the required solution?",
+        "o": [
+          "Not prepared",
+          "High-level idea only",
+          "Basic needs are known",
+          "Requirements are partly defined",
+          "Vendor brief is nearly ready",
+          "Vendor brief is complete"
+        ]
+      },
+      {
+        "n": 26,
+        "t": "pain",
+        "q": "What creates the greatest risk of choosing the wrong vendor?",
+        "o": [
+          "Unclear requirements",
+          "Weak evaluation criteria",
+          "Vendor overpromising",
+          "Limited technical review",
+          "Poor security assessment",
+          "No pilot criteria",
+          "Unclear commercial terms",
+          "Lack of comparable proposals"
+        ]
+      },
+      {
+        "n": 27,
+        "t": "aspiration",
+        "q": "Which vendor selection factor should carry the most weight?",
+        "o": [
+          "Functional fit",
+          "Integration capability",
+          "Security posture",
+          "Industry experience",
+          "Implementation support",
+          "Commercial value",
+          "Scalability",
+          "Proof of ROI"
+        ]
+      },
+      {
+        "n": 28,
+        "t": "pain",
+        "q": "Which proposal comparison area is likely to be hardest to evaluate?",
+        "o": [
+          "Scope differences",
+          "Pricing differences",
+          "Implementation timelines",
+          "Support models",
+          "Security commitments",
+          "Integration assumptions",
+          "ROI claims",
+          "Change-management support"
+        ]
+      },
+      {
+        "n": 29,
+        "t": "progression",
+        "q": "How clearly are vendor success criteria defined?",
+        "o": [
+          "Not defined",
+          "Broad expectations only",
+          "Some desired outcomes listed",
+          "Success criteria are drafted",
+          "Success criteria are measurable",
+          "Success criteria are procurement-ready"
+        ]
+      },
+      {
+        "n": 30,
+        "t": "pain",
+        "q": "Which vendor dependency would create the most concern?",
+        "o": [
+          "Custom development lock-in",
+          "Limited API access",
+          "Weak local support",
+          "Opaque pricing",
+          "Poor documentation",
+          "Limited data portability",
+          "Unclear SLA",
+          "Overreliance on one platform"
+        ]
+      },
+      {
+        "n": 31,
+        "t": "aspiration",
+        "q": "What should the side-by-side vendor scorecard clarify most?",
+        "o": [
+          "Best value option",
+          "Lowest implementation risk",
+          "Strongest ROI case",
+          "Best technical fit",
+          "Best security posture",
+          "Best support model",
+          "Fastest deployment",
+          "Best long-term scalability"
+        ]
+      },
+      {
+        "n": 32,
+        "t": "progression",
+        "q": "How ready is procurement to compare three curated vendor proposals?",
+        "o": [
+          "Not ready",
+          "Initial procurement interest",
+          "Basic vendor list exists",
+          "Evaluation process is partly defined",
+          "Procurement criteria are clear",
+          "Procurement is ready to run"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "Implementation Governance & Ownership",
+    "questions": [
+      {
+        "n": 33,
+        "t": "progression",
+        "q": "How clearly is ownership defined for the implementation phase?",
+        "o": [
+          "No owner identified",
+          "Potential owners discussed",
+          "Business owner identified",
+          "Business and technical owners identified",
+          "Governance group is forming",
+          "Ownership model is implementation-ready"
+        ]
+      },
+      {
+        "n": 34,
+        "t": "pain",
+        "q": "Which ownership issue creates the greatest delivery risk?",
+        "o": [
+          "No accountable sponsor",
+          "Unclear process owner",
+          "Weak IT ownership",
+          "No change owner",
+          "No KPI owner",
+          "Vendor role unclear",
+          "Steering group absent",
+          "Decision rights unclear"
+        ]
+      },
+      {
+        "n": 35,
+        "t": "aspiration",
+        "q": "Which governance structure would most improve implementation confidence?",
+        "o": [
+          "Executive sponsor",
+          "Project steering group",
+          "Business process owner",
+          "Technical owner",
+          "Change-management lead",
+          "Vendor manager",
+          "Risk owner",
+          "KPI owner"
+        ]
+      },
+      {
+        "n": 36,
+        "t": "progression",
+        "q": "How structured is project governance for cross-functional initiatives today?",
+        "o": [
+          "Highly informal",
+          "Ad hoc by department",
+          "Some project controls exist",
+          "Governance is defined for major projects",
+          "Governance is mostly reliable",
+          "Governance is implementation-ready"
+        ]
+      },
+      {
+        "n": 37,
+        "t": "pain",
+        "q": "What could cause scope creep during implementation?",
+        "o": [
+          "Unclear requirements",
+          "Too many stakeholders",
+          "Changing priorities",
+          "Vendor ambiguity",
+          "Weak change control",
+          "Unclear success metrics",
+          "Poor process documentation",
+          "No formal sign-off"
+        ]
+      },
+      {
+        "n": 38,
+        "t": "aspiration",
+        "q": "Which implementation control would be most valuable?",
+        "o": [
+          "Scope document",
+          "Milestone plan",
+          "Decision log",
+          "Risk register",
+          "Change control process",
+          "Acceptance criteria",
+          "KPI dashboard",
+          "Vendor SLA tracker"
+        ]
+      },
+      {
+        "n": 39,
+        "t": "progression",
+        "q": "How prepared is the organisation to manage vendor accountability?",
+        "o": [
+          "Not prepared",
+          "Vendor management is informal",
+          "Some vendor review exists",
+          "Basic SLA thinking exists",
+          "Vendor governance is partly structured",
+          "Vendor accountability is formally managed"
+        ]
+      },
+      {
+        "n": 40,
+        "t": "pain",
+        "q": "Which governance failure would have the greatest impact?",
+        "o": [
+          "Delayed decisions",
+          "Uncontrolled scope",
+          "Poor vendor performance",
+          "Low adoption",
+          "Security gaps",
+          "Budget overrun",
+          "Weak benefit tracking",
+          "Operational disruption"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "Risk, Compliance & Security",
+    "questions": [
+      {
+        "n": 41,
+        "t": "progression",
+        "q": "How prepared is the organisation to assess AI security and compliance risks?",
+        "o": [
+          "Not prepared",
+          "Concerns are informal",
+          "IT/security review is expected",
+          "Basic review criteria exist",
+          "Security review process is defined",
+          "Security/compliance review is procurement-ready"
+        ]
+      },
+      {
+        "n": 42,
+        "t": "pain",
+        "q": "Which risk area needs the most attention before vendor selection?",
+        "o": [
+          "Data privacy",
+          "Cybersecurity",
+          "Access control",
+          "Regulatory compliance",
+          "Auditability",
+          "Data residency",
+          "Vendor security",
+          "Model reliability"
+        ]
+      },
+      {
+        "n": 43,
+        "t": "pain",
+        "q": "What creates the greatest implementation risk from a compliance perspective?",
+        "o": [
+          "Sensitive data exposure",
+          "Unclear data processing",
+          "Weak audit trail",
+          "Poor access controls",
+          "Regulatory ambiguity",
+          "Lack of policy",
+          "Vendor opacity",
+          "Human oversight gaps"
+        ]
+      },
+      {
+        "n": 44,
+        "t": "aspiration",
+        "q": "Which risk-register category should be strongest in the final output?",
+        "o": [
+          "Security risk",
+          "Compliance risk",
+          "Operational risk",
+          "Adoption risk",
+          "Integration risk",
+          "Vendor risk",
+          "Financial risk",
+          "Reputational risk"
+        ]
+      },
+      {
+        "n": 45,
+        "t": "progression",
+        "q": "How clearly are internal approval requirements defined for AI tools?",
+        "o": [
+          "Not defined",
+          "Informal approvals only",
+          "IT approval likely required",
+          "Security/legal approval partly defined",
+          "Approval path is mostly clear",
+          "Approval workflow is procurement-ready"
+        ]
+      },
+      {
+        "n": 46,
+        "t": "pain",
+        "q": "Which vendor security issue would be a deal-breaker?",
+        "o": [
+          "No clear data policy",
+          "Weak encryption",
+          "No audit logs",
+          "Unclear subprocessors",
+          "Poor access controls",
+          "No compliance documentation",
+          "Weak incident response",
+          "No data deletion terms"
+        ]
+      },
+      {
+        "n": 47,
+        "t": "aspiration",
+        "q": "Which mitigation would most reduce implementation risk?",
+        "o": [
+          "Security review checklist",
+          "Data handling policy",
+          "Access-control design",
+          "Vendor due diligence",
+          "Pilot environment",
+          "Human-in-the-loop controls",
+          "Audit trail requirements",
+          "Legal review of terms"
+        ]
+      },
+      {
+        "n": 48,
+        "t": "progression",
+        "q": "How prepared is the organisation to govern responsible AI use?",
+        "o": [
+          "No policy exists",
+          "Informal caution only",
+          "Basic guidance discussed",
+          "Policy drafting has started",
+          "Responsible AI rules are partly defined",
+          "Responsible AI governance is ready"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "Technology Stack & Integration Readiness",
+    "questions": [
+      {
+        "n": 49,
+        "t": "progression",
+        "q": "How clearly is the current technology stack mapped for vendor scoping?",
+        "o": [
+          "Not mapped",
+          "Known informally",
+          "Key systems listed",
+          "Basic system map exists",
+          "Integration points are identified",
+          "Technology map is vendor-ready"
+        ]
+      },
+      {
+        "n": 50,
+        "t": "pain",
+        "q": "Which integration issue could most affect implementation timeline?",
+        "o": [
+          "Limited APIs",
+          "Legacy systems",
+          "Poor data quality",
+          "Complex authentication",
+          "Vendor dependency",
+          "Manual workarounds",
+          "Insufficient IT capacity",
+          "Unclear system ownership"
+        ]
+      },
+      {
+        "n": 51,
+        "t": "aspiration",
+        "q": "Which technical capability should vendors demonstrate clearly?",
+        "o": [
+          "API integration",
+          "Data extraction",
+          "Workflow automation",
+          "Security controls",
+          "User permissions",
+          "Reporting dashboards",
+          "Scalability",
+          "Admin management"
+        ]
+      },
+      {
+        "n": 52,
+        "t": "progression",
+        "q": "How ready is IT to support implementation within 60–120 days?",
+        "o": [
+          "Not ready",
+          "Capacity uncertain",
+          "Basic support possible",
+          "IT involvement is likely",
+          "IT support is planned",
+          "IT is implementation-ready"
+        ]
+      },
+      {
+        "n": 53,
+        "t": "pain",
+        "q": "What technical limitation could weaken vendor proposals?",
+        "o": [
+          "No clean data source",
+          "Disconnected systems",
+          "Limited documentation",
+          "Unclear architecture",
+          "Security restrictions",
+          "Low automation maturity",
+          "Poor reporting tools",
+          "Manual approval paths"
+        ]
+      },
+      {
+        "n": 54,
+        "t": "aspiration",
+        "q": "Which system outcome should implementation prioritise?",
+        "o": [
+          "Seamless workflow integration",
+          "Reliable reporting",
+          "Reduced manual handoffs",
+          "Better data visibility",
+          "Scalable architecture",
+          "Secure access control",
+          "Automated task routing",
+          "Lower support burden"
+        ]
+      },
+      {
+        "n": 55,
+        "t": "progression",
+        "q": "How prepared is the organisation to provide vendors with technical information?",
+        "o": [
+          "Not prepared",
+          "Information is scattered",
+          "Some system details exist",
+          "IT can provide basic information",
+          "Technical requirements are mostly known",
+          "Technical pack is vendor-ready"
+        ]
+      },
+      {
+        "n": 56,
+        "t": "pain",
+        "q": "Which technology risk should appear in the implementation risk register?",
+        "o": [
+          "Integration failure",
+          "Data migration issues",
+          "Security gaps",
+          "System downtime",
+          "Poor user experience",
+          "Vendor platform limitations",
+          "Reporting inaccuracies",
+          "Support dependency"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "Change Management & Organisational Adoption",
+    "questions": [
+      {
+        "n": 57,
+        "t": "progression",
+        "q": "How ready are impacted teams to adopt an AI-enabled workflow?",
+        "o": [
+          "Not ready",
+          "Likely resistant",
+          "Mixed readiness",
+          "Cautiously open",
+          "Mostly ready with support",
+          "Ready for structured rollout"
+        ]
+      },
+      {
+        "n": 58,
+        "t": "pain",
+        "q": "Which adoption issue could reduce ROI after implementation?",
+        "o": [
+          "Low usage",
+          "Fear of job impact",
+          "Insufficient training",
+          "Poor communication",
+          "Manager resistance",
+          "Workflow confusion",
+          "Change fatigue",
+          "Lack of incentives"
+        ]
+      },
+      {
+        "n": 59,
+        "t": "aspiration",
+        "q": "Which change-management asset would be most useful?",
+        "o": [
+          "Stakeholder map",
+          "Communication plan",
+          "Training plan",
+          "Role-impact analysis",
+          "Adoption KPI dashboard",
+          "Manager briefing pack",
+          "User feedback loop",
+          "Go-live support plan"
+        ]
+      },
+      {
+        "n": 60,
+        "t": "progression",
+        "q": "How clearly are impacted roles and responsibilities understood?",
+        "o": [
+          "Not understood",
+          "Only broadly understood",
+          "Some role impacts known",
+          "Role changes are being mapped",
+          "Role impacts are mostly clear",
+          "Role transition plan is ready"
+        ]
+      },
+      {
+        "n": 61,
+        "t": "pain",
+        "q": "Which stakeholder group requires the most careful engagement?",
+        "o": [
+          "Executive leadership",
+          "Middle managers",
+          "Frontline users",
+          "IT/security",
+          "Finance/procurement",
+          "Legal/compliance",
+          "Customer-facing teams",
+          "External partners"
+        ]
+      },
+      {
+        "n": 62,
+        "t": "aspiration",
+        "q": "What employee outcome should the implementation protect or improve?",
+        "o": [
+          "Reduced repetitive work",
+          "Higher productivity",
+          "Clearer workflows",
+          "Better decision support",
+          "Improved training",
+          "More confidence using AI",
+          "Less manual reporting",
+          "Better service quality"
+        ]
+      },
+      {
+        "n": 63,
+        "t": "progression",
+        "q": "How prepared is management to communicate why the AI initiative is happening?",
+        "o": [
+          "Not prepared",
+          "Message is unclear",
+          "Basic rationale exists",
+          "Leadership narrative is forming",
+          "Communication plan is drafted",
+          "Executive communication is ready"
+        ]
+      },
+      {
+        "n": 64,
+        "t": "pain",
+        "q": "Which change risk should be actively managed during vendor implementation?",
+        "o": [
+          "Resistance to change",
+          "Low adoption",
+          "Process disruption",
+          "Loss of trust",
+          "Training gaps",
+          "Manager inconsistency",
+          "Unrealistic expectations",
+          "Poor feedback handling"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "Implementation Planning & Delivery",
+    "questions": [
+      {
+        "n": 65,
+        "t": "progression",
+        "q": "How ready is the organisation to launch implementation within 60–120 days?",
+        "o": [
+          "Not ready",
+          "Timeline unclear",
+          "Some readiness exists",
+          "Preliminary plan is forming",
+          "Implementation path is mostly clear",
+          "Ready for procurement-to-launch transition"
+        ]
+      },
+      {
+        "n": 66,
+        "t": "pain",
+        "q": "What could most delay implementation after vendor selection?",
+        "o": [
+          "Contracting delays",
+          "IT security review",
+          "Data access issues",
+          "Stakeholder availability",
+          "Scope ambiguity",
+          "Training delays",
+          "Integration complexity",
+          "Budget approval"
+        ]
+      },
+      {
+        "n": 67,
+        "t": "aspiration",
+        "q": "Which implementation deliverable should be prioritised?",
+        "o": [
+          "Full project scope document",
+          "Milestone roadmap",
+          "Vendor onboarding plan",
+          "Risk register",
+          "KPI success framework",
+          "Pilot plan",
+          "Go-live checklist",
+          "Post-launch optimisation plan"
+        ]
+      },
+      {
+        "n": 68,
+        "t": "progression",
+        "q": "How clearly are implementation milestones defined?",
+        "o": [
+          "Not defined",
+          "Broad phases only",
+          "Some milestone thinking exists",
+          "Milestones are being drafted",
+          "Milestones are mostly clear",
+          "Milestone plan is vendor-ready"
+        ]
+      },
+      {
+        "n": 69,
+        "t": "pain",
+        "q": "Which delivery constraint is most important to manage?",
+        "o": [
+          "Timeline pressure",
+          "Limited internal capacity",
+          "Integration complexity",
+          "User availability",
+          "Budget limits",
+          "Vendor availability",
+          "Data readiness",
+          "Approval bottlenecks"
+        ]
+      },
+      {
+        "n": 70,
+        "t": "aspiration",
+        "q": "What should define a successful first 90 days?",
+        "o": [
+          "Vendor selected",
+          "Scope agreed",
+          "Pilot launched",
+          "Core users trained",
+          "KPIs baselined",
+          "Risk register active",
+          "Integration plan approved",
+          "Executive progress report delivered"
+        ]
+      },
+      {
+        "n": 71,
+        "t": "progression",
+        "q": "How prepared is the organisation to run a pilot or phased rollout?",
+        "o": [
+          "Not prepared",
+          "Pilot idea only",
+          "Pilot users not confirmed",
+          "Pilot scope partly defined",
+          "Pilot success criteria drafted",
+          "Pilot plan is ready"
+        ]
+      },
+      {
+        "n": 72,
+        "t": "pain",
+        "q": "Which post-launch issue could undermine project success?",
+        "o": [
+          "Low adoption",
+          "Poor support",
+          "Workflow mismatch",
+          "Unmeasured benefits",
+          "Unresolved exceptions",
+          "Data quality problems",
+          "Vendor responsiveness",
+          "Scope gaps"
+        ]
+      }
+    ]
+  },
+  {
+    "section": "ROI, Procurement & Investment Logic",
+    "questions": [
+      {
+        "n": 73,
+        "t": "progression",
+        "q": "How prepared is the organisation to compare vendor proposals using ROI and payback logic?",
+        "o": [
+          "Not prepared",
+          "Basic cost comparison only",
+          "Some benefit estimates exist",
+          "ROI criteria are being developed",
+          "ROI comparison is mostly structured",
+          "ROI/payback scorecard is ready"
+        ]
+      },
+      {
+        "n": 74,
+        "t": "pain",
+        "q": "Which investment question is hardest to answer today?",
+        "o": [
+          "Expected annual savings",
+          "Payback period",
+          "Implementation cost",
+          "Internal resource cost",
+          "Revenue impact",
+          "Cash-flow impact",
+          "Adoption impact",
+          "Risk-adjusted value"
+        ]
+      },
+      {
+        "n": 75,
+        "t": "aspiration",
+        "q": "Which financial output would be most useful for approval?",
+        "o": [
+          "Weighted vendor scorecard",
+          "Payback-period estimate",
+          "Annual savings estimate",
+          "Cost-benefit summary",
+          "ROI ranking",
+          "Budget range",
+          "Implementation cost breakdown",
+          "Board decision recommendation"
+        ]
+      },
+      {
+        "n": 76,
+        "t": "pain",
+        "q": "Which procurement risk most needs to be controlled?",
+        "o": [
+          "Overpaying",
+          "Buying the wrong tool",
+          "Under-scoped implementation",
+          "Hidden vendor costs",
+          "Weak contract terms",
+          "Poor support commitment",
+          "Unclear exit terms",
+          "Vendor lock-in"
+        ]
+      },
+      {
+        "n": 77,
+        "t": "progression",
+        "q": "How clear is the budget envelope for the implementation?",
+        "o": [
+          "No budget clarity",
+          "Budget being discussed",
+          "Rough range exists",
+          "Budget owner identified",
+          "Budget range is approved in principle",
+          "Budget is ready for vendor proposal review"
+        ]
+      },
+      {
+        "n": 78,
+        "t": "pain",
+        "q": "Which vendor-cost item needs the most scrutiny?",
+        "o": [
+          "Setup fees",
+          "Subscription fees",
+          "Integration costs",
+          "Custom development",
+          "Training costs",
+          "Support fees",
+          "Data migration costs",
+          "Change-request costs"
+        ]
+      },
+      {
+        "n": 79,
+        "t": "aspiration",
+        "q": "What should NovatioAi’s vendor recommendation emphasise most?",
+        "o": [
+          "Best ROI",
+          "Lowest risk",
+          "Fastest implementation",
+          "Best strategic fit",
+          "Best technical fit",
+          "Best commercial value",
+          "Best adoption support",
+          "Best long-term scalability"
+        ]
+      },
+      {
+        "n": 80,
+        "t": "progression",
+        "q": "How ready is the organisation to make a final procurement decision after receiving three proposals?",
+        "o": [
+          "Not ready",
+          "Decision process unclear",
+          "Decision stakeholders known",
+          "Decision criteria partly defined",
+          "Decision meeting can be scheduled",
+          "Decision process is ready"
+        ]
+      }
+    ]
+  }
+];
+let ASSESSMENT = SNAPSHOT;
+const state = {};
+let chart;
+let latestResultsPayload = null;
+
+async function syncFromSheet() {
+  const btn = document.querySelector('.sync-btn');
+  const status = document.getElementById('sync-status');
+  btn.disabled = true; btn.textContent = '↻ Syncing…'; status.textContent = 'Contacting Google Sheets…';
+  const methods = [fetchGviz, fetchViaProxy];
+  for (const method of methods) {
+    try {
+      const data = await method();
+      if (data && data.length && data.some(sec => sec.questions && sec.questions.length)) {
+        ASSESSMENT = data;
+        Object.keys(state).forEach(k => delete state[k]);
+        renderForm();
+        document.getElementById('results').classList.remove('show');
+        latestResultsPayload = null;
+        status.textContent = '✓ Synced at ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+        btn.textContent = '↻ Sync from Sheet'; btn.disabled = false; return;
+      }
+    } catch(e) {}
+  }
+  status.textContent = '⚠ Sheet unreachable — using built-in Launch Package snapshot';
+  btn.textContent = '↻ Sync from Sheet'; btn.disabled = false;
+}
+async function fetchGviz() {
+  const url = `https://docs.google.com/spreadsheets/d/${QUESTION_SHEET_ID}/gviz/tq?tqx=out:json`;
+  const r = await fetch(url, {mode:'cors'});
+  if (!r.ok) throw new Error('gviz failed');
+  const text = await r.text();
+  const json = JSON.parse(text.replace(/^[^{]*/, '').replace(/\);?\s*$/, ''));
+  return parseGviz(json);
+}
+async function fetchViaProxy() {
+  const target = `https://docs.google.com/spreadsheets/d/${QUESTION_SHEET_ID}/export?format=csv`;
+  const url = `https://api.allorigins.win/get?url=${encodeURIComponent(target)}`;
+  const r = await fetch(url);
+  if (!r.ok) throw new Error('proxy failed');
+  const data = await r.json();
+  return parseCSV(data.contents);
+}
+function toTypeCode(raw) { const l=(raw||'').toLowerCase(); if(l.includes('pain')) return 'pain'; if(l.includes('progression')||l.includes('maturity')||l.includes('readiness')) return 'progression'; return 'aspiration'; }
+function parseGviz(gviz) {
+  const cols = gviz.table.cols.map(c => c.label.toLowerCase());
+  const cell = (row,name) => { const i=cols.indexOf(name.toLowerCase()); const c=i>=0?row.c[i]:null; return c && c.v != null ? String(c.v).trim() : ''; };
+  const map = new Map();
+  gviz.table.rows.forEach(row => {
+    const qn=cell(row,'question number'), q=cell(row,'question'), sec=cell(row,'section');
+    if(!qn || !q) return;
+    if(!map.has(sec)) map.set(sec, []);
+    const opts=[]; for(let i=1;i<=9;i++){ const v=cell(row,`option ${i}`); if(v) opts.push(v); }
+    map.get(sec).push({n:+qn,t:toTypeCode(cell(row,'type')),q,o:opts});
+  });
+  return Array.from(map.entries()).map(([section,questions]) => ({section,questions}));
+}
+function parseCSV(text) {
+  const lines=[]; let cur='', inQ=false, row=[];
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(ch==='"') { if(inQ && text[i+1]==='"') {cur+='"'; i++;} else inQ=!inQ; }
+    else if(ch===',' && !inQ) { row.push(cur.trim()); cur=''; }
+    else if((ch==='\n'||ch==='\r') && !inQ) { if(ch==='\r' && text[i+1]==='\n') i++; row.push(cur.trim()); cur=''; if(row.some(c=>c!=='')) lines.push(row); row=[]; }
+    else cur += ch;
+  }
+  if(cur || row.length) { row.push(cur.trim()); lines.push(row); }
+  if(lines.length < 2) return null;
+  const hdr=lines[0].map(h=>h.toLowerCase()); const col=name=>hdr.indexOf(name.toLowerCase()); const map=new Map();
+  lines.slice(1).forEach(row => {
+    const qn=row[col('question number')], q=row[col('question')], sec=row[col('section')];
+    if(!qn || !q) return;
+    if(!map.has(sec)) map.set(sec, []);
+    const opts=[]; for(let i=1;i<=9;i++){ const idx=col(`option ${i}`); const v=idx>=0?row[idx]:''; if(v && v.trim()) opts.push(v.trim()); }
+    map.get(sec).push({n:+qn,t:toTypeCode(row[col('type')]),q,o:opts});
+  });
+  return Array.from(map.entries()).map(([section,questions]) => ({section,questions}));
+}
+function renderForm() {
+  document.getElementById('sections').innerHTML = ASSESSMENT.map((sec,sIdx) => `<section class="section"><div class="section-head"><div class="section-num">Dimension ${String(sIdx+1).padStart(2,'0')}</div><h2 class="section-title">${escapeHtml(sec.section)}</h2></div><div class="section-body">${sec.questions.map(q => `<div class="q"><div class="q-prompt"><span class="q-num">${String(q.n).padStart(2,'0')}.</span><span>${escapeHtml(q.q)}</span><span class="q-tag">${q.t==='pain'?'Risk · multi':q.t==='progression'?'Readiness · single':'Priority · multi'}</span></div><div class="opts" data-qn="${q.n}" data-type="${q.t}">${q.o.map((opt,i) => `<label class="opt" data-i="${i}"><input type="${q.t==='progression'?'radio':'checkbox'}" name="q${q.n}"><span>${escapeHtml(opt)}</span></label>`).join('')}</div></div>`).join('')}</div></section>`).join('');
+  document.querySelectorAll('.opts').forEach(group => {
+    const qn=+group.dataset.qn, type=group.dataset.type;
+    group.querySelectorAll('.opt').forEach(opt => {
+      opt.addEventListener('click', e => {
+        e.preventDefault(); const i=+opt.dataset.i;
+        if(type==='progression') { group.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected')); opt.classList.add('selected'); state[qn]=i; }
+        else { opt.classList.toggle('selected'); if(!state[qn]) state[qn]=new Set(); if(opt.classList.contains('selected')) state[qn].add(i); else state[qn].delete(i); }
+      });
+    });
+  });
+}
+function escapeHtml(str) { return String(str).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+function scoreSection(sec) {
+  let scores=[], pains=[], aspirations=[], maturity=[];
+  sec.questions.forEach(q => {
+    const sel = state[q.n];
+    if(q.t==='pain') { const count=sel?sel.size:0; const readiness=Math.max(0,100-(count/q.o.length)*100); scores.push(readiness); if(sel&&sel.size>0) sel.forEach(i=>pains.push({q:q.q,option:q.o[i]})); }
+    else if(q.t==='progression') { if(sel===undefined) scores.push(50); else { const readiness=(sel/(q.o.length-1))*100; scores.push(readiness); maturity.push({q:q.q,label:q.o[sel],position:sel+1,of:q.o.length}); } }
+    else { if(sel&&sel.size>0) sel.forEach(i=>aspirations.push({q:q.q,option:q.o[i]})); }
+  });
+  const clarity=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):50;
+  return {clarity,pains,aspirations,maturity};
+}
+function getQuestionAnswerMap() {
+  const out={};
+  ASSESSMENT.forEach(sec => sec.questions.forEach(q => {
+    const key = `Q${String(q.n).padStart(2,'0')} - ${q.q}`;
+    const sel = state[q.n];
+    if(q.t==='progression') out[key] = sel === undefined ? '' : q.o[sel];
+    else out[key] = sel && sel.size ? Array.from(sel).map(i=>q.o[i]).join(' | ') : '';
+  }));
+  return out;
+}
+function buildResultsPayload(results, recommendation) {
+  const sorted=[...results].sort((a,b)=>a.clarity-b.clarity), lowest=sorted[0], highest=sorted[sorted.length-1], avg=Math.round(results.reduce((a,b)=>a+b.clarity,0)/results.length);
+  const dimensionScores = results.map(r => ({section:r.section, readiness:r.clarity}));
+  const pressurePoints=[], maturityStance=[], aspirations=[];
+  results.forEach(r => {
+    r.pains.forEach(p => pressurePoints.push({section:r.section, question:p.q, selection:p.option}));
+    r.maturity.forEach(m => maturityStance.push({section:r.section, question:m.q, selection:m.label, position:`${m.position}/${m.of}`}));
+    r.aspirations.forEach(a => aspirations.push({section:r.section, question:a.q, selection:a.option}));
+  });
+  const vendorScorecardFocus = ['Process volume','Labor intensity','Error/rework rate','Cash/revenue impact','Cycle-time impact','Implementation ease','Adoption readiness','Payback period'];
+  const implementationRiskRegister = ['Ownership risk','Scope creep','Data readiness','Integration complexity','Security/compliance review','Vendor lock-in','Adoption risk','KPI baseline gaps','Post-launch benefit tracking'];
+  const row = {
+    'Timestamp': new Date().toISOString(),
+    'Assessment': 'The Launch Package',
+    'Overall Launch Readiness': avg,
+    'Readiness Band': recommendation.readinessBand,
+    'Risk Band': recommendation.riskBand,
+    'Recommended Next Action': recommendation.action,
+    'Lowest Dimension': lowest.section,
+    'Lowest Score': lowest.clarity,
+    'Highest Dimension': highest.section,
+    'Highest Score': highest.clarity,
+    'Dimension Scores JSON': JSON.stringify(dimensionScores),
+    'Pressure Points JSON': JSON.stringify(pressurePoints),
+    'Maturity Stance JSON': JSON.stringify(maturityStance),
+    'Aspirations JSON': JSON.stringify(aspirations),
+    'Vendor Scorecard Focus JSON': JSON.stringify(vendorScorecardFocus),
+    'Implementation Risk Register JSON': JSON.stringify(implementationRiskRegister),
+    ...getQuestionAnswerMap()
+  };
+  return {timestamp: row.Timestamp, assessment: row.Assessment, row, results, dimensionScores, pressurePoints, maturityStance, aspirations, vendorScorecardFocus, implementationRiskRegister};
+}
+function generateResults() {
+  const results=ASSESSMENT.map(sec=>({section:sec.section,...scoreSection(sec)}));
+  const labels=results.map(r=>r.section.replace(' & ',' &\n').replace(', ', ',\n'));
+  const data=results.map(r=>r.clarity);
+  const panel=document.getElementById('results'); panel.classList.add('show');
+  const ctx=document.getElementById('radar').getContext('2d'); if(chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Launch Readiness Score',
+        data,
+        backgroundColor: 'rgba(201,161,74,.22)',
+        borderColor: '#c9a14a',
+        borderWidth: 2,
+        pointBackgroundColor: '#c9a14a',
+        pointBorderColor: '#0b1f3a',
+        pointRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {display: false},
+        tooltip: {
+          backgroundColor: '#0b1f3a',
+          titleColor: '#c9a14a',
+          bodyColor: '#f5efe2',
+          callbacks: {
+            title: items => items[0].label.replace('\n',' '),
+            label: ctx => `Readiness: ${ctx.parsed.r}/100`
+          }
+        }
+      },
+      scales: {
+        r: {
+          min: 0,
+          max: 100,
+          ticks: {stepSize: 25, color: 'rgba(245,239,226,.5)', backdropColor: 'transparent'},
+          grid: {color: 'rgba(245,239,226,.15)'},
+          angleLines: {color: 'rgba(245,239,226,.2)'},
+          pointLabels: {color: '#f5efe2', font: {family: 'DM Sans', size: 10, weight: '500'}}
+        }
+      }
+    }
+  });
+  document.getElementById('text-output').innerHTML=results.map(r=>`<div class="dim"><div class="dim-head"><span class="dim-name">${escapeHtml(r.section)}</span><span class="dim-score">Readiness ${r.clarity}/100</span></div><div class="bar"><span style="width:${r.clarity}%"></span></div>${r.pains.length?`<div style="font-size:12px;color:var(--muted);font-family:'DM Mono';letter-spacing:.1em;text-transform:uppercase">Risk / friction signals</div><ul>${r.pains.map(p=>`<li>${escapeHtml(p.option)}</li>`).join('')}</ul>`:''}${r.maturity.length?`<div style="font-size:12px;color:var(--muted);margin-top:8px;font-family:'DM Mono';letter-spacing:.1em;text-transform:uppercase">Readiness stance</div><ul>${r.maturity.map(m=>`<li>${escapeHtml(m.label)} <span style="color:var(--muted)">(${m.position}/${m.of})</span></li>`).join('')}</ul>`:''}${r.aspirations.length?`<div style="font-size:12px;color:var(--muted);margin-top:8px;font-family:'DM Mono';letter-spacing:.1em;text-transform:uppercase">Priority signals</div><ul>${r.aspirations.map(a=>`<li>${escapeHtml(a.option)}</li>`).join('')}</ul>`:''}${!r.pains.length&&!r.maturity.length&&!r.aspirations.length?`<div class="empty">No selections in this dimension.</div>`:''}</div>`).join('');
+  const sorted=[...results].sort((a,b)=>a.clarity-b.clarity), lowest=sorted[0], highest=sorted[sorted.length-1], avg=Math.round(results.reduce((a,b)=>a+b.clarity,0)/results.length);
+  const readinessBand=avg>=75?'Procurement-ready':avg>=55?'Conditionally ready':'Pre-procurement preparation required';
+  const riskBand=avg>=75?'Low-to-moderate implementation risk':avg>=55?'Moderate implementation risk':'High implementation risk';
+  const action=avg>=75?'Proceed to curated vendor outreach and request three comparable, investment-ready proposals.':avg>=55?'Tighten scope, KPI baselines, governance and risk controls before requesting final proposals.':'Pause vendor procurement until the scope, KPI baseline, ownership and implementation controls are clarified.';
+  const recommendation={readinessBand,riskBand,action};
+  const pressure=sorted.slice(0,3).map(r=>`<li><b>${escapeHtml(r.section)}</b> — readiness ${r.clarity}/100</li>`).join('');
+  const strengths=sorted.slice(-2).reverse().map(r=>`<li><b>${escapeHtml(r.section)}</b> — readiness ${r.clarity}/100</li>`).join('');
+  document.getElementById('headline-insight').innerHTML=`<h4>Launch Package procurement recommendation</h4><p>Overall launch readiness is <b>${avg}/100</b>, indicating <b>${readinessBand}</b>. Current risk posture is <b>${riskBand}</b>. Recommended next action: <b>${action}</b></p><div class="report-grid"><div><h4>Top implementation pressure points</h4><ul>${pressure}</ul></div><div><h4>Strongest launch foundations</h4><ul>${strengths}</ul></div></div><h4>Vendor scorecard focus</h4><p>The side-by-side vendor scorecard should weight process volume, labor intensity, error/rework reduction, cash or revenue impact, cycle-time improvement, implementation ease, adoption readiness and payback period.</p><h4>Implementation risk register focus</h4><p>The risk register should track ownership risk, scope creep, data readiness, integration complexity, security/compliance review, vendor lock-in, adoption risk, KPI baseline gaps and post-launch benefit tracking.</p><h4>Suggested Launch Package outputs</h4><ul><li>Full project scope document for the selected priority use case.</li><li>Three curated vendor proposals with comparable scope, pricing, timeline and assumptions.</li><li>Weighted vendor scorecard with ROI, payback and implementation-risk logic.</li><li>NovatioAi vendor recommendation with decision rationale.</li><li>Implementation risk register and first 60–120 day launch roadmap.</li></ul>`;
+  latestResultsPayload = buildResultsPayload(results, recommendation);
+  document.getElementById('sheet-save-status').innerHTML = RESULTS_WEB_APP_URL ? `Google Sheets save status: report generated. Click <b>Save Results to Google Sheet</b> to append this report to <b>${RESULT_TAB_NAME}</b>.` : `Google Sheets save status: report generated. Add the deployed Apps Script Web App URL to <code>RESULTS_WEB_APP_URL</code>, then click <b>Save Results to Google Sheet</b>.`;
+  document.getElementById('results-meta').textContent='Generated '+new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+  setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+async function saveLatestResultsToSheet() {
+  const status=document.getElementById('sheet-save-status');
+  if(!latestResultsPayload) { status.innerHTML='Google Sheets save status: <b>generate the report first</b>.'; return; }
+  if(!RESULTS_WEB_APP_URL || RESULTS_WEB_APP_URL.trim()==='') { status.innerHTML=`Google Sheets save status: <b>not connected yet</b>. This file targets the spreadsheet ID <code>${RESULTS_SHEET_ID}</code> and tab <b>${RESULT_TAB_NAME}</b>, but Google Sheets needs an Apps Script Web App URL to accept browser row inserts. Use the setup note at the top of the file, then paste the deployed URL into <code>RESULTS_WEB_APP_URL</code>.`; return; }
+  status.innerHTML='Google Sheets save status: saving row…';
+  try { await fetch(RESULTS_WEB_APP_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(latestResultsPayload)}); status.innerHTML=`Google Sheets save status: <b>submitted</b>. Check the <b>${RESULT_TAB_NAME}</b> tab in the Assessment Results sheet.`; } catch(err) { status.innerHTML=`Google Sheets save status: <b>failed</b>. ${err.message || err}`; }
+}
+function downloadResultsCSV() {
+  if(!latestResultsPayload) { document.getElementById('sheet-save-status').innerHTML='CSV export status: <b>generate the report first</b>.'; return; }
+  const row=latestResultsPayload.row;
+  const esc=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  const csv=RESULT_HEADERS.map(esc).join(',')+'
+'+RESULT_HEADERS.map(h=>esc(row[h]||'')).join(',');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`launch-package-results-${new Date().toISOString().slice(0,10)}.csv`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+function resetAll() {
+  Object.keys(state).forEach(k=>delete state[k]);
+  document.querySelectorAll('.opt.selected').forEach(o=>o.classList.remove('selected'));
+  document.getElementById('results').classList.remove('show');
+  latestResultsPayload=null;
+  const saveStatus=document.getElementById('sheet-save-status'); if(saveStatus) saveStatus.textContent='Google Sheets save status: waiting for report generation.';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+renderForm();
+
+// Boot immediately from the built-in Launch Package snapshot, then allow optional Google Sheets sync.
+function bootLaunchPackageAssessment() {
+  if (!ASSESSMENT || !ASSESSMENT.length) {
+    ASSESSMENT = SNAPSHOT;
+  }
+  renderForm();
+  const status = document.getElementById('sync-status');
+  if (status) status.textContent = `Built-in Launch Package snapshot loaded · ${ASSESSMENT.reduce((sum, sec) => sum + sec.questions.length, 0)} questions · click to fetch live updates`;
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootLaunchPackageAssessment);
+} else {
+  bootLaunchPackageAssessment();
+}
+
+</script>
+</body>
+</html>
