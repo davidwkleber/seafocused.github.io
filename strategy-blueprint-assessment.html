@@ -189,7 +189,7 @@
 
 <header>
   <div class="wrap">
-    <div class="brand">NOVATIO<b>AI</b> · BANGKOK</div>
+    <div class="brand">NOVATIO<b>AI</b> · BANGKOK/DENMARK</div>
     <div class="eyebrow">The Strategy Blueprint</div>
     <h1>Executive AI <em>Strategy Blueprint</em> Assessment</h1>
     <p class="lead">A structured advisory diagnostic across ten dimensions of AI strategy, execution readiness, governance, change management, ROI alignment and future positioning. Complete the assessment and generate a blueprint profile — visual and written — to anchor the executive and board-level conversation.</p>
@@ -260,7 +260,7 @@ const SHEET_ID = '1-6gsPvbmqpgUgl1e5PTF6R4iY8kMf_MHM1OWv3CvlsM'; // Strategy Blu
 
 const RESULTS_SHEET_ID = '1s8LT-x8HnDN4QbLqAq_4iRmv6aG_AqB_R_mpDN-0-7w';
 const RESULTS_TAB_NAME = 'Strategy Blueprint Results';
-const RESULTS_WEB_APP_URL = ''; // Paste your deployed Google Apps Script Web App URL here.
+const RESULTS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxiX3B99hnGTS_v7BO2iFOVNGO2nu16tb__N8Uj6GZFPuN3Q_hHgMcP1s5b4Fj3CbVE_A/exec'; // Paste your deployed Google Apps Script Web App URL here.
 let latestResultsPayload = null;
 
 /* ==============================================================
@@ -1504,32 +1504,70 @@ function buildResultsPayload(results) {
   const lowest = sorted[0];
   const highest = sorted[sorted.length - 1];
   const avg = Math.round(results.reduce((a,b) => a + b.clarity, 0) / results.length);
-  const answers = [];
-  ASSESSMENT.forEach(sec => sec.questions.forEach(q => answers.push(selectedAnswersForQuestion(q))));
+
+  const dimensionScores = results.map(r => ({section: r.section, score: r.clarity}));
+  const pressurePoints = [];
+  const maturityStance = [];
+  const aspirations = [];
+
+  results.forEach(r => {
+    r.pains.forEach(p => pressurePoints.push({
+      section: r.section,
+      question: p.q,
+      selection: p.option
+    }));
+    r.maturity.forEach(m => maturityStance.push({
+      section: r.section,
+      question: m.q,
+      selection: m.label,
+      maturityPosition: `${m.position}/${m.of}`
+    }));
+    r.aspirations.forEach(a => aspirations.push({
+      section: r.section,
+      question: a.q,
+      selection: a.option
+    }));
+  });
+
+  const row = {
+    "Timestamp": new Date().toISOString(),
+    "Assessment Name": "The Strategy Blueprint",
+    "Respondent Name": "",
+    "Respondent Email": "",
+    "Company": "",
+    "Overall Readiness Score": avg,
+    "Lowest Dimension": lowest.section,
+    "Lowest Dimension Score": lowest.clarity,
+    "Highest Dimension": highest.section,
+    "Highest Dimension Score": highest.clarity,
+    "Dimension Scores JSON": JSON.stringify(dimensionScores),
+    "Pressure Points JSON": JSON.stringify(pressurePoints),
+    "Maturity Stance JSON": JSON.stringify(maturityStance),
+    "Aspirations JSON": JSON.stringify(aspirations)
+  };
+
+  ASSESSMENT.forEach(sec => sec.questions.forEach(q => {
+    const key = `Q${String(q.n).padStart(2,'0')} - ${q.q}`;
+    row[key] = selectedAnswersForQuestion(q);
+  }));
+
   return {
-    tabName: RESULTS_TAB_NAME,
-    row: [
-      new Date().toISOString(),
-      'The Strategy Blueprint',
-      '',
-      '',
-      '',
-      avg,
-      lowest.section,
-      lowest.clarity,
-      highest.section,
-      highest.clarity,
-      ...answers
-    ],
-    summary: {
-      assessment: 'The Strategy Blueprint',
-      overallReadiness: avg,
-      lowestDimension: lowest.section,
-      lowestScore: lowest.clarity,
-      highestDimension: highest.section,
-      highestScore: highest.clarity,
-      dimensionScores: results.map(r => ({section:r.section, score:r.clarity}))
-    }
+    tabName: "Strategy Blueprint Results",
+    assessmentType: "strategy",
+    row,
+
+    timestamp: row["Timestamp"],
+    assessment: "The Strategy Blueprint",
+    assessmentName: "The Strategy Blueprint",
+    overallReadiness: avg,
+    lowestDimension: lowest.section,
+    lowestScore: lowest.clarity,
+    highestDimension: highest.section,
+    highestScore: highest.clarity,
+    dimensionScores,
+    pressurePoints,
+    maturityStance,
+    aspirations
   };
 }
 
@@ -1562,11 +1600,13 @@ function downloadResultsCSV() {
     document.getElementById('sheet-save-status').innerHTML = 'CSV export status: <b>generate the report first</b>.';
     return;
   }
+
+  const rowObject = latestResultsPayload.row || {};
+  const headers = Object.keys(rowObject);
+  const row = headers.map(h => rowObject[h]);
+
   const esc = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
-  const questionHeaders = [];
-  ASSESSMENT.forEach(sec => sec.questions.forEach(q => questionHeaders.push(`Q${String(q.n).padStart(2,'0')} - ${q.q}`)));
-  const headers = ['Timestamp','Assessment Name','Respondent Name','Respondent Email','Company','Overall Readiness Score','Lowest Dimension','Lowest Dimension Score','Highest Dimension','Highest Dimension Score', ...questionHeaders];
-  const csv = headers.map(esc).join(',') + '\n' + latestResultsPayload.row.map(esc).join(',');
+  const csv = headers.map(esc).join(',') + '\n' + row.map(esc).join(',');
   const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
