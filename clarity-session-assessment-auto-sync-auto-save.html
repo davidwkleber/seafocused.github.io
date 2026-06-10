@@ -1,0 +1,968 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>The Clarity Session v3 · NovatioAi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js">
+async function bootAssessment() {
+  renderForm();
+  try {
+    await syncFromSheet();
+  } catch (e) {
+    const status = document.getElementById('sync-status');
+    if (status) status.textContent = '⚠ Sheet unreachable — using built-in data';
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootAssessment);
+} else {
+  bootAssessment();
+}
+
+</script>
+<style>
+  :root{
+    --navy:#0b1f3a;
+    --navy-2:#142a4a;
+    --navy-soft:#1b3560;
+    --gold:#c9a14a;
+    --gold-soft:#e2c98a;
+    --cream:#f5efe2;
+    --paper:#fbf8f1;
+    --ink:#0b1f3a;
+    --muted:#6b6657;
+    --line:rgba(11,31,58,0.12);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:400;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--gold)}
+
+  /* HEADER */
+  header{
+    background:var(--navy);
+    color:var(--cream);
+    padding:48px 32px 56px;
+    border-bottom:1px solid rgba(201,161,74,0.25);
+    position:relative;
+    overflow:hidden;
+  }
+  header::after{
+    content:"";position:absolute;inset:auto 0 0 0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)
+  }
+  .wrap{max-width:1120px;margin:0 auto}
+  .eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+  h1{font-family:'Playfair Display',serif;font-weight:500;font-size:clamp(34px,4.6vw,54px);line-height:1.05;margin:0 0 14px;color:var(--cream)}
+  h1 em{font-style:italic;color:var(--gold-soft);font-weight:400}
+  .lead{max-width:680px;color:rgba(245,239,226,.78);font-size:16px}
+  .brand{
+    position:absolute;top:24px;right:32px;
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:rgba(245,239,226,.55)
+  }
+  .brand b{color:var(--gold);font-weight:500}
+
+  /* SYNC BAR */
+  .sync-bar{
+    background:var(--navy-2);
+    padding:9px 32px;
+    display:flex;align-items:center;gap:14px;
+    font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+    color:rgba(245,239,226,.45);
+    border-bottom:1px solid rgba(201,161,74,.12);
+  }
+  .sync-bar b{color:var(--gold-soft);font-weight:500}
+  #sync-status{margin-left:8px;color:rgba(245,239,226,.35)}
+  .sync-btn{
+    margin-left:auto;padding:5px 13px;
+    background:transparent;border:1px solid rgba(201,161,74,.35);border-radius:2px;
+    color:var(--gold);font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;
+    cursor:pointer;transition:.15s;
+  }
+  .sync-btn:hover{background:rgba(201,161,74,.12)}
+  .sync-btn:disabled{opacity:.35;cursor:default}
+
+  /* MAIN */
+  main{padding:48px 32px 64px}
+  .section{margin:0 0 56px;border:1px solid var(--line);background:#fff;border-radius:2px;overflow:hidden}
+  .section-head{
+    display:flex;align-items:baseline;gap:18px;
+    padding:22px 28px;background:linear-gradient(180deg,#fff,#fbf6e9);
+    border-bottom:1px solid var(--line);
+  }
+  .section-num{
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;
+    color:var(--gold);text-transform:uppercase;
+  }
+  .section-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:500;margin:0}
+  .section-body{padding:22px 28px}
+
+  .q{padding:18px 0;border-top:1px dashed var(--line)}
+  .q:first-child{border-top:none}
+  .q-prompt{
+    display:flex;gap:12px;align-items:baseline;
+    font-size:15.5px;color:var(--navy);margin-bottom:12px;font-weight:500
+  }
+  .q-num{
+    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;
+    color:var(--gold);min-width:32px;
+  }
+  .q-tag{
+    font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--muted);
+    border:1px solid var(--line);padding:2px 8px;border-radius:99px;margin-left:auto
+  }
+  .opts{display:flex;flex-wrap:wrap;gap:8px;padding-left:44px}
+  .opt{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:8px 14px;border:1px solid var(--line);border-radius:999px;
+    background:#fff;cursor:pointer;font-size:13.5px;color:var(--navy);
+    transition:.15s ease all;user-select:none
+  }
+  .opt:hover{border-color:var(--gold);background:#fdf7e6}
+  .opt.selected{background:var(--navy);color:var(--cream);border-color:var(--navy)}
+  .opt input{display:none}
+
+  /* SUBMIT */
+  .submit-row{
+    position:sticky;bottom:16px;z-index:5;
+    display:flex;justify-content:center;gap:12px;flex-wrap:wrap;
+    margin:32px auto 0;
+  }
+  .btn{
+    font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;
+    padding:14px 28px;border:1px solid var(--navy);border-radius:2px;
+    background:var(--navy);color:var(--cream);cursor:pointer;letter-spacing:.04em;
+    transition:.18s ease all;box-shadow:0 10px 30px -12px rgba(11,31,58,.45)
+  }
+  .btn:hover{background:var(--navy-soft);transform:translateY(-1px)}
+  .btn.ghost{background:transparent;color:var(--navy);box-shadow:none}
+  .btn.ghost:hover{background:var(--navy);color:var(--cream)}
+  .btn.gold{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+  .btn.gold:hover{background:#b6913f}
+
+  /* RESULTS */
+  #results{display:none;margin-top:48px;border-top:2px solid var(--navy);padding-top:48px}
+  #results.show{display:block}
+  .results-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px}
+  .results-head h2{font-family:'Playfair Display',serif;font-weight:500;font-size:36px;margin:0}
+  .results-head .meta{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+
+  .results-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:32px}
+  @media (max-width:900px){.results-grid{grid-template-columns:1fr}}
+
+  .chart-card{
+    background:var(--navy);border-radius:2px;padding:28px;
+    color:var(--cream);position:relative;overflow:hidden
+  }
+  .chart-card::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(60% 40% at 50% 0%,rgba(201,161,74,.18),transparent 70%);pointer-events:none
+  }
+  .chart-card h3{font-family:'Playfair Display',serif;font-weight:500;font-size:20px;margin:0 0 4px;color:var(--cream)}
+  .chart-card .sub{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+  .chart-wrap{position:relative;aspect-ratio:1/1;width:100%;max-width:520px;margin:0 auto}
+
+  .text-card{background:#fff;border:1px solid var(--line);padding:28px;border-radius:2px}
+  .text-card h3{font-family:'Playfair Display',serif;font-weight:500;font-size:20px;margin:0 0 4px}
+  .text-card .sub{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+
+  .dim{padding:14px 0;border-top:1px dashed var(--line)}
+  .dim:first-of-type{border-top:none;padding-top:0}
+  .dim-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px}
+  .dim-name{font-weight:500;font-size:15px}
+  .dim-score{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.1em;color:var(--navy)}
+  .bar{height:5px;background:var(--cream);border-radius:99px;overflow:hidden;margin:6px 0 10px}
+  .bar > span{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--navy));transition:width .9s ease}
+  .dim ul{margin:6px 0 0;padding:0 0 0 18px;font-size:13.5px;color:var(--navy)}
+  .dim ul li{margin:3px 0}
+  .dim .empty{font-size:13px;color:var(--muted);font-style:italic}
+
+  .insight{
+    margin-top:32px;padding:22px 24px;background:var(--cream);
+    border-left:3px solid var(--gold);border-radius:0 2px 2px 0
+  }
+  .insight h4{font-family:'Playfair Display',serif;font-weight:500;font-size:18px;margin:0 0 8px}
+  .insight p{margin:0;color:var(--navy);font-size:14.5px}
+
+  footer{padding:32px;text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;border-top:1px solid var(--line)}
+  footer b{color:var(--gold);font-weight:500}
+
+  .sheet-status{margin-top:14px;padding:12px 14px;border:1px solid var(--line);background:#fff;border-left:3px solid var(--gold);font-size:13px;color:var(--navy)}
+  .sheet-status b{color:var(--navy)}
+  .sheet-status code{font-family:'DM Mono',monospace;font-size:11px;color:var(--gold)}
+  .setup-note{margin:18px 0 0;padding:14px 16px;background:rgba(201,161,74,.10);border:1px solid rgba(201,161,74,.28);font-size:13px;color:rgba(245,239,226,.78)}
+  .setup-note b{color:var(--gold-soft)}
+  .setup-note code{color:var(--gold-soft);font-family:'DM Mono',monospace;font-size:11px}
+
+
+  .respondent-card{
+    margin:0 0 28px;
+    padding:22px 28px;
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:2px;
+  }
+  .respondent-card label{
+    display:block;
+    font-family:'DM Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:8px;
+  }
+  .respondent-card input{
+    width:100%;
+    max-width:520px;
+    padding:13px 14px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    font-family:'DM Sans',sans-serif;
+    font-size:15px;
+    color:var(--navy);
+    background:#fff;
+  }
+  .respondent-card .hint{
+    margin-top:8px;
+    font-size:13px;
+    color:var(--muted);
+  }
+
+  @media print{
+    .submit-row,.sync-bar,.opt:not(.selected){display:none}
+    header{break-inside:avoid}
+    .section{break-inside:avoid}
+    #results{break-before:page}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">NOVATIO<b>AI</b> · BANGKOK/DENMARK</div>
+    <div class="eyebrow">The Clarity Session</div>
+    <h1>Executive Strategic <em>Clarity</em> Assessment</h1>
+    <p class="lead">A structured diagnostic across eight dimensions of strategic, operational and AI readiness. Complete the assessment and generate a clarity profile — visual and written — to anchor the executive conversation.</p>
+</div>
+</header>
+
+<div class="sync-bar">
+  <span>Source: <b>Google Sheets</b></span>
+  <span id="sync-status">Built-in snapshot · click to fetch live updates</span>
+  <button class="sync-btn" onclick="syncFromSheet()">↻ Sync from Sheet</button>
+</div>
+
+<main class="wrap" id="form-area">
+
+  <div class="respondent-card">
+    <label for="respondent-name">Respondent / Company Name</label>
+    <input id="respondent-name" name="respondent-name" type="text" placeholder="Enter company or respondent name" autocomplete="organization">
+    <div class="hint">This will be saved in the Respondent Name column of the Assessment Results sheet.</div>
+  </div>
+
+  <div id="sections"></div>
+
+  <div class="submit-row">
+    <button class="btn" onclick="generateResults()">Generate Clarity Profile →</button>
+    <button class="btn ghost" onclick="resetAll()">Reset</button>
+  </div>
+
+  <section id="results">
+    <div class="results-head">
+      <div>
+        <div class="eyebrow" style="color:var(--gold)">Output · Clarity Profile</div>
+        <h2>Where the strategic pressure sits</h2>
+      </div>
+      <div class="meta" id="results-meta"></div>
+    </div>
+
+    <div class="results-grid">
+      <div class="chart-card">
+        <h3>Clarity Across Eight Dimensions</h3>
+        <div class="sub">High score = Clarity · Low score = Pressure</div>
+        <div class="chart-wrap"><canvas id="radar"></canvas></div>
+      </div>
+      <div class="text-card">
+        <h3>Diagnostic Summary</h3>
+        <div class="sub">Selections grouped by dimension</div>
+        <div id="text-output"></div>
+      </div>
+    </div>
+
+    <div class="insight" id="headline-insight"></div>
+
+    <div class="sheet-status" id="sheet-save-status">
+      Google Sheets save status: results will be saved automatically after report generation.
+    </div>
+  </section>
+</main>
+
+<footer>NOVATIO<b>AI</b> · The Clarity Session · Vendor-Neutral AI Advisory</footer>
+
+<script>
+/* ==============================================================
+   CONFIGURATION
+   To update questions: edit the SNAPSHOT array below, or click
+   "Sync from Sheet" to pull live data from the Google Sheet.
+   To point at a different sheet: change SHEET_ID.
+   ============================================================== */
+const SHEET_ID = '1B6tqhfQV0tgG4vJlhgq-jRdj9ls7kxsgGC9Xhi33oWU';
+
+const RESULTS_SHEET_ID = '1s8LT-x8HnDN4QbLqAq_4iRmv6aG_AqB_R_mpDN-0-7w';
+const RESULTS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1s8LT-x8HnDN4QbLqAq_4iRmv6aG_AqB_R_mpDN-0-7w/edit?usp=sharing';
+
+/*
+  Browser-only HTML cannot append rows directly to a Google Sheet URL.
+  Google Sheets requires an authenticated API call or a Google Apps Script Web App endpoint.
+
+  Setup:
+  1. Open the target Google Sheet.
+  2. Go to Extensions → Apps Script.
+  3. Paste the backend below.
+  4. Deploy → New deployment → Web app.
+  5. Execute as: Me.
+  6. Who has access: Anyone with the link.
+  7. Copy the Web App URL and paste it into RESULTS_WEB_APP_URL below.
+
+  Apps Script backend:
+
+  const SHEET_ID = '1s8LT-x8HnDN4QbLqAq_4iRmv6aG_AqB_R_mpDN-0-7w';
+  const TAB_NAME = 'Clarity Results';
+
+  function doPost(e) {
+    const ss = SpreadsheetApp.openById(SHEET_ID);
+    let sheet = ss.getSheetByName(TAB_NAME);
+    if (!sheet) {
+      sheet = ss.insertSheet(TAB_NAME);
+      sheet.appendRow([
+        'Timestamp','Assessment','Overall Clarity','Lowest Dimension','Lowest Score',
+        'Highest Dimension','Highest Score','Dimension Scores JSON','Pressure Points JSON',
+        'Maturity Stance JSON','Aspirations JSON','Raw Payload JSON'
+      ]);
+    }
+    const payload = JSON.parse(e.postData.contents);
+    sheet.appendRow([
+      payload.timestamp,payload.assessment,payload.overallClarity,
+      payload.lowestDimension,payload.lowestScore,payload.highestDimension,payload.highestScore,
+      JSON.stringify(payload.dimensionScores),JSON.stringify(payload.pressurePoints),
+      JSON.stringify(payload.maturityStance),JSON.stringify(payload.aspirations),JSON.stringify(payload)
+    ]);
+    return ContentService.createTextOutput(JSON.stringify({status:'ok'})).setMimeType(ContentService.MimeType.JSON);
+  }
+*/
+const RESULTS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxiX3B99hnGTS_v7BO2iFOVNGO2nu16tb__N8Uj6GZFPuN3Q_hHgMcP1s5b4Fj3CbVE_A/exec'; // Paste deployed Google Apps Script Web App URL here.
+let latestResultsPayload = null;
+
+/* ==============================================================
+   SNAPSHOT — sourced from Google Sheet, last exported 2026-05-24
+   https://docs.google.com/spreadsheets/d/1B6tqhfQV0tgG4vJlhgq-jRdj9ls7kxsgGC9Xhi33oWU
+
+   Question types:
+     'pain'        → multi-select; each selection = a pressure point (lowers clarity score)
+     'progression' → single-select; later option = higher maturity (raises clarity score)
+     'aspiration'  → multi-select; informational only, does not affect score
+   ============================================================== */
+const SNAPSHOT = [
+  {
+    section: 'Leadership & Strategic Direction',
+    questions: [
+      {n:1, t:'pain', q:'What is currently creating the greatest strategic pressure on your organisation?',
+       o:['Rising operational costs','Increasing competition','Slower execution speed','Difficulty scaling operations','Changing customer expectations','Innovation pressure','Internal inefficiencies','Unclear future positioning']},
+      {n:2, t:'pain', q:'Which statement best reflects your organisation today?',
+       o:['Operationally overloaded','Strategically unclear','Growing but inefficient','Too dependent on manual work','Siloed across departments','Reactive instead of proactive','Struggling with prioritisation','Difficult to scale consistently']},
+      {n:3, t:'aspiration', q:'Which outcome matters most to leadership within the next 6–18 months?',
+       o:['Increased profitability','Better scalability','Faster execution','Improved customer experience','Better decision-making','Reduced operational complexity','Stronger innovation capability','More efficient workforce utilisation']},
+      {n:4, t:'pain', q:'What is currently slowing executive decision-making the most?',
+       o:['Slow reporting','Fragmented information','Too many meetings','Lack of visibility','Unclear ownership','Manual analysis','Delayed communication','Inconsistent data quality']},
+      {n:5, t:'pain', q:'Which business capability needs the greatest improvement?',
+       o:['Operational efficiency','Internal communication','Forecasting and planning','Customer responsiveness','Strategic execution','Cross-functional collaboration','Knowledge sharing','Reporting and analytics']},
+      {n:6, t:'progression', q:'How aligned is leadership around digital transformation today?',
+       o:['No alignment','Limited alignment','Discussions have started','General agreement exists','Leadership actively supports transformation','AI is part of strategic planning']},
+      {n:7, t:'pain', q:'What currently creates the greatest uncertainty around AI internally?',
+       o:['Business value','ROI','Governance','Vendor selection','Security concerns','Employee adoption','Implementation complexity','Lack of internal competencies']},
+      {n:8, t:'progression', q:'Which statement best reflects leadership\'s current AI understanding?',
+       o:['Very limited understanding','General awareness only','Some practical understanding','Leadership sees relevant opportunities','AI discussions are strategic','AI is already being prioritised']}
+    ]
+  },
+  {
+    section: 'Operational Efficiency & Friction',
+    questions: [
+      {n:9, t:'pain', q:'Which processes currently consume unnecessary time?',
+       o:['Reporting','Administration','Internal approvals','Searching for information','Meetings and coordination','Manual data entry','Customer handling','Follow-up tasks']},
+      {n:10, t:'pain', q:'Where do employees currently experience the most operational frustration?',
+       o:['Too many repetitive tasks','Lack of clarity','Slow systems and workflows','Information silos','Too many manual processes','Duplicate work','Slow approvals','Poor communication']},
+      {n:11, t:'pain', q:'Which departments are under the greatest operational pressure?',
+       o:['Executive management','Operations','Sales','Customer service','HR','Finance','IT','Project delivery']},
+      {n:12, t:'pain', q:'What currently prevents faster execution?',
+       o:['Lack of resources','Too many manual workflows','Poor coordination','Lack of visibility','Leadership misalignment','Technology limitations','Employee overload','Slow decision-making']},
+      {n:13, t:'pain', q:'Which operational issue creates the highest cost today?',
+       o:['Manual processes','Rework and inefficiency','Delayed decisions','Communication breakdowns','Poor forecasting','Operational bottlenecks','Lack of automation','Knowledge dependency on individuals']},
+      {n:14, t:'pain', q:'Which business area is currently hardest to scale?',
+       o:['Sales','Operations','Customer service','Reporting','Project management','Recruitment and onboarding','Internal communication','Knowledge management']},
+      {n:15, t:'pain', q:'Which statement best reflects your reporting environment?',
+       o:['Reporting is slow','Reporting is highly manual','Data is fragmented','Leadership lacks real-time visibility','Different departments use different metrics','Forecasting lacks accuracy','Reports require too much follow-up','Information is difficult to trust consistently']}
+    ]
+  },
+  {
+    section: 'Organisational Readiness & Change',
+    questions: [
+      {n:16, t:'progression', q:'How ready is the organisation for operational change?',
+       o:['Very resistant','Cautious but open','Mixed across departments','Leadership-driven readiness','Generally adaptable','Comfortable with transformation initiatives']},
+      {n:17, t:'pain', q:'Which concern is most important regarding employee impact?',
+       o:['Resistance to change','Fear of job displacement','Lack of competencies','Low adoption rates','Unclear communication','Leadership inconsistency','Change fatigue','Operational disruption']},
+      {n:18, t:'progression', q:'Which statement best reflects organisational collaboration today?',
+       o:['Departments work in silos','Collaboration is inconsistent','Communication is fragmented','Coordination depends on individuals','Cross-functional work is improving','Collaboration is generally strong']},
+      {n:19, t:'pain', q:'What currently limits innovation internally?',
+       o:['Lack of time','Operational overload','Risk aversion','Unclear priorities','Lack of ownership','Insufficient leadership alignment','Too many legacy processes','Lack of experimentation culture']},
+      {n:20, t:'pain', q:'Which internal dependency creates the greatest risk?',
+       o:['Key employees','Manual knowledge transfer','Individual managers','Specific systems','External vendors','Spreadsheet-based processes','Informal workflows','Lack of documentation']}
+    ]
+  },
+  {
+    section: 'Governance & Leadership Structure',
+    questions: [
+      {n:21, t:'progression', q:'How mature is governance around AI and digital initiatives?',
+       o:['No governance exists','Governance discussions are starting','Ownership is unclear','Some policies exist','Governance is partially structured','Governance is becoming formalised']},
+      {n:22, t:'pain', q:'Which governance area creates the most uncertainty?',
+       o:['Accountability','Decision rights','Data handling','Compliance','Security','Vendor dependency','Ethical concerns','Risk management']},
+      {n:23, t:'pain', q:'Which leadership capability requires the most strengthening?',
+       o:['Strategic prioritisation','Change leadership','Digital understanding','Cross-functional alignment','Decision-making speed','Operational visibility','Innovation leadership','Governance oversight']},
+      {n:24, t:'progression', q:'How are strategic initiatives currently prioritised?',
+       o:['Mostly reactive','Department-driven','Leadership-driven but inconsistent','Based on operational urgency','Based on financial pressure','Structured strategic prioritisation exists']},
+      {n:25, t:'pain', q:'What creates the greatest leadership bottleneck today?',
+       o:['Too many operational decisions','Lack of visibility','Slow information flow','Too many dependencies','Resource constraints','Misaligned priorities','Weak accountability','Lack of strategic clarity']}
+    ]
+  },
+  {
+    section: 'AI Opportunity & Value Creation',
+    questions: [
+      {n:26, t:'aspiration', q:'Which AI opportunity appears most valuable today?',
+       o:['Operational automation','Better reporting and analytics','Customer experience improvements','Faster workflows','Internal knowledge access','Better forecasting','Strategic decision support','Innovation acceleration']},
+      {n:27, t:'aspiration', q:'Which function would benefit most from better intelligence and insights?',
+       o:['Executive leadership','Operations','Sales','Finance','Customer service','HR','Marketing','Project delivery']},
+      {n:28, t:'progression', q:'Which statement best reflects your current AI ambition?',
+       o:['We want understanding first','We want clearer opportunities','We want prioritised use cases','We want structured execution','We want scalable implementation','We see AI as strategically critical']},
+      {n:29, t:'aspiration', q:'What would create the fastest measurable business value?',
+       o:['Reduced manual work','Faster reporting','Better customer responsiveness','Better planning accuracy','Improved employee productivity','Faster execution','Better operational visibility','Reduced operational risk']},
+      {n:30, t:'pain', q:'Which competitive risk concerns leadership the most?',
+       o:['Falling behind digitally','Operational inefficiency','Slow innovation','Talent challenges','Customer expectations','Competitor speed','Poor scalability','Weak strategic execution']}
+    ]
+  },
+  {
+    section: 'Executive Clarity & Investment Readiness',
+    questions: [
+      {n:31, t:'pain', q:'What type of clarity is most needed before moving forward?',
+       o:['Business value clarity','Strategic prioritisation','Governance clarity','Risk understanding','Operational impact','Cost versus value','Vendor understanding','Organisational readiness']},
+      {n:32, t:'progression', q:'Which investment mindset best reflects leadership today?',
+       o:['Exploration only','Careful evaluation','Ready for pilots','Ready for prioritised investment','Ready for operational implementation','Ready for strategic transformation']},
+      {n:33, t:'pain', q:'Which factor is most important before approving investment?',
+       o:['Clear ROI','Low operational risk','Leadership alignment','Governance structure','Vendor confidence','Organisational readiness','Clear roadmap','Employee readiness']},
+      {n:34, t:'pain', q:'What would make leadership confident in moving forward?',
+       o:['Strong business case','Clear roadmap','Defined ownership','Reduced complexity','Better understanding of use cases','Governance structure','External advisory support','Executive alignment']},
+      {n:35, t:'pain', q:'Which support area would create the highest value?',
+       o:['Strategic advisory','Operational roadmap development','Governance guidance','Vendor clarification','Change management support','KPI and measurement frameworks','Executive workshops','Business case development']},
+      {n:36, t:'pain', q:'Which risk would have the greatest negative impact if handled poorly?',
+       o:['Failed implementation','Employee resistance','Wrong vendor selection','Security or compliance issues','Lack of adoption','Unrealistic expectations','Operational disruption','Poor strategic prioritisation']}
+    ]
+  },
+  {
+    section: 'Future Readiness & Long-Term Positioning',
+    questions: [
+      {n:37, t:'pain', q:'What is the greatest long-term risk of not evolving operationally?',
+       o:['Reduced competitiveness','Increasing operational costs','Slower execution','Reduced profitability','Customer dissatisfaction','Talent challenges','Innovation stagnation','Leadership losing visibility and control']},
+      {n:38, t:'aspiration', q:'Which future capability is most strategically important?',
+       o:['Faster decision-making','Organisational scalability','Operational automation','Better forecasting','Stronger customer experience','Knowledge-driven operations','Cross-functional agility','Innovation capability']},
+      {n:39, t:'progression', q:'How important is AI expected to become in your industry?',
+       o:['Limited importance','Moderate importance','Important in selected areas','Increasingly important strategically','Critical for competitiveness','Transformational for the industry']},
+      {n:40, t:'aspiration', q:'If this initiative becomes highly successful, what would change most?',
+       o:['Leadership gains better visibility','Operations become more scalable','Employees focus on higher-value work','Customers receive faster service','Decision-making improves significantly','Costs are reduced operationally','Strategic execution accelerates','The organisation becomes more future-ready']}
+    ]
+  },
+  {
+    section: 'Technology Environment & Technical Readiness',
+    questions: [
+      {n:41, t:'progression', q:'Which statement best reflects your organisation\'s current technology environment?',
+       o:['Most processes are still highly manual','We use multiple disconnected systems','Our systems work, but integration is limited','We have several modern cloud-based platforms','We have a relatively structured digital environment','We are already investing in digital transformation initiatives']},
+      {n:42, t:'progression', q:'How is technology development and support currently handled within your organisation?',
+       o:['We do not have dedicated technical resources','We rely primarily on external vendors or freelancers','We have a small internal IT support function','We have internal developers or technical specialists','We combine internal teams with external partners','We have a structured internal technology department']},
+      {n:43, t:'progression', q:'How are your internal technical teams and developers currently using AI?',
+       o:['AI is not currently used within the technical team','Individual developers use AI tools informally','AI is mainly used for coding assistance','AI is used for debugging and troubleshooting','AI supports documentation and technical knowledge sharing','AI is used to improve development speed and productivity','AI is being explored in testing or QA processes','AI is already integrated into parts of the software development workflow','AI is integrated end-to-end in technical operations']}
+    ]
+  }
+];
+
+/* ==============================================================
+   STATE
+   ============================================================== */
+let ASSESSMENT = SNAPSHOT;
+const state = {};
+
+/* ==============================================================
+   LIVE SYNC — optional, progressive enhancement.
+   Tries two CORS-safe methods; if both fail the snapshot stays.
+   Browser security (CORS) may block direct sheet access —
+   the embedded snapshot guarantees the app always works.
+   ============================================================== */
+async function syncFromSheet() {
+  const btn    = document.querySelector('.sync-btn');
+  const status = document.getElementById('sync-status');
+  btn.disabled = true;
+  btn.textContent = '↻ Syncing…';
+  status.textContent = 'Contacting Google Sheets…';
+
+  const methods = [
+    () => fetchGviz(),
+    () => fetchViaProxy()
+  ];
+
+  for (const method of methods) {
+    try {
+      const data = await method();
+      if (data && data.length) {
+        ASSESSMENT = data;
+        Object.keys(state).forEach(k => delete state[k]);
+        renderForm();
+        document.getElementById('results').classList.remove('show');
+        const t = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+        status.textContent = `✓ Synced at ${t}`;
+        btn.textContent = '↻ Sync from Sheet';
+        btn.disabled = false;
+        return;
+      }
+    } catch(e) { /* try next method */ }
+  }
+
+  status.textContent = '⚠ Sheet unreachable — using built-in data';
+  btn.textContent = '↻ Sync from Sheet';
+  btn.disabled = false;
+}
+
+async function fetchGviz() {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+  const r = await fetch(url, {mode:'cors'});
+  if (!r.ok) throw new Error('gviz failed');
+  const text = await r.text();
+  const json = JSON.parse(text.replace(/^[^{]*/, '').replace(/\);?\s*$/, ''));
+  return parseGviz(json);
+}
+
+async function fetchViaProxy() {
+  const target = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
+  const url = `https://api.allorigins.win/get?url=${encodeURIComponent(target)}`;
+  const r = await fetch(url);
+  if (!r.ok) throw new Error('proxy failed');
+  const data = await r.json();
+  return parseCSV(data.contents);
+}
+
+function toTypeCode(raw) {
+  const l = (raw || '').toLowerCase();
+  if (l.includes('pain'))                          return 'pain';
+  if (l.includes('progression') || l.includes('maturity')) return 'progression';
+  return 'aspiration';
+}
+
+function parseGviz(gviz) {
+  const cols = gviz.table.cols.map(c => c.label.toLowerCase());
+  const cell = (row, name) => {
+    const i = cols.indexOf(name.toLowerCase());
+    const c = i >= 0 ? row.c[i] : null;
+    return c && c.v != null ? String(c.v).trim() : '';
+  };
+  const map = new Map();
+  gviz.table.rows.forEach(row => {
+    const qn = cell(row,'question number');
+    const q  = cell(row,'question');
+    const sec = cell(row,'section');
+    if (!qn || !q) return;
+    if (!map.has(sec)) map.set(sec, []);
+    const opts = [];
+    for (let i = 1; i <= 9; i++) { const v = cell(row,`option ${i}`); if (v) opts.push(v); }
+    map.get(sec).push({n:+qn, t:toTypeCode(cell(row,'type')), q, o:opts});
+  });
+  return Array.from(map.entries()).map(([section,questions]) => ({section,questions}));
+}
+
+function parseCSV(text) {
+  const lines = []; let cur = '', inQ = false, row = [];
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === '"') { if (inQ && text[i+1] === '"') { cur += '"'; i++; } else inQ = !inQ; }
+    else if (ch === ',' && !inQ) { row.push(cur.trim()); cur = ''; }
+    else if ((ch === '\n' || ch === '\r') && !inQ) {
+      if (ch === '\r' && text[i+1] === '\n') i++;
+      row.push(cur.trim()); cur = '';
+      if (row.some(c => c !== '')) lines.push(row);
+      row = [];
+    } else cur += ch;
+  }
+  if (cur || row.length) { row.push(cur.trim()); lines.push(row); }
+  if (lines.length < 2) return null;
+  const hdr = lines[0].map(h => h.toLowerCase());
+  const col = name => hdr.indexOf(name.toLowerCase());
+  const map = new Map();
+  lines.slice(1).forEach(row => {
+    const qn = row[col('question number')];
+    const q  = row[col('question')];
+    const sec = row[col('section')];
+    if (!qn || !q) return;
+    if (!map.has(sec)) map.set(sec, []);
+    const opts = [];
+    for (let i = 1; i <= 9; i++) { const v = row[col(`option ${i}`)]; if (v && v.trim()) opts.push(v.trim()); }
+    map.get(sec).push({n:+qn, t:toTypeCode(row[col('type')]), q, o:opts});
+  });
+  return Array.from(map.entries()).map(([section,questions]) => ({section,questions}));
+}
+
+/* ==============================================================
+   RENDER
+   ============================================================== */
+function renderForm() {
+  const root = document.getElementById('sections');
+  root.innerHTML = ASSESSMENT.map((sec, sIdx) => `
+    <section class="section">
+      <div class="section-head">
+        <div class="section-num">Dimension ${String(sIdx+1).padStart(2,'0')}</div>
+        <h2 class="section-title">${sec.section}</h2>
+      </div>
+      <div class="section-body">
+        ${sec.questions.map(q => `
+          <div class="q">
+            <div class="q-prompt">
+              <span class="q-num">${String(q.n).padStart(2,'0')}.</span>
+              <span>${q.q}</span>
+              <span class="q-tag">${q.t === 'pain' ? 'Pressure · multi' : q.t === 'progression' ? 'Maturity · single' : 'Aspiration · multi'}</span>
+            </div>
+            <div class="opts" data-qn="${q.n}" data-type="${q.t}">
+              ${q.o.map((opt, i) => `
+                <label class="opt" data-i="${i}">
+                  <input type="${q.t === 'progression' ? 'radio' : 'checkbox'}" name="q${q.n}" />
+                  <span>${opt}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+  `).join('');
+
+  document.querySelectorAll('.opts').forEach(group => {
+    const qn   = +group.dataset.qn;
+    const type = group.dataset.type;
+    group.querySelectorAll('.opt').forEach(opt => {
+      opt.addEventListener('click', e => {
+        e.preventDefault();
+        const i = +opt.dataset.i;
+        if (type === 'progression') {
+          group.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          state[qn] = i;
+        } else {
+          opt.classList.toggle('selected');
+          if (!state[qn]) state[qn] = new Set();
+          if (opt.classList.contains('selected')) state[qn].add(i);
+          else state[qn].delete(i);
+        }
+      });
+    });
+  });
+}
+
+/* ==============================================================
+   SCORING
+   ============================================================== */
+function scoreSection(sec) {
+  let scores = [], pains = [], aspirations = [], maturity = [];
+  sec.questions.forEach(q => {
+    const sel = state[q.n];
+    if (q.t === 'pain') {
+      const count   = sel ? sel.size : 0;
+      const clarity = Math.max(0, 100 - (count / q.o.length) * 100);
+      scores.push(clarity);
+      if (sel && sel.size > 0) sel.forEach(i => pains.push({q:q.q, option:q.o[i]}));
+    } else if (q.t === 'progression') {
+      if (sel === undefined) { scores.push(50); }
+      else {
+        const clarity = (sel / (q.o.length - 1)) * 100;
+        scores.push(clarity);
+        maturity.push({q:q.q, label:q.o[sel], position:sel+1, of:q.o.length});
+      }
+    } else {
+      if (sel && sel.size > 0) sel.forEach(i => aspirations.push({q:q.q, option:q.o[i]}));
+    }
+  });
+  const clarity = scores.length ? Math.round(scores.reduce((a,b) => a+b, 0) / scores.length) : 50;
+  return {clarity, pains, aspirations, maturity};
+}
+
+/* ==============================================================
+   RESULTS
+   ============================================================== */
+let chart;
+function generateResults() {
+  const results = ASSESSMENT.map(sec => ({section: sec.section, ...scoreSection(sec)}));
+  const labels  = results.map(r => r.section.replace(' & ', ' &\n'));
+  const data    = results.map(r => r.clarity);
+  const panel   = document.getElementById('results');
+  panel.classList.add('show');
+
+  const ctx = document.getElementById('radar').getContext('2d');
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Clarity Score',
+        data,
+        backgroundColor: 'rgba(201,161,74,0.22)',
+        borderColor: '#c9a14a',
+        borderWidth: 2,
+        pointBackgroundColor: '#c9a14a',
+        pointBorderColor: '#0b1f3a',
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {display: false},
+        tooltip: {
+          backgroundColor: '#0b1f3a',
+          titleColor: '#c9a14a',
+          bodyColor: '#f5efe2',
+          titleFont: {family:'DM Mono', size:10},
+          bodyFont: {family:'DM Sans', size:13},
+          padding: 10,
+          callbacks: {
+            title: items => items[0].label.replace('\n',' '),
+            label: ctx  => `Clarity: ${ctx.parsed.r}/100`
+          }
+        }
+      },
+      scales: {
+        r: {
+          min: 0, max: 100,
+          ticks: {stepSize:25, color:'rgba(245,239,226,0.5)', backdropColor:'transparent', font:{family:'DM Mono',size:9}},
+          grid:        {color:'rgba(245,239,226,0.15)'},
+          angleLines:  {color:'rgba(245,239,226,0.2)'},
+          pointLabels: {color:'#f5efe2', font:{family:'DM Sans', size:11, weight:'500'}}
+        }
+      }
+    }
+  });
+
+  document.getElementById('text-output').innerHTML = results.map(r => `
+    <div class="dim">
+      <div class="dim-head">
+        <span class="dim-name">${r.section}</span>
+        <span class="dim-score">Clarity ${r.clarity}/100</span>
+      </div>
+      <div class="bar"><span style="width:${r.clarity}%"></span></div>
+      ${r.pains.length ? `<div style="font-size:12px;color:var(--muted);margin-top:6px;font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase">Pressure points</div>
+        <ul>${r.pains.map(p => `<li>${p.option}</li>`).join('')}</ul>` : ''}
+      ${r.maturity.length ? `<div style="font-size:12px;color:var(--muted);margin-top:8px;font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase">Maturity stance</div>
+        <ul>${r.maturity.map(m => `<li>${m.label} <span style="color:var(--muted)">(${m.position}/${m.of})</span></li>`).join('')}</ul>` : ''}
+      ${r.aspirations.length ? `<div style="font-size:12px;color:var(--muted);margin-top:8px;font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase">Stated aspirations</div>
+        <ul>${r.aspirations.map(a => `<li>${a.option}</li>`).join('')}</ul>` : ''}
+      ${!r.pains.length && !r.maturity.length && !r.aspirations.length ? `<div class="empty">No selections in this dimension.</div>` : ''}
+    </div>
+  `).join('');
+
+  const sorted  = [...results].sort((a,b) => a.clarity - b.clarity);
+  const lowest  = sorted[0];
+  const highest = sorted[sorted.length-1];
+  const avg     = Math.round(results.reduce((a,b) => a + b.clarity, 0) / results.length);
+  document.getElementById('headline-insight').innerHTML = `
+    <h4>Where to focus the executive conversation</h4>
+    <p>Overall clarity sits at <b>${avg}/100</b>. The greatest pressure is in <b>${lowest.section}</b> (${lowest.clarity}/100) — the natural anchor for the next executive session. The most settled dimension is <b>${highest.section}</b> (${highest.clarity}/100), where leadership has the strongest footing to build from.</p>
+  `;
+
+  latestResultsPayload = buildResultsPayload(results);
+  const saveStatus = document.getElementById('sheet-save-status');
+  if (saveStatus) saveStatus.innerHTML = 'Google Sheets save status: report generated. Saving automatically…';
+  saveLatestResultsToSheet();
+
+
+  const today = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+  document.getElementById('results-meta').textContent = `Generated ${today}`;
+  setTimeout(() => panel.scrollIntoView({behavior:'smooth', block:'start'}), 100);
+}
+
+
+
+function getRespondentName() {
+  const el = document.getElementById('respondent-name');
+  return el ? el.value.trim() : '';
+}
+
+function getQuestionAnswerMap() {
+  const out = {};
+  ASSESSMENT.forEach(sec => sec.questions.forEach(q => {
+    const key = `Q${String(q.n).padStart(2,'0')} - ${q.q}`;
+    const sel = state[q.n];
+
+    let answer = '';
+    if (q.t === 'progression') {
+      answer = sel === undefined ? '' : q.o[sel];
+    } else {
+      answer = sel && sel.size
+        ? Array.from(sel).map(i => q.o[i]).join(' | ')
+        : '';
+    }
+
+    out[key] = answer
+      ? `Question: ${q.q}\nAnswer: ${answer}`
+      : `Question: ${q.q}\nAnswer:`;
+  }));
+  return out;
+}
+
+
+function buildResultsPayload(results) {
+  const sorted = [...results].sort((a,b) => a.clarity - b.clarity);
+  const lowest = sorted[0];
+  const highest = sorted[sorted.length - 1];
+  const avg = Math.round(results.reduce((a,b) => a + b.clarity, 0) / results.length);
+
+  const dimensionScores = results.map(r => ({section: r.section, clarity: r.clarity}));
+  const pressurePoints = [], maturityStance = [], aspirations = [];
+
+  results.forEach(r => {
+    r.pains.forEach(p => pressurePoints.push({
+      section: r.section,
+      question: p.q,
+      selection: p.option
+    }));
+    r.maturity.forEach(m => maturityStance.push({
+      section: r.section,
+      question: m.q,
+      selection: m.label,
+      maturityPosition: `${m.position}/${m.of}`
+    }));
+    r.aspirations.forEach(a => aspirations.push({
+      section: r.section,
+      question: a.q,
+      selection: a.option
+    }));
+  });
+
+  const questionAnswers = getQuestionAnswerMap();
+  const respondentName = getRespondentName();
+
+  const row = {
+    "Timestamp": new Date().toISOString(),
+    "Assessment Name": "The Clarity Session",
+    "Respondent Name": respondentName,
+    "Respondent Email": "",
+    "Company": respondentName,
+    "Overall Clarity Score": avg,
+    "Lowest Dimension": lowest.section,
+    "Lowest Dimension Score": lowest.clarity,
+    "Highest Dimension": highest.section,
+    "Highest Dimension Score": highest.clarity,
+    "Dimension Scores JSON": JSON.stringify(dimensionScores),
+    "Pressure Points JSON": JSON.stringify(pressurePoints),
+    "Maturity Stance JSON": JSON.stringify(maturityStance),
+    "Aspirations JSON": JSON.stringify(aspirations),
+    ...questionAnswers
+  };
+
+  return {
+    tabName: "Clarity Results",
+    assessmentType: "clarity",
+    row,
+
+    timestamp: row["Timestamp"],
+    assessment: "The Clarity Session",
+    assessmentName: "The Clarity Session",
+    respondentName,
+    overallClarity: avg,
+    lowestDimension: lowest.section,
+    lowestScore: lowest.clarity,
+    highestDimension: highest.section,
+    highestScore: highest.clarity,
+    dimensionScores,
+    pressurePoints,
+    maturityStance,
+    aspirations,
+    questionAnswers
+  };
+}
+
+async function saveLatestResultsToSheet() {
+  const status = document.getElementById('sheet-save-status');
+  if (!latestResultsPayload) { status.innerHTML = 'Google Sheets save status: <b>generate the report first</b>.'; return; }
+  if (!RESULTS_WEB_APP_URL || RESULTS_WEB_APP_URL.trim() === '') {
+    status.innerHTML = `Google Sheets save status: <b>not connected yet</b>. This HTML has the target Sheet ID embedded, but Google Sheets needs an Apps Script Web App URL to accept row inserts from a browser. Use the setup note at the top of the file, then paste the deployed URL into <code>RESULTS_WEB_APP_URL</code>.`;
+    return;
+  }
+  status.innerHTML = 'Google Sheets save status: saving row…';
+  try {
+    await fetch(RESULTS_WEB_APP_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(latestResultsPayload)});
+    status.innerHTML = `Google Sheets save status: <b>saved automatically</b> to the “Clarity Results” worksheet. The row includes question text and answers.`;
+  } catch (err) { status.innerHTML = `Google Sheets save status: <b>failed</b>. ${err.message || err}`; }
+}
+
+function downloadResultsCSV() {
+  if (!latestResultsPayload) {
+    document.getElementById('sheet-save-status').innerHTML = 'CSV export status: <b>generate the report first</b>.';
+    return;
+  }
+
+  const rowObject = latestResultsPayload.row || {};
+  const headers = Object.keys(rowObject);
+  const row = headers.map(h => rowObject[h]);
+
+  const esc = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
+  const csv = headers.map(esc).join(',') + '\n' + row.map(esc).join(',');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `clarity-session-results-${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function resetAll() {
+  Object.keys(state).forEach(k => delete state[k]);
+  document.querySelectorAll('.opt.selected').forEach(o => o.classList.remove('selected'));
+  document.getElementById('results').classList.remove('show');
+  latestResultsPayload = null;
+  const saveStatus = document.getElementById('sheet-save-status');
+  if (saveStatus) saveStatus.textContent = 'Google Sheets save status: results will be saved automatically after report generation.';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+
+async function bootAssessment() {
+  renderForm();
+  try {
+    await syncFromSheet();
+  } catch (e) {
+    const status = document.getElementById('sync-status');
+    if (status) status.textContent = '⚠ Sheet unreachable — using built-in data';
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootAssessment);
+} else {
+  bootAssessment();
+}
+
+</script>
+</body>
+</html>
