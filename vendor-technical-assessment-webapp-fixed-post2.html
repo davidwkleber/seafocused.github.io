@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vendor Technical Assessment · NovatioAi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0b1f3a;--navy-2:#142a4a;--gold:#c9a14a;--gold-soft:#e2c98a;--cream:#f5efe2;--paper:#fbf8f1;--line:rgba(11,31,58,.12);--muted:#6b6657;--orange:#d95f02}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--navy);font-family:'DM Sans',sans-serif;line-height:1.55}
+header{background:var(--navy);color:var(--cream);padding:48px 32px 56px;position:relative}.wrap{max-width:1120px;margin:0 auto}
+.brand{position:absolute;top:24px;right:32px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;color:rgba(245,239,226,.55)}.brand b{color:var(--gold)}
+.eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+h1{font-family:'Playfair Display',serif;font-weight:500;font-size:clamp(34px,4.6vw,54px);line-height:1.05;margin:0 0 14px;color:var(--cream)}h1 em{color:var(--gold-soft);font-style:italic}
+.lead{max-width:800px;color:rgba(245,239,226,.78);font-size:16px}
+.sync-bar{background:var(--navy-2);padding:9px 32px;display:flex;gap:14px;align-items:center;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(245,239,226,.45)}.sync-bar b{color:var(--gold-soft)}#sync-status{color:rgba(245,239,226,.45)}
+main{padding:48px 32px 64px}.respondent-card{margin:0 0 28px;padding:22px 28px;border:1px solid var(--line);background:#fff;border-radius:2px}.respondent-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:800px){.respondent-grid{grid-template-columns:1fr}}
+label.meta-label{display:block;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+input,textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--navy);background:#fff}textarea{min-height:120px;resize:vertical}
+.hint{margin-top:8px;font-size:13px;color:var(--muted)}.section{margin:0 0 42px;border:1px solid var(--line);background:white}.section-head{display:flex;gap:18px;align-items:baseline;padding:22px 28px;background:linear-gradient(180deg,#fff,#fbf6e9);border-bottom:1px solid var(--line)}.section-num{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase}.section-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:500;margin:0}.section-body{padding:22px 28px}
+.q{padding:20px 0;border-top:1px dashed var(--line)}.q:first-child{border-top:none}.q-prompt{display:flex;gap:12px;align-items:baseline;font-size:15.5px;margin-bottom:10px;font-weight:700}.q-num{font-family:'DM Mono',monospace;color:var(--orange);min-width:32px}.why{background:#f4f2ee;border-left:3px solid var(--gold);padding:10px 12px;margin:10px 0 12px;color:var(--muted);font-size:13px}.why b{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--navy)}
+.submit-row{position:sticky;bottom:16px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:32px auto 0;z-index:5}.btn{font-weight:500;font-size:14px;padding:14px 28px;border:1px solid var(--navy);background:var(--navy);color:var(--cream);cursor:pointer}.btn.ghost{background:transparent;color:var(--navy)}
+#results{display:none;margin-top:48px;border-top:2px solid var(--navy);padding-top:48px}#results.show{display:block}.results-head{display:flex;justify-content:space-between;gap:16px;margin-bottom:24px}.results-head h2{font-family:'Playfair Display',serif;font-size:36px;margin:0}.meta{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}.result-card{background:#fff;border:1px solid var(--line);padding:28px}.score{font-family:'Playfair Display',serif;font-size:44px;color:var(--navy);margin:0}.status-list{margin:14px 0 0;padding-left:20px}.sheet-status{margin-top:14px;padding:12px 14px;border:1px solid var(--line);background:#fff;border-left:3px solid var(--gold);font-size:13px}
+footer{padding:32px;text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;border-top:1px solid var(--line)}footer b{color:var(--gold)}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="brand">NOVATIO<b>AI</b> · BANGKOK/DENMARK</div><div class="eyebrow">Vendor Technical Assessment</div><h1>Certified Partner <em>Qualification</em> Assessment</h1><p class="lead">A structured technical qualification assessment for prospective NovatioAI partner vendors. Questions are grouped by technical capability, tooling, team structure, security architecture and delivery discipline.</p></div></header>
+<div class="sync-bar"><span>Source: <b>Google Sheets</b></span><span id="sync-status">Loading latest assessment questions…</span></div>
+<main class="wrap" id="form-area">
+<div class="respondent-card"><div class="respondent-grid"><div><label class="meta-label" for="respondent-name">Vendor / Company Name</label><input id="respondent-name" type="text" placeholder="Enter vendor or company name"></div><div><label class="meta-label" for="respondent-email">Contact Email</label><input id="respondent-email" type="email" placeholder="Enter contact email"></div></div><div class="hint">The assessment is saved automatically to the results sheet after the report is generated.</div></div>
+<div id="sections"></div>
+<div class="submit-row"><button class="btn" onclick="generateResults()">Generate Vendor Qualification Report →</button><button class="btn ghost" onclick="resetAll()">Reset</button></div>
+<section id="results"><div class="results-head"><div><div class="eyebrow" style="color:var(--gold)">Output · Qualification Summary</div><h2>Vendor technical readiness profile</h2></div><div class="meta" id="results-meta"></div></div><div class="result-card" id="text-output"></div><div class="sheet-status" id="sheet-save-status">Google Sheets save status: results will be saved automatically after report generation.</div></section>
+</main>
+<footer>NOVATIO<b>AI</b> · Vendor Technical Assessment · Confidential Partner Qualification</footer>
+<script>
+const QUESTION_SHEET_ID = "1lfCqla8KabBeqqGPutfs9LUPxVhRUBwfY5KRrTncWEw";
+const RESULTS_SHEET_ID = "1I6ynQpxm_g-7qQerrEqadT8CMs-GgpJ6Fyj0SuJ8-kA";
+const RESULT_TAB_NAME = "Vendor Technical Assessment Results";
+const RESULT_HEADERS = ["Timestamp", "Assessment Name", "Respondent Name", "Respondent Email", "Company", "Completion Score", "Answered Questions", "Total Questions", "Technical Capability Complete", "Reference Question Complete", "Domains Complete JSON", "Missing Questions JSON", "Q01 - Describe your two most recent live AI deployments — what problem each solved, the model or architecture used, and the current production status.", "Q02 - Which AI models and providers does your team actively work with — and which do you consider your primary stack?", "Q03 - Walk us through how you handle RAG architecture: chunking strategy, embedding model choice, retrieval tuning, and hallucination mitigation.", "Q04 - Do you work with fine-tuning or LoRA adaptation? If so, describe a use case where full fine-tuning was chosen over prompting, and why.", "Q05 - What is your position on local/self-hosted models versus closed-source providers — and how do you advise clients on that decision?", "Q06 - Which workflow automation and orchestration tools does your team use in production? (e.g. n8n, Make.com, LangChain, LlamaIndex, Airflow)", "Q07 - Do you use AI-assisted development tools such as Claude Code, GitHub Copilot, or OpenAI Codex? How are these integrated into your development process?", "Q08 - For generative visual or multimodal projects, which tools does your team work with — e.g. ComfyUI, Stable Diffusion, Midjourney API, or similar?", "Q09 - Describe your MLOps setup: how do you handle model versioning, experiment tracking, deployment pipelines, and monitoring in production?", "Q10 - How do you manage prompt engineering, prompt versioning, and prompt regression testing across a project lifecycle?", "Q11 - Provide an overview of your team structure: number of senior leads, mid-level engineers, junior developers, and project managers — and the split between on-staff and freelance.", "Q12 - What is your current staff attrition rate, and how do you maintain continuity of knowledge on active projects when team members change?", "Q13 - Are your leads and principal engineers primarily on-site, hybrid, or remote — and across which time zones?", "Q14 - We require CVs for all C-suite, director, and manager-level personnel, and for technical leads and senior developers. Can you provide these as part of qualification?", "Q15 - How do you handle client data governance — including data residency requirements, access controls, and compliance with GDPR or regional data protection frameworks?", "Q16 - Describe your approach to data architecture for AI projects: how do you assess a client's data readiness, and what data engineering work typically precedes model development?", "Q17 - What security practices do you follow during AI development — including API key management, model output logging, PII handling, and third-party model data exposure?", "Q18 - Walk us through your scoping and discovery process for a new AI project. What outputs does a client receive before any development begins?", "Q19 - How do you handle scope changes during delivery — what is your process, and how do you protect both the client and your team when requirements shift?", "Q20 - Provide two client references for completed AI projects — including the client's name, the nature of the engagement, and a contactable decision-maker we can speak with directly."];
+const RESULTS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbww-YaGocUs6xbaPoTfEUsPZSj8qqs3CVEvFgkJo4nIrzRD8RnNq8AoJ6l4wusQJAEkMA/exec'; // Deployed Apps Script Web App URL.
+const SNAPSHOT = [{"section": "Technical Capability", "questions": [{"n": 1, "q": "Describe your two most recent live AI deployments — what problem each solved, the model or architecture used, and the current production status.", "rationale": "The certification standard requires minimum two verifiable, commercially active deployments within 24 months. Vague answers signal portfolio inflation."}, {"n": 2, "q": "Which AI models and providers does your team actively work with — and which do you consider your primary stack?", "rationale": "Reveals true depth vs. surface familiarity. Strong vendors articulate clear reasoning for model selection, not just a list of names."}, {"n": 3, "q": "Walk us through how you handle RAG architecture: chunking strategy, embedding model choice, retrieval tuning, and hallucination mitigation.", "rationale": "RAG is now table-stakes for enterprise AI. Inability to speak fluently to these specifics indicates limited production experience."}, {"n": 4, "q": "Do you work with fine-tuning or LoRA adaptation? If so, describe a use case where full fine-tuning was chosen over prompting, and why.", "rationale": "Distinguishes vendors capable of custom model work from those limited to API wrappers. Reasoning behind the trade-off matters."}, {"n": 5, "q": "What is your position on local/self-hosted models versus closed-source providers — and how do you advise clients on that decision?", "rationale": "Vendor-neutral advisory requires partners who can argue both sides on merit. A vendor locked to one provider introduces bias risk into client projects."}]}, {"section": "Workflow & Tooling", "questions": [{"n": 6, "q": "Which workflow automation and orchestration tools does your team use in production? (e.g. n8n, Make.com, LangChain, LlamaIndex, Airflow)", "rationale": "Maps actual operational tooling vs. claimed capability. Experienced teams have strong opinions about specific tool trade-offs."}, {"n": 7, "q": "Do you use AI-assisted development tools such as Claude Code, GitHub Copilot, or OpenAI Codex? How are these integrated into your development process?", "rationale": "Teams using modern AI dev tooling tend to ship faster and with fewer defects. Also signals cultural openness to emerging toolchains."}, {"n": 8, "q": "For generative visual or multimodal projects, which tools does your team work with — e.g. ComfyUI, Stable Diffusion, Midjourney API, or similar?", "rationale": "Relevant where client projects involve image, video, or multimodal generation. Tests breadth of applied GenAI capability beyond text."}, {"n": 9, "q": "Describe your MLOps setup: how do you handle model versioning, experiment tracking, deployment pipelines, and monitoring in production?", "rationale": "Production-grade AI requires mature MLOps. Absence of a clear answer here is a strong signal that the vendor's work does not survive beyond demo."}, {"n": 10, "q": "How do you manage prompt engineering, prompt versioning, and prompt regression testing across a project lifecycle?", "rationale": "Often overlooked by less mature vendors. Disciplined prompt management is essential for maintaining output quality at scale."}]}, {"section": "Team & Organisation", "questions": [{"n": 11, "q": "Provide an overview of your team structure: number of senior leads, mid-level engineers, junior developers, and project managers — and the split between on-staff and freelance.", "rationale": "Delivery risk is strongly correlated with team stability. Heavy freelance reliance or thin senior coverage are red flags for enterprise projects."}, {"n": 12, "q": "What is your current staff attrition rate, and how do you maintain continuity of knowledge on active projects when team members change?", "rationale": "High attrition is a delivery risk that clients rarely anticipate. Vendors with no answer to knowledge continuity have likely not faced the consequence yet."}, {"n": 13, "q": "Are your leads and principal engineers primarily on-site, hybrid, or remote — and across which time zones?", "rationale": "Time zone spread and remote structure affect responsiveness to NovatioAI's European and Australian clients. Transparency here is a trust signal."}, {"n": 14, "q": "We require CVs for all C-suite, director, and manager-level personnel, and for technical leads and senior developers. Can you provide these as part of qualification?", "rationale": "Non-negotiable for certification. Vendor willingness to provide CVs correlates with transparency and confidence in their team's actual credentials."}]}, {"section": "Data, Security & Architecture", "questions": [{"n": 15, "q": "How do you handle client data governance — including data residency requirements, access controls, and compliance with GDPR or regional data protection frameworks?", "rationale": "Enterprise clients increasingly have hard data residency requirements. Partners without a clear data governance position create liability for NovatioAI-referred projects."}, {"n": 16, "q": "Describe your approach to data architecture for AI projects: how do you assess a client's data readiness, and what data engineering work typically precedes model development?", "rationale": "Mature AI vendors understand that data engineering is the majority of the work. Vendors who skip this assessment produce fragile systems."}, {"n": 17, "q": "What security practices do you follow during AI development — including API key management, model output logging, PII handling, and third-party model data exposure?", "rationale": "Security failures in AI projects carry outsized reputational risk. This question surfaces whether security is embedded in process or treated as an afterthought."}]}, {"section": "Delivery & Process", "questions": [{"n": 18, "q": "Walk us through your scoping and discovery process for a new AI project. What outputs does a client receive before any development begins?", "rationale": "Aligns with NovatioAI's pre-execution mandate. Partners should produce structured discovery artefacts — not begin building on the basis of a verbal brief."}, {"n": 19, "q": "How do you handle scope changes during delivery — what is your process, and how do you protect both the client and your team when requirements shift?", "rationale": "Scope discipline is central to the NovatioAI partner value proposition. Partners without a formal change management process undermine the structured briefs we provide."}, {"n": 20, "q": "Provide two client references for completed AI projects — including the client's name, the nature of the engagement, and a contactable decision-maker we can speak with directly.", "rationale": "References are independently verified as part of the certification process. Reluctance or inability to provide contactable references is disqualifying."}]}];
+let ASSESSMENT = SNAPSHOT;
+let latestResultsPayload = null;
+
+function escapeHtml(str){return String(str??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+function getRespondentName(){const el=document.getElementById('respondent-name');return el?el.value.trim():'';}
+function getRespondentEmail(){const el=document.getElementById('respondent-email');return el?el.value.trim():'';}
+
+function renderForm(){
+  const root=document.getElementById('sections');
+  root.innerHTML=ASSESSMENT.map((sec,sIdx)=>`<section class="section"><div class="section-head"><div class="section-num">Domain ${String(sIdx+1).padStart(2,'0')}</div><h2 class="section-title">${escapeHtml(sec.section)}</h2></div><div class="section-body">${sec.questions.map(q=>`<div class="q"><div class="q-prompt"><span class="q-num">${String(q.n).padStart(2,'0')}</span><span>${escapeHtml(q.q)}</span></div><div class="why"><b>WHY WE ASK:</b> ${escapeHtml(q.rationale||'')}</div><textarea id="answer-${q.n}" placeholder="Type the vendor response here..."></textarea></div>`).join('')}</div></section>`).join('');
+  const status=document.getElementById('sync-status');
+  if(status) status.textContent=`Built-in assessment questions loaded · ${ASSESSMENT.reduce((s,sec)=>s+sec.questions.length,0)} questions`;
+}
+
+async function syncFromSheet(){
+  const status=document.getElementById('sync-status');
+  if(status) status.textContent='Loading latest assessment questions…';
+  for(const method of [fetchGviz,fetchViaProxy]){
+    try{
+      const data=await method();
+      if(data&&data.length&&data.some(sec=>sec.questions&&sec.questions.length)){
+        ASSESSMENT=data;
+        renderForm();
+        const results=document.getElementById('results');
+        if(results) results.classList.remove('show');
+        latestResultsPayload=null;
+        if(status) status.textContent='✓ Assessment questions loaded';
+        return;
+      }
+    }catch(e){}
+  }
+  if(status) status.textContent='✓ Using built-in assessment questions';
+}
+
+async function fetchGviz(){
+  const url=`https://docs.google.com/spreadsheets/d/${QUESTION_SHEET_ID}/gviz/tq?tqx=out:json`;
+  const r=await fetch(url,{mode:'cors'});
+  if(!r.ok) throw new Error('gviz failed');
+  const text=await r.text();
+  const json=JSON.parse(text.replace(/^[^{]*/,'').replace(/\);?\s*$/,''));
+  return parseGviz(json);
+}
+
+async function fetchViaProxy(){
+  const target=`https://docs.google.com/spreadsheets/d/${QUESTION_SHEET_ID}/export?format=csv`;
+  const url=`https://api.allorigins.win/get?url=${encodeURIComponent(target)}`;
+  const r=await fetch(url);
+  if(!r.ok) throw new Error('proxy failed');
+  const data=await r.json();
+  return parseCSV(data.contents);
+}
+
+function parseGviz(gviz){
+  const cols=gviz.table.cols.map(c=>(c.label||'').toLowerCase());
+  const cell=(row,name)=>{const i=cols.indexOf(name.toLowerCase());const c=i>=0?row.c[i]:null;return c&&c.v!=null?String(c.v).trim():'';};
+  const map=new Map();
+  gviz.table.rows.forEach(row=>{
+    const domain=cell(row,'domain')||cell(row,'section');
+    const n=cell(row,'question number');
+    const q=cell(row,'question');
+    const rationale=cell(row,'rationale / why we ask')||cell(row,'why we ask')||cell(row,'rationale');
+    if(!domain||!n||!q) return;
+    if(!map.has(domain)) map.set(domain,[]);
+    map.get(domain).push({n:+n,q,rationale});
+  });
+  return Array.from(map.entries()).map(([section,questions])=>({section,questions}));
+}
+
+function parseCSV(text){
+  const lines=[];let cur='',inQ=false,row=[];
+  for(let i=0;i<text.length;i++){const ch=text[i];if(ch==='"'){if(inQ&&text[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}else if(ch===','&&!inQ){row.push(cur.trim());cur='';}else if((ch==='\n'||ch==='\r')&&!inQ){if(ch==='\r'&&text[i+1]==='\n')i++;row.push(cur.trim());cur='';if(row.some(c=>c!==''))lines.push(row);row=[];}else cur+=ch;}
+  if(cur||row.length){row.push(cur.trim());lines.push(row);}
+  if(lines.length<2) return null;
+  const hdr=lines[0].map(h=>h.toLowerCase().trim());
+  const col=name=>hdr.indexOf(name.toLowerCase());
+  const map=new Map();
+  lines.slice(1).forEach(row=>{
+    const domain=row[col('domain')]||row[col('section')];
+    const n=row[col('question number')];
+    const q=row[col('question')];
+    const rationale=(col('rationale / why we ask')>=0?row[col('rationale / why we ask')]:'')||(col('why we ask')>=0?row[col('why we ask')]:'')||(col('rationale')>=0?row[col('rationale')]:'');
+    if(!domain||!n||!q) return;
+    if(!map.has(domain)) map.set(domain,[]);
+    map.get(domain).push({n:+n,q,rationale});
+  });
+  return Array.from(map.entries()).map(([section,questions])=>({section,questions}));
+}
+
+function getAnswer(q){const el=document.getElementById(`answer-${q.n}`);return el?el.value.trim():'';}
+
+function analyzeCompletion(){
+  const all=[]; ASSESSMENT.forEach(sec=>sec.questions.forEach(q=>all.push({section:sec.section,...q,answer:getAnswer(q)})));
+  const answered=all.filter(q=>q.answer.length>0);
+  const completion=Math.round((answered.length/all.length)*100);
+  const technicalComplete=all.filter(q=>q.n>=1&&q.n<=5).every(q=>q.answer.length>0);
+  const referencesComplete=(all.find(q=>q.n===20)||{answer:''}).answer.length>0;
+  const domains={};
+  ASSESSMENT.forEach(sec=>{const qs=sec.questions;domains[sec.section]={answered:qs.filter(q=>getAnswer(q).length>0).length,total:qs.length};});
+  const missing=all.filter(q=>!q.answer).map(q=>`Q${String(q.n).padStart(2,'0')} - ${q.q}`);
+  return {all,answered,completion,technicalComplete,referencesComplete,domains,missing};
+}
+
+function buildResultsPayload(analysis){
+  const respondentName=getRespondentName();
+  const respondentEmail=getRespondentEmail();
+  const row={
+    'Timestamp':new Date().toISOString(),
+    'Assessment Name':'Vendor Technical Assessment',
+    'Respondent Name':respondentName,
+    'Respondent Email':respondentEmail,
+    'Company':respondentName,
+    'Completion Score':analysis.completion,
+    'Answered Questions':analysis.answered.length,
+    'Total Questions':analysis.all.length,
+    'Technical Capability Complete':analysis.technicalComplete?'Yes':'No',
+    'Reference Question Complete':analysis.referencesComplete?'Yes':'No',
+    'Domains Complete JSON':JSON.stringify(analysis.domains),
+    'Missing Questions JSON':JSON.stringify(analysis.missing)
+  };
+  analysis.all.forEach(q=>{
+    row[`Q${String(q.n).padStart(2,'0')} - ${q.q}`]=q.answer?`Question: ${q.q}\nAnswer: ${q.answer}`:`Question: ${q.q}\nAnswer:`;
+  });
+  return {tabName:RESULT_TAB_NAME,assessmentType:'vendorTechnical',row};
+}
+
+function generateResults(){
+  const analysis=analyzeCompletion();
+  latestResultsPayload=buildResultsPayload(analysis);
+  const missingTechnical=!analysis.technicalComplete?'<li>Technical Capability Q01–Q05 are not complete. These are core qualification questions.</li>':'';
+  const missingReferences=!analysis.referencesComplete?'<li>Reference question Q20 is not complete. References are mandatory.</li>':'';
+  document.getElementById('results').classList.add('show');
+  document.getElementById('text-output').innerHTML=`<p class="score">${analysis.completion}%</p><p><b>${analysis.answered.length} of ${analysis.all.length}</b> qualification questions have responses.</p><ul class="status-list">${missingTechnical}${missingReferences}<li>Results are being saved automatically to the vendor assessment results sheet.</li></ul>`;
+  document.getElementById('results-meta').textContent='Generated '+new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+  document.getElementById('sheet-save-status').innerHTML='Google Sheets save status: report generated. Saving automatically…';
+  saveLatestResultsToSheet();
+  setTimeout(()=>document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+
+function postToAppsScript(payload){
+  return new Promise(resolve=>{
+    const iframeName='gas_submit_'+Date.now();
+    const iframe=document.createElement('iframe');
+    iframe.name=iframeName;
+    iframe.style.display='none';
+    document.body.appendChild(iframe);
+
+    const form=document.createElement('form');
+    form.method='POST';
+    form.action=RESULTS_WEB_APP_URL;
+    form.target=iframeName;
+    form.style.display='none';
+
+    const input=document.createElement('input');
+    input.type='hidden';
+    input.name='payload';
+    input.value=JSON.stringify(payload);
+
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    let cleaned=false;
+    const cleanup=()=>{
+      if(cleaned) return;
+      cleaned=true;
+      setTimeout(()=>{
+        try{form.remove();}catch(e){}
+        try{iframe.remove();}catch(e){}
+      },500);
+      resolve();
+    };
+
+    iframe.onload=cleanup;
+    form.submit();
+    setTimeout(cleanup,2500);
+  });
+}
+
+async function saveLatestResultsToSheet(){
+  const status=document.getElementById('sheet-save-status');
+  if(!latestResultsPayload){
+    status.innerHTML='Google Sheets save status: <b>generate the report first</b>.';
+    return;
+  }
+  if(!RESULTS_WEB_APP_URL||!RESULTS_WEB_APP_URL.trim()){
+    status.innerHTML='Google Sheets save status: <b>backend URL needed</b>. Deploy the Apps Script and paste its Web App URL into RESULTS_WEB_APP_URL.';
+    return;
+  }
+
+  status.innerHTML='Google Sheets save status: saving row…';
+  try{
+    await postToAppsScript(latestResultsPayload);
+    status.innerHTML='Google Sheets save status: <b>submitted</b>. Check the Vendor Technical Assessment Results worksheet.';
+  }catch(err){
+    status.innerHTML=`Google Sheets save status: <b>failed</b>. ${err.message||err}`;
+  }
+}
+
+
+function resetAll(){
+  document.querySelectorAll('textarea').forEach(t=>t.value='');
+  document.getElementById('results').classList.remove('show');
+  latestResultsPayload=null;
+  document.getElementById('sheet-save-status').textContent='Google Sheets save status: results will be saved automatically after report generation.';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+async function bootAssessment(){
+  renderForm();
+  try{await syncFromSheet();}catch(e){const status=document.getElementById('sync-status');if(status)status.textContent='✓ Using built-in assessment questions';}
+}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',bootAssessment);}else{bootAssessment();}
+</script>
+</body>
+</html>
